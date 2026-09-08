@@ -7,6 +7,7 @@ export function callbackHtml(provider: string, payload: { token: string; provide
 <script>
 (function () {
   function receiveMessage(e) {
+    if (e.source !== window.opener) return;
     window.opener.postMessage(${JSON.stringify(message)}, e.origin);
     window.removeEventListener('message', receiveMessage, false);
   }

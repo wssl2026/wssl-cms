@@ -11,7 +11,6 @@ backend:
     uploadMedia: 'content: upload {{path}}'
     deleteMedia: 'content: delete {{path}}'
 
-local_backend: true
 site_url: https://www.wssl.org
 display_url: https://www.wssl.org
 logo_url: /images/mobile-logo.png

@@ -25,4 +25,15 @@ describe('Decap config', () => {
     const settings = config.collections.find((c: any) => c.name === 'settings');
     expect(settings.files.map((f: any) => f.file).sort()).toEqual(['src/data/alerts.json', 'src/data/nav.json', 'src/data/site.json']);
   });
+  it('does not ship local_backend in the production config', () => {
+    expect(config.local_backend).toBeUndefined();
+  });
+});
+
+describe('Decap admin page', () => {
+  it('manually initializes CMS and gates local_backend to localhost', () => {
+    const html = readFileSync('public/admin/index.html', 'utf8');
+    expect(html).toContain('CMS_MANUAL_INIT = true');
+    expect(html).toContain('local_backend: true');
+  });
 });

@@ -24,6 +24,15 @@ describe('GET /api/callback', () => {
     const req = new Request('https://www.wssl.org/api/callback?code=abc&state=one', { headers: { Cookie: 'decap_oauth_state=two' } });
     const res = await callback(ctx(req));
     expect(res.status).toBe(400);
+    expect(res.headers.get('Set-Cookie')).toContain('decap_oauth_state=;');
+  });
+  it('returns 502 and clears the state cookie when GitHub cannot be reached', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('network down'); }));
+    const req = new Request('https://www.wssl.org/api/callback?code=abc&state=one', { headers: { Cookie: 'decap_oauth_state=one' } });
+    const res = await callback(ctx(req));
+    expect(res.status).toBe(502);
+    expect(res.headers.get('Set-Cookie')).toContain('decap_oauth_state=;');
+    vi.unstubAllGlobals();
   });
   it('exchanges the code and returns the Decap handshake page', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ access_token: 'gho_123' }), { headers: { 'Content-Type': 'application/json' } })));
@@ -40,5 +49,8 @@ describe('GET /api/callback', () => {
 describe('callbackHtml', () => {
   it('embeds the message as a JSON string literal', () => {
     expect(callbackHtml('github', { token: 't', provider: 'github' })).toContain('"authorization:github:success:{\\"token\\":\\"t\\",\\"provider\\":\\"github\\"}"');
+  });
+  it('only accepts a reply from the popup opener', () => {
+    expect(callbackHtml('github', { token: 't', provider: 'github' })).toContain('e.source !== window.opener');
   });
 });
