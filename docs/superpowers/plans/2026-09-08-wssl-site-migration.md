@@ -116,7 +116,7 @@ export default defineConfig({
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": ["@cloudflare/workers-types", "vitest/globals"],
+    "types": ["vitest/globals"],
     "resolveJsonModule": true,
     "strictNullChecks": true
   },
@@ -143,6 +143,7 @@ dist/
 .dev.vars
 functions/_lib/corpus.json
 scripts/migration-report.json
+.superpowers/
 .idea/
 .DS_Store
 ```
