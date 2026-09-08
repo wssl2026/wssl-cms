@@ -19,6 +19,9 @@ describe('asset helpers', () => {
     expect(normalizeInternal('https://www.wssl.org/fields/overview/')).toBe('/fields/overview/');
     expect(normalizeInternal('/about/contact/#form')).toBe('/about/contact/#form');
   });
+  it('tolerates malformed percent-encoding instead of throwing', () => {
+    expect(localAssetPath('/sites/wssl/assets/File/50% off.pdf')).toBe('/assets/legacy/File/50-off.pdf');
+  });
 });
 
 describe('htmlToMarkdown', () => {

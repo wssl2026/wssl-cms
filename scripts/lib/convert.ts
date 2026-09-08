@@ -10,6 +10,10 @@ export interface ConvertResult {
 const WSSL_HOSTS = ['https://www.wssl.org', 'https://wssl.org', 'https://cms.wssl.org', 'http://www.wssl.org', 'http://wssl.org'];
 const LEGACY_ASSET_PREFIX = '/sites/wssl/assets/';
 
+function safeDecode(s: string): string {
+  try { return decodeURIComponent(s); } catch { return s; }
+}
+
 export function stripHost(href: string): string {
   for (const host of WSSL_HOSTS) {
     if (href.startsWith(host)) return href.slice(host.length) || '/';
@@ -22,7 +26,7 @@ export function isLegacyAsset(href: string): boolean {
 }
 
 export function localAssetPath(href: string): string {
-  const rel = decodeURIComponent(stripHost(href)).slice(LEGACY_ASSET_PREFIX.length);
+  const rel = safeDecode(stripHost(href)).slice(LEGACY_ASSET_PREFIX.length);
   const safe = rel
     .split('/')
     .map((seg) => seg.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/-{2,}/g, '-'))
