@@ -119,6 +119,8 @@ function sortKey(it: MuraItem): number {
   return 0;
 }
 
+const trimSlashes = (f: string): string => f.replace(/^\/+|\/+$/g, '');
+
 export function buildNav(items: MuraItem[]): NavItem[] {
   const byParent = new Map<string, MuraItem[]>();
   for (const it of items) {
@@ -127,13 +129,36 @@ export function buildNav(items: MuraItem[]): NavItem[] {
     list.push(it);
     byParent.set(it.parentid, list);
   }
-  const build = (parentid: string, depth: number): NavItem[] =>
-    (byParent.get(parentid) ?? [])
+
+  // Mura's content API does not return the folder items that some pages hang
+  // off (e.g. volunteers/coaches, schedules/game-schedules), so those pages are
+  // orphans whose parentid matches no item. Re-attach each orphan group to the
+  // nearest ancestor page found by filename; otherwise the whole subtree — most
+  // of Volunteers and all of Game Schedules — silently disappears from the nav.
+  const knownIds = new Set(items.map((i) => i.contentid));
+  const byFilename = new Map(items.map((i) => [trimSlashes(i.filename), i]));
+  for (const [parentid, children] of [...byParent]) {
+    if (parentid === HOME_ID || knownIds.has(parentid)) continue;
+    byParent.delete(parentid);
+    const segments = trimSlashes(children[0].filename).split('/');
+    let anchor: MuraItem | undefined;
+    for (let n = segments.length - 1; n > 0 && !anchor; n--) anchor = byFilename.get(segments.slice(0, n).join('/'));
+    if (!anchor) continue;
+    byParent.set(anchor.contentid, [...(byParent.get(anchor.contentid) ?? []), ...children]);
+  }
+  const seen = new Set<string>();
+  const build = (parentid: string, depth: number): NavItem[] => {
+    if (seen.has(parentid)) return []; // defensive: never loop on a cyclic parent chain
+    seen.add(parentid);
+    return (byParent.get(parentid) ?? [])
       .sort((a, b) => sortKey(a) - sortKey(b))
       .flatMap((it) => {
         const href = hrefFor(it);
-        if (!href) return [];
+        // A parent with no page of its own (a Folder, or a section-less filename)
+        // must not take its whole subtree with it: hoist the children into its place.
+        if (!href) return build(it.contentid, depth);
         return [{ label: it.menutitle || it.title, href, children: depth < 3 ? build(it.contentid, depth + 1) : [] }];
       });
+  };
   return build(HOME_ID, 1);
 }

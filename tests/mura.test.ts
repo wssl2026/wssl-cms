@@ -117,6 +117,44 @@ describe('buildNav', () => {
     expect(buildNav(items)).toEqual([{ label: 'About', href: '/about/', children: [] }]);
   });
 
+  it('hoists the children of a nav parent that has no page of its own', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'volunteers/coaches', menutitle: 'Coaches', type: 'Folder', parentid: 'A', orderno: 1 }),
+      item({ contentid: 'C', filename: 'volunteers/coaches/become-coach', menutitle: 'Become a Coach', parentid: 'B', orderno: 2 }),
+      item({ contentid: 'D', filename: 'volunteers/coaches/certification', menutitle: 'Certification', parentid: 'B', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'Volunteers', href: '/volunteers/', children: [
+        { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
+        { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+      ] },
+    ]);
+  });
+
+  it('re-attaches orphans whose parent item the API never returned to the nearest ancestor page', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
+      // parent 'MISSING' (volunteers/coaches) is absent from the API response
+      item({ contentid: 'C', filename: 'volunteers/coaches/become-coach', menutitle: 'Become a Coach', parentid: 'MISSING', orderno: 2 }),
+      item({ contentid: 'D', filename: 'volunteers/coaches/certification', menutitle: 'Certification', parentid: 'MISSING', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'Volunteers', href: '/volunteers/', children: [
+        { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
+        { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+      ] },
+    ]);
+  });
+
+  it('drops orphans with no ancestor page rather than crashing', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'about', menutitle: 'About', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'orphan-section/page', menutitle: 'Orphan', parentid: 'MISSING', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([{ label: 'About', href: '/about/', children: [] }]);
+  });
+
   it('excludes a nav Link item whose URL points to a Mura-only host', () => {
     const items = [
       item({ contentid: 'A', filename: 'about', menutitle: 'About', parentid: HOME, orderno: 1 }),
