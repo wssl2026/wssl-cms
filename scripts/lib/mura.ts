@@ -13,12 +13,13 @@ export interface MuraItem {
   body?: string;
   summary?: string;
   url?: string; // Link items
+  orderno?: number | string; // Mura's real sort column; displayorder is unreliable in the live API
 }
 
 export interface NavItem { label: string; href: string; children: NavItem[] }
 
 export const MURA_API = 'https://www.wssl.org/index.cfm/_api/json/v1/wssl/content/';
-const FIELDS = 'contentid,filename,title,menutitle,type,body,summary,parentid,displayorder,isnav,lastupdate,url';
+const FIELDS = 'contentid,filename,title,menutitle,type,body,summary,parentid,displayorder,isnav,lastupdate,url,orderno';
 export const HOME_ID = '00000000000000000000000000000000001';
 export const SECTIONS = ['programs', 'registration', 'schedules', 'fields', 'volunteers', 'about'] as const;
 
@@ -50,8 +51,34 @@ export function targetFor(filename: string): { file: string; section: string; pa
   };
 }
 
+const NAMED_ENTITIES: Record<string, string> = {
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&apos;': "'",
+  '&nbsp;': ' ',
+  '&rsquo;': '’',
+  '&lsquo;': '‘',
+  '&ldquo;': '“',
+  '&rdquo;': '”',
+  '&ndash;': '–',
+  '&mdash;': '—',
+  '&hellip;': '…',
+};
+
+/** Decode common HTML entities found in Mura summaries/titles. `&amp;` is decoded last to avoid double-unescaping. */
+export function decodeEntities(s: string): string {
+  let out = s
+    .replace(/&#x([0-9a-fA-F]+);/gi, (_m, hex: string) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_m, dec: string) => String.fromCodePoint(parseInt(dec, 10)));
+  for (const [entity, char] of Object.entries(NAMED_ENTITIES)) {
+    out = out.split(entity).join(char);
+  }
+  return out.replace(/&amp;/g, '&');
+}
+
 function stripTags(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  return decodeEntities(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
 }
 
 /** 'YYYY-MM-DD' from Mura's lastupdate ('2024-11-10 09:00:00' or any Date-parsable string). */
@@ -76,7 +103,14 @@ export function frontmatter(item: MuraItem, path: string): string {
 function hrefFor(item: MuraItem): string | null {
   if (item.type === 'Link') return item.url ?? null;
   if (item.type !== 'Page') return null;
-  return `/${item.filename.replace(/\/+$/, '')}/`;
+  return targetFor(item.filename) ? `/${item.filename.replace(/\/+$/, '')}/` : null;
+}
+
+/** Mura's live API returns an empty `displayorder` for every item; `orderno` is the real, always-numeric sort column. */
+function sortKey(it: MuraItem): number {
+  if (it.orderno !== undefined && it.orderno !== '') return Number(it.orderno);
+  if (it.displayorder !== undefined && (it.displayorder as unknown) !== '') return Number(it.displayorder);
+  return 0;
 }
 
 export function buildNav(items: MuraItem[]): NavItem[] {
@@ -89,7 +123,7 @@ export function buildNav(items: MuraItem[]): NavItem[] {
   }
   const build = (parentid: string, depth: number): NavItem[] =>
     (byParent.get(parentid) ?? [])
-      .sort((a, b) => Number(a.displayorder) - Number(b.displayorder))
+      .sort((a, b) => sortKey(a) - sortKey(b))
       .flatMap((it) => {
         const href = hrefFor(it);
         if (!href) return [];

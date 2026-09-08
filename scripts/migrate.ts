@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fetchAllContent, targetFor, frontmatter, buildNav, type MuraItem } from './lib/mura';
 import { htmlToMarkdown, localAssetPath } from './lib/convert';
+import { planAssetDownloads } from './lib/assets';
 
 const THEME_IMAGES: Record<string, string> = {
   'https://www.wssl.org/sites/wssl/themes/wssl-theme/images/wssl-header-lg.png': 'public/images/wssl-header-lg.png',
@@ -60,24 +61,11 @@ async function main() {
     report.written.push(out);
   }
 
-  // Two different legacy asset paths can collapse to the same local path once
-  // localAssetPath() strips punctuation/whitespace runs. Download each local
-  // path once; record later collisions instead of silently overwriting.
-  const seenLocal = new Map<string, string>();
-  const toDownload: string[] = [];
-  for (const asset of allAssets) {
-    const local = localAssetPath(asset);
-    const existing = seenLocal.get(local);
-    if (existing) {
-      report.collisions.push(`${asset} collides with ${existing} at ${local}`);
-      continue;
-    }
-    seenLocal.set(local, asset);
-    toDownload.push(asset);
-  }
+  const { downloads, collisions } = planAssetDownloads(allAssets);
+  report.collisions.push(...collisions);
 
-  for (const asset of toDownload) {
-    (await downloadLegacyAsset(asset)) === 'ok' ? report.assetsOk.push(asset) : report.assetsMissing.push(asset);
+  for (const { source } of downloads) {
+    (await downloadLegacyAsset(source)) === 'ok' ? report.assetsOk.push(source) : report.assetsMissing.push(source);
   }
   for (const [url, dest] of Object.entries(THEME_IMAGES)) {
     (await download(url, dest)) ? report.assetsOk.push(url) : report.assetsMissing.push(url);

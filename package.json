@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260908.1",
+    "@mixmark-io/domino": "^2.2.0",
     "@types/turndown": "^5.0.6",
     "fast-glob": "^3.3.3",
     "gray-matter": "^4.0.3",

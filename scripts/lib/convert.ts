@@ -1,5 +1,6 @@
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
+import domino from '@mixmark-io/domino';
 
 export interface ConvertResult {
   markdown: string;
@@ -66,6 +67,93 @@ function stripEmptyTables(html: string): string {
   return html;
 }
 
+const TABLE_KEEP_ATTRS = new Set(['colspan', 'rowspan']);
+const TABLE_STRIP_TAGS = ['thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'p', 'span', 'div', 'font', 'b', 'strong'];
+
+function stripAttributesExceptSpan(el: any): void {
+  const names: string[] = [];
+  for (let i = 0; i < el.attributes.length; i++) names.push(el.attributes[i].name);
+  for (const name of names) {
+    if (!TABLE_KEEP_ATTRS.has(name.toLowerCase())) el.removeAttribute(name);
+  }
+}
+
+function unwrap(el: any): void {
+  const parent = el.parentNode;
+  if (!parent) return;
+  while (el.firstChild) parent.insertBefore(el.firstChild, el);
+  parent.removeChild(el);
+}
+
+function cellSpan(cell: any): number {
+  const cs = parseInt(cell.getAttribute('colspan') || '1', 10) || 1;
+  const rs = parseInt(cell.getAttribute('rowspan') || '1', 10) || 1;
+  return Math.max(cs, rs);
+}
+
+/**
+ * Collapse a table cell's content onto a single line so it fits inside a
+ * Markdown table row: turn `<br>` line breaks into a space, and unwrap
+ * block-level `<p>`/`<div>` wrappers (which turndown would otherwise render
+ * with surrounding blank lines) into inline content, spacing adjacent
+ * blocks apart so words don't run together.
+ */
+function flattenLineBreaks(cell: any, doc: any): void {
+  Array.from(cell.querySelectorAll('br')).forEach((br: any) => {
+    br.parentNode?.replaceChild(doc.createTextNode(' '), br);
+  });
+  Array.from(cell.querySelectorAll('p, div')).forEach((el: any) => {
+    if (el.nextSibling) el.parentNode?.insertBefore(doc.createTextNode(' '), el.nextSibling);
+    unwrap(el);
+  });
+}
+
+/**
+ * Legacy Mura content pastes tables straight from Google Sheets: raw inline
+ * styles, colgroup/col width hints, &nbsp; padding and data-sheets-* paste
+ * metadata. turndown-plugin-gfm only produces a Markdown table when the
+ * first row is already a heading row, so anything else survives as raw,
+ * dirty HTML. This pre-pass, run on the parsed DOM before turndown walks
+ * it, cleans that up: strip layout-only attributes and wrapper tags, then
+ * promote simple tables (no nesting, no col/rowspan) to a proper header
+ * row so the GFM rule can turn them into Markdown tables. Tables that stay
+ * genuinely irregular (nested tables, spanning cells) are left as raw HTML,
+ * but with the same attribute/tag cleanup applied.
+ */
+function cleanTables(root: any): void {
+  const doc = root.ownerDocument;
+
+  // a. drop layout-only column hints entirely.
+  Array.from(root.querySelectorAll('colgroup, col')).forEach((el: any) => el.parentNode?.removeChild(el));
+
+  const tables = Array.from(root.querySelectorAll('table'));
+  for (const table of tables as any[]) {
+    // b. strip everything but colspan/rowspan from table structure and inline wrappers.
+    const scoped = [table, ...Array.from(table.querySelectorAll(TABLE_STRIP_TAGS.join(', ')))];
+    scoped.forEach((el: any) => stripAttributesExceptSpan(el));
+
+    // c. unwrap span/font inside the table — they carry no structure once styling is gone.
+    Array.from(table.querySelectorAll('span, font')).forEach((el: any) => unwrap(el));
+
+    // d/e. promote to a Markdown table when it's simple enough; otherwise leave as clean raw HTML.
+    const hasNestedTable = !!table.querySelector('table');
+    const hasSpanningCell = Array.from(table.querySelectorAll('td, th')).some((cell: any) => cellSpan(cell) > 1);
+    if (!hasNestedTable && !hasSpanningCell) {
+      Array.from(table.querySelectorAll('td, th')).forEach((cell: any) => flattenLineBreaks(cell, doc));
+      const firstRow = table.rows[0];
+      if (firstRow) {
+        Array.from(firstRow.cells).forEach((cell: any) => {
+          if (cell.tagName !== 'TD') return;
+          const th = doc.createElement('th');
+          for (let i = 0; i < cell.attributes.length; i++) th.setAttribute(cell.attributes[i].name, cell.attributes[i].value);
+          while (cell.firstChild) th.appendChild(cell.firstChild);
+          cell.parentNode.replaceChild(th, cell);
+        });
+      }
+    }
+  }
+}
+
 export function htmlToMarkdown(html: string): ConvertResult {
   html = stripEmptyTables(html);
   const assets = new Set<string>();
@@ -98,7 +186,11 @@ export function htmlToMarkdown(html: string): ConvertResult {
     replacement: (content, node) => `[${content}](${normalizeInternal((node as HTMLElement).getAttribute('href') ?? '')})`,
   });
 
-  let markdown = td.turndown(html);
+  const doc = (domino as any).createDocument(`<x-turndown id="turndown-root">${html}</x-turndown>`);
+  const root = doc.getElementById('turndown-root');
+  cleanTables(root);
+
+  let markdown = td.turndown(root);
   markdown = markdown
     .replace(/ /g, ' ')
     .replace(/^(\s*)-   /gm, '$1- ')       // turndown pads bullets to 4 chars; use "- "

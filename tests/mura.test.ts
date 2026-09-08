@@ -1,4 +1,4 @@
-import { fetchAllContent, targetFor, frontmatter, buildNav, isoDate, type MuraItem } from '../scripts/lib/mura';
+import { fetchAllContent, targetFor, frontmatter, buildNav, isoDate, decodeEntities, type MuraItem } from '../scripts/lib/mura';
 
 const item = (over: Partial<MuraItem>): MuraItem => ({
   contentid: 'X', filename: 'about/history', title: 'History', menutitle: 'History', type: 'Page',
@@ -35,6 +35,28 @@ describe('frontmatter', () => {
     expect(isoDate('garbage')).toBeUndefined();
     expect(isoDate(undefined)).toBeUndefined();
   });
+  it('decodes quote and apostrophe entities in the description', () => {
+    const fm = frontmatter(item({ summary: '<p>These are &quot;Small-Sided Games&quot; &#39;really&#39;.</p>' }), 'small-sided');
+    expect(fm).toContain('description: These are "Small-Sided Games" \'really\'.');
+  });
+});
+
+describe('decodeEntities', () => {
+  it('decodes named HTML entities, with &amp; decoded last', () => {
+    expect(decodeEntities('Fees &amp; refunds')).toBe('Fees & refunds');
+    expect(decodeEntities('&quot;Small-Sided Games&quot;')).toBe('"Small-Sided Games"');
+    expect(decodeEntities('&#39;single&#39; and &apos;also&apos;')).toBe("'single' and 'also'");
+    expect(decodeEntities('&lt;tag&gt;')).toBe('<tag>');
+    expect(decodeEntities('&nbsp;&ndash;&mdash;&hellip;')).toBe(' –—…');
+    expect(decodeEntities('&lsquo;&rsquo;&ldquo;&rdquo;')).toBe('‘’“”');
+    // &amp; must decode last so a double-encoded entity like &amp;quot; doesn't
+    // get double-unescaped into a literal quote.
+    expect(decodeEntities('&amp;quot;')).toBe('&quot;');
+  });
+  it('decodes numeric decimal and hex entities', () => {
+    expect(decodeEntities('&#65;&#66;')).toBe('AB');
+    expect(decodeEntities('&#x41;&#x42;')).toBe('AB');
+  });
 });
 
 describe('fetchAllContent', () => {
@@ -57,14 +79,15 @@ describe('fetchAllContent', () => {
 });
 
 describe('buildNav', () => {
-  it('builds an ordered tree from parentid/displayorder, skipping non-nav items', () => {
-    const HOME = '00000000000000000000000000000000001';
+  const HOME = '00000000000000000000000000000000001';
+
+  it('builds an ordered tree from parentid/orderno, skipping non-nav items', () => {
     const items = [
-      item({ contentid: 'A', filename: 'programs', menutitle: 'Programs', parentid: HOME, displayorder: 2 }),
-      item({ contentid: 'B', filename: 'about', menutitle: 'About', parentid: HOME, displayorder: 1 }),
-      item({ contentid: 'C', filename: 'programs/core', menutitle: 'Core', parentid: 'A', displayorder: 1 }),
-      item({ contentid: 'D', filename: 'programs/hidden', menutitle: 'Hidden', parentid: 'A', displayorder: 2, isnav: 0 }),
-      item({ contentid: 'E', filename: 'tryout-form', title: 'Tryout form', menutitle: 'Tryout form', type: 'Link', parentid: 'A', displayorder: 3, url: 'https://forms.gle/x' }),
+      item({ contentid: 'A', filename: 'programs', menutitle: 'Programs', parentid: HOME, displayorder: '', orderno: 2 }),
+      item({ contentid: 'B', filename: 'about', menutitle: 'About', parentid: HOME, displayorder: '', orderno: 1 }),
+      item({ contentid: 'C', filename: 'programs/core', menutitle: 'Core', parentid: 'A', displayorder: '', orderno: 1 }),
+      item({ contentid: 'D', filename: 'programs/hidden', menutitle: 'Hidden', parentid: 'A', displayorder: '', orderno: 2, isnav: 0 }),
+      item({ contentid: 'E', filename: 'tryout-form', title: 'Tryout form', menutitle: 'Tryout form', type: 'Link', parentid: 'A', displayorder: '', orderno: 3, url: 'https://forms.gle/x' }),
     ];
     expect(buildNav(items)).toEqual([
       { label: 'About', href: '/about/', children: [] },
@@ -73,5 +96,24 @@ describe('buildNav', () => {
         { label: 'Tryout form', href: 'https://forms.gle/x', children: [] },
       ] },
     ]);
+  });
+
+  it('falls back to displayorder when orderno is undefined', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'programs', menutitle: 'Programs', parentid: HOME, displayorder: 2 }),
+      item({ contentid: 'B', filename: 'about', menutitle: 'About', parentid: HOME, displayorder: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'About', href: '/about/', children: [] },
+      { label: 'Programs', href: '/programs/', children: [] },
+    ]);
+  });
+
+  it('excludes a nav Page item whose filename has no target section (e.g. blog)', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'about', menutitle: 'About', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'blog', title: 'Blog', menutitle: 'Blog', parentid: HOME, orderno: 2 }),
+    ];
+    expect(buildNav(items)).toEqual([{ label: 'About', href: '/about/', children: [] }]);
   });
 });
