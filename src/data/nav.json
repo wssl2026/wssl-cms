@@ -1,0 +1,317 @@
+{
+  "items": [
+    {
+      "label": "Tryout Inquiry Form",
+      "href": "https://www.wssl.org/tryout-inquiry-form2/",
+      "children": []
+    },
+    {
+      "label": "Volunteers",
+      "href": "/volunteers/",
+      "children": []
+    },
+    {
+      "label": "Registration",
+      "href": "/registration/",
+      "children": [
+        {
+          "label": "Register for Core / Playground / EPIC",
+          "href": "/registration/register-for-core/",
+          "children": []
+        },
+        {
+          "label": "Travel and Tournament Team Tryouts",
+          "href": "/registration/tryouts-for-travel-or-tournament-teams/",
+          "children": []
+        },
+        {
+          "label": "Safety",
+          "href": "/registration/safety/",
+          "children": []
+        },
+        {
+          "label": "Policies and Waivers",
+          "href": "/registration/policies-and-waivers/",
+          "children": []
+        },
+        {
+          "label": "Financial Aid",
+          "href": "/registration/financial-aid/",
+          "children": []
+        },
+        {
+          "label": "Register for Development Academy",
+          "href": "/registration/registration-development-academy/",
+          "children": []
+        },
+        {
+          "label": "Parent Code of Conduct",
+          "href": "/registration/code-of-conduct-parents/",
+          "children": []
+        },
+        {
+          "label": "Proof of Age",
+          "href": "/registration/proof-of-age/",
+          "children": []
+        },
+        {
+          "label": "Refund Policy",
+          "href": "/registration/refund-policy/",
+          "children": []
+        },
+        {
+          "label": "Player Code of Conduct",
+          "href": "/registration/player-code-of-conduct/",
+          "children": []
+        },
+        {
+          "label": "Registration FAQ",
+          "href": "/registration/registration-faq/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Programs",
+      "href": "/programs/",
+      "children": [
+        {
+          "label": "Core U6-U19",
+          "href": "/programs/core/",
+          "children": [
+            {
+              "label": "Free Core Weekday Training Program",
+              "href": "/programs/core/core-weekday-training/",
+              "children": []
+            },
+            {
+              "label": "Divisions - Where / When We Play",
+              "href": "/programs/core/divisions/",
+              "children": []
+            },
+            {
+              "label": "Waitlists",
+              "href": "/programs/core/waitlists/",
+              "children": []
+            },
+            {
+              "label": "Team Formation",
+              "href": "/programs/core/team-formation/",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Travel Teams U8-U19",
+          "href": "/programs/travel-teams/",
+          "children": [
+            {
+              "label": "Travel FAQ",
+              "href": "/programs/travel-teams/travel-faq/",
+              "children": []
+            },
+            {
+              "label": "Travel Kits",
+              "href": "/programs/travel-teams/travel-kits/",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "EPIC",
+          "href": "/programs/epic/",
+          "children": []
+        },
+        {
+          "label": "Playground U4 and U5",
+          "href": "/programs/playground/",
+          "children": []
+        },
+        {
+          "label": "Tournament Teams U9-U12",
+          "href": "/programs/tournament-teams/",
+          "children": []
+        },
+        {
+          "label": "Holiday/Summer Camps",
+          "href": "/programs/holiday-summer-camps/",
+          "children": []
+        },
+        {
+          "label": "Winter Training",
+          "href": "/programs/winter-training/",
+          "children": []
+        },
+        {
+          "label": "Small Sided Play",
+          "href": "/programs/small-sided/",
+          "children": []
+        },
+        {
+          "label": "Program FAQ",
+          "href": "/programs/program-faq/",
+          "children": []
+        },
+        {
+          "label": "Development Academy U6-U14",
+          "href": "/programs/da/",
+          "children": []
+        },
+        {
+          "label": "Red Bulls Curriculum",
+          "href": "/programs/red-bulls-curriculum/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "About",
+      "href": "/about/",
+      "children": [
+        {
+          "label": "WSSL Leadership",
+          "href": "/about/wssl-leadership/",
+          "children": []
+        },
+        {
+          "label": "Contact Us",
+          "href": "/about/contact/",
+          "children": []
+        },
+        {
+          "label": "Silent Soccer",
+          "href": "/about/silent-soccer/",
+          "children": []
+        },
+        {
+          "label": "Documents",
+          "href": "/about/documents/",
+          "children": []
+        },
+        {
+          "label": "WSSL and AYSO",
+          "href": "/about/wssl-ayso/",
+          "children": []
+        },
+        {
+          "label": "History",
+          "href": "/about/history/",
+          "children": []
+        },
+        {
+          "label": "WSSL Calendar",
+          "href": "/about/wssl-calendar/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Schedules",
+      "href": "/schedules/",
+      "children": [
+        {
+          "label": "Training Schedules",
+          "href": "/schedules/training-schedules/",
+          "children": [
+            {
+              "label": "Core Weekday Open Training",
+              "href": "/schedules/training-schedules/core-weekday-open-training/",
+              "children": []
+            },
+            {
+              "label": "Tournament Training",
+              "href": "/schedules/training-schedules/tournament-team-training/",
+              "children": []
+            },
+            {
+              "label": "Travel Training",
+              "href": "/schedules/training-schedules/travel-training/",
+              "children": []
+            },
+            {
+              "label": "Winter Training Programs",
+              "href": "/schedules/training-schedules/winter-training/",
+              "children": []
+            },
+            {
+              "label": "Fall/Spring Development Academy Training Schedule",
+              "href": "/schedules/training-schedules/development-academy-schedule-fall-spring/",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Blog",
+      "href": "/blog/",
+      "children": []
+    },
+    {
+      "label": "Fields",
+      "href": "/fields/",
+      "children": [
+        {
+          "label": "Fredrick Douglass Playground",
+          "href": "/fields/fredrick-douglass-playground/",
+          "children": []
+        },
+        {
+          "label": "Randalls Island",
+          "href": "/fields/randalls-island/",
+          "children": []
+        },
+        {
+          "label": "Riverbank State Park",
+          "href": "/fields/jacob-schiff-playground/",
+          "children": []
+        },
+        {
+          "label": "Overview",
+          "href": "/fields/overview/",
+          "children": []
+        },
+        {
+          "label": "Central Park North Meadow",
+          "href": "/fields/central-park-north-meadow/",
+          "children": []
+        },
+        {
+          "label": "Riverside Park",
+          "href": "/fields/riverside-park/",
+          "children": []
+        },
+        {
+          "label": "Van Cortlandt Park",
+          "href": "/fields/van-cortlandt-park/",
+          "children": []
+        },
+        {
+          "label": "Marx Playground",
+          "href": "/fields/marx-playground/",
+          "children": []
+        },
+        {
+          "label": "Thomas Jefferson",
+          "href": "/fields/thomas-jefferson/",
+          "children": []
+        },
+        {
+          "label": "Riverdale Bertino Field",
+          "href": "/fields/riverdale-bertino-field/",
+          "children": []
+        },
+        {
+          "label": "Indoor Gym Facilities",
+          "href": "/fields/indoor-gym-facilities/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Login",
+      "href": "/login/",
+      "children": []
+    }
+  ]
+}
