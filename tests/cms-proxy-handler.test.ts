@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createCmsProxyHandler, onRequestGet, onRequestPost } from '../functions/api/cms/v1';
-import { utf8ToBase64 } from '../functions/_lib/github-content';
+import { GitHubApiError, utf8ToBase64 } from '../functions/_lib/github-content';
 import type { GitHubContentClient } from '../functions/_lib/github-content';
 
 const TOKEN = 'github_pat_do_not_log_me';
@@ -201,6 +201,18 @@ describe('POST /api/cms/v1 — the localhost development path', () => {
     expect((await response.json()).error).toMatch(/CF_ACCESS_TEAM_DOMAIN/);
   });
 
+  it('fails closed with a clear error when the team domain is still the documented placeholder (403)', async () => {
+    const handler = createCmsProxyHandler({ verifyJwt: acceptAnyJwt });
+    const response = await handler(
+      makeContext(post({ action: 'info' }, { jwt: 'good' }), {
+        ...PROD_ENV,
+        CF_ACCESS_TEAM_DOMAIN: '<team>.cloudflareaccess.com',
+      }),
+    );
+    expect(response.status).toBe(403);
+    expect((await response.json()).error).toBe('CMS is not configured: CF_ACCESS_TEAM_DOMAIN is invalid.');
+  });
+
   it('still requires a JWT on localhost once CF_ACCESS_AUD is configured', async () => {
     const handler = createCmsProxyHandler();
     const response = await handler(
@@ -386,5 +398,71 @@ describe('POST /api/cms/v1 — configuration and upstream failures', () => {
       makeContext(post({ action: 'getEntry', params: { branch: 'main', path: 'src/content/pages/about/x.md' } }, { jwt: 'good' })),
     );
     expect(seen).toEqual([{ repo: 'OWNER/REPO', branch: 'main', token: TOKEN }]);
+  });
+
+  it('returns a clear 503 when GITHUB_REPO is not set, instead of an empty repo string', async () => {
+    const handler = createCmsProxyHandler({ verifyJwt: acceptAnyJwt });
+    const response = await handler(
+      makeContext(post({ action: 'info' }, { jwt: 'good' }), { ...PROD_ENV, GITHUB_REPO: undefined }),
+    );
+    expect(response.status).toBe(503);
+    expect((await response.json()).error).toBe('CMS is not configured: GITHUB_REPO is not set.');
+  });
+
+  it('turns a GitHub conflict (409) into a 409 the editor understands, not a 502', async () => {
+    const handler = createCmsProxyHandler({
+      verifyJwt: acceptAnyJwt,
+      createClient: () =>
+        ({
+          getFile: async () => {
+            throw new GitHubApiError('GitHub PUT /repos/OWNER/REPO/contents/x.md failed with 409: sha mismatch', 409);
+          },
+        }) as unknown as GitHubContentClient,
+    });
+    const response = await handler(
+      makeContext(
+        post({ action: 'getEntry', params: { branch: 'main', path: 'src/content/pages/about/x.md' } }, { jwt: 'good' }),
+      ),
+    );
+    expect(response.status).toBe(409);
+    expect((await response.json()).error).toBe(
+      'Someone else changed this page since you opened it. Reload the editor and try again.',
+    );
+  });
+
+  it('turns a GitHub validation failure (422) into the same 409 conflict message', async () => {
+    const handler = createCmsProxyHandler({
+      verifyJwt: acceptAnyJwt,
+      createClient: () =>
+        ({
+          getFile: async () => {
+            throw new GitHubApiError('GitHub PUT failed with 422', 422);
+          },
+        }) as unknown as GitHubContentClient,
+    });
+    const response = await handler(
+      makeContext(
+        post({ action: 'getEntry', params: { branch: 'main', path: 'src/content/pages/about/x.md' } }, { jwt: 'good' }),
+      ),
+    );
+    expect(response.status).toBe(409);
+  });
+
+  it('leaves other GitHub errors as 502', async () => {
+    const handler = createCmsProxyHandler({
+      verifyJwt: acceptAnyJwt,
+      createClient: () =>
+        ({
+          getFile: async () => {
+            throw new GitHubApiError('GitHub GET failed with 403', 403);
+          },
+        }) as unknown as GitHubContentClient,
+    });
+    const response = await handler(
+      makeContext(
+        post({ action: 'getEntry', params: { branch: 'main', path: 'src/content/pages/about/x.md' } }, { jwt: 'good' }),
+      ),
+    );
+    expect(response.status).toBe(502);
   });
 });

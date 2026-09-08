@@ -7,7 +7,7 @@
  * single fine-grained bot token, so editors need no GitHub account.
  */
 import { verifyAccessJwt } from '../../_lib/access-jwt';
-import { createGitHubContentClient } from '../../_lib/github-content';
+import { GitHubApiError, createGitHubContentClient } from '../../_lib/github-content';
 import { ProxyError, handleProxyAction } from '../../_lib/decap-proxy';
 import type { Author, GitHubContentClient } from '../../_lib/github-content';
 
@@ -27,6 +27,10 @@ export interface CmsProxyDeps {
 const MAX_BODY_BYTES = 8 * 1024 * 1024;
 const LOCAL_HOSTS = ['localhost', '127.0.0.1'];
 const LOCAL_AUTHOR: Author = { name: 'Local editor', email: 'local@wssl.org' };
+// Guards against the documented `wrangler.toml` placeholder (`<team>.cloudflareaccess.com`)
+// being left in place, which would otherwise surface as a confusing "sign-in expired" 401
+// on every request instead of a clear configuration error.
+const TEAM_DOMAIN_RE = /^[a-z0-9-]+\.cloudflareaccess\.com$/i;
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -53,6 +57,11 @@ export function createCmsProxyHandler(overrides: Partial<CmsProxyDeps> = {}): Pa
         // Without the team domain there is nothing to check the token against; failing
         // closed here is clearer than an "expired sign-in" every editor would report.
         return json({ error: 'The site editor is not configured: CF_ACCESS_TEAM_DOMAIN is not set.' }, 403);
+      }
+      if (!TEAM_DOMAIN_RE.test(env.CF_ACCESS_TEAM_DOMAIN)) {
+        // Catches the documented `<team>.cloudflareaccess.com` placeholder left in place,
+        // which would otherwise fail JWT verification and look like an expired sign-in.
+        return json({ error: 'CMS is not configured: CF_ACCESS_TEAM_DOMAIN is invalid.' }, 403);
       }
       const token = request.headers.get('Cf-Access-Jwt-Assertion');
       if (!token) return json({ error: 'Not signed in. Reload /admin/ and sign in again.' }, 401);
@@ -94,7 +103,12 @@ export function createCmsProxyHandler(overrides: Partial<CmsProxyDeps> = {}): Pa
     const action = body.action;
 
     // --- do it ---------------------------------------------------------------
-    const repo = env.GITHUB_REPO ?? '';
+    const repo = env.GITHUB_REPO;
+    if (!repo) {
+      // An empty `repo` would otherwise leak into the `info` response and every other
+      // action, instead of telling whoever is deploying this what is actually missing.
+      return json({ error: 'CMS is not configured: GITHUB_REPO is not set.' }, 503);
+    }
     // Built on first use, so that actions which never touch GitHub — `info`, which
     // Decap uses to detect this backend, `unpublishedEntries`, `getDeployPreview` —
     // and requests refused for their action or their path still answer for themselves
@@ -111,6 +125,16 @@ export function createCmsProxyHandler(overrides: Partial<CmsProxyDeps> = {}): Pa
       return json(await handleProxyAction(action, body.params, { github, repo, author }));
     } catch (e) {
       if (e instanceof ProxyError) return json({ error: e.message }, e.status);
+      if (e instanceof GitHubApiError && (e.status === 409 || e.status === 422)) {
+        // GitHub answers this way when the blob sha we sent no longer matches HEAD —
+        // someone else committed to the same file in between. That is not a server
+        // failure; it is a heads-up the editor can act on by reloading and retrying.
+        console.log(JSON.stringify({ cms: action, status: 409, message: e.message }));
+        return json(
+          { error: 'Someone else changed this page since you opened it. Reload the editor and try again.' },
+          409,
+        );
+      }
       const message = errorMessage(e);
       console.log(JSON.stringify({ cms: action, status: 502, message }));
       if (e instanceof ConfigError) return json({ error: message }, 502);

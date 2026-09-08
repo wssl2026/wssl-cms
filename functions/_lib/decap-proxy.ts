@@ -17,8 +17,13 @@
 import type { Author, GitHubContentClient } from './github-content';
 import { base64ToUtf8, utf8ToBase64 } from './github-content';
 
-/** The only places in the repository an editor may read or write. */
-export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/uploads'] as const;
+/**
+ * The only places in the repository an editor may read or write. `public/images` is
+ * included alongside `public/uploads` because the home-page image widgets in
+ * `public/admin/config.yml` (the carousel, card icons, program buttons) use
+ * `media_folder: public/images`.
+ */
+export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/uploads', 'public/images'] as const;
 
 export class ProxyError extends Error {
   status: number;

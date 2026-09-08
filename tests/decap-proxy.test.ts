@@ -372,8 +372,46 @@ describe('handleProxyAction — deletes', () => {
 });
 
 describe('handleProxyAction — path allow-list', () => {
-  it('names exactly the three writable roots', () => {
-    expect([...ALLOWED_ROOTS]).toEqual(['src/content/pages', 'src/data', 'public/uploads']);
+  it('names exactly the four writable roots', () => {
+    expect([...ALLOWED_ROOTS]).toEqual(['src/content/pages', 'src/data', 'public/uploads', 'public/images']);
+  });
+
+  it('allows media under public/images (the home-page image widgets) but not other public/ folders', async () => {
+    const { deps, files, writes } = makeFakeGitHub({ 'public/images/hero.png': 'hero-bytes' });
+    const content = utf8ToBase64('new-hero-bytes');
+
+    const media = (await handleProxyAction('getMedia', { branch: 'main', mediaFolder: 'public/images' }, deps)) as {
+      path: string;
+    }[];
+    expect(media).toEqual([expect.objectContaining({ path: 'public/images/hero.png' })]);
+
+    const persisted = (await handleProxyAction(
+      'persistMedia',
+      {
+        branch: 'main',
+        asset: { path: 'public/images/hero.png', content, encoding: 'base64' },
+        options: { commitMessage: 'content: upload public/images/hero.png' },
+      },
+      deps,
+    )) as { path: string };
+    expect(persisted.path).toBe('public/images/hero.png');
+    expect(files.get('public/images/hero.png')!.base64).toBe(content);
+    expect(writes[writes.length - 1]).toMatchObject({ type: 'put', path: 'public/images/hero.png' });
+
+    await expect(
+      handleProxyAction('getMedia', { branch: 'main', mediaFolder: 'public/other' }, deps),
+    ).rejects.toMatchObject({ status: 400 });
+    await expect(
+      handleProxyAction(
+        'persistMedia',
+        {
+          branch: 'main',
+          asset: { path: 'public/other/x.png', content, encoding: 'base64' },
+          options: { commitMessage: 'x' },
+        },
+        deps,
+      ),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   const rejected: [string, string, Record<string, unknown>][] = [

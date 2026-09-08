@@ -123,7 +123,11 @@ export function createGitHubContentClient(config: GitHubClientConfig): GitHubCon
     const response = await fetchImpl(`${API}${endpoint}`, { headers: headers() });
     if (response.status === 404) return null;
     if (!response.ok) return fail('GET', endpoint, response);
-    const body = (await response.json()) as { type?: string; content?: string; encoding?: string; sha: string };
+    const body = (await response.json()) as
+      | { type?: string; content?: string; encoding?: string; sha: string }
+      | unknown[];
+    // A directory path answers with a JSON array, not an object — treat it as "no file".
+    if (Array.isArray(body)) return null;
     if (body.type && body.type !== 'file') return null;
     return body;
   }
