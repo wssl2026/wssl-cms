@@ -1,15 +1,18 @@
+# Editors sign in by email through Cloudflare Access and never touch GitHub: the real
+# backend is the proxy at /api/cms/v1, wired up in index.html. This `github` block is
+# only the declared fallback Decap needs before it detects that proxy.
 backend:
   name: github
   repo: OWNER/REPO
   branch: main
-  base_url: https://www.wssl.org
-  auth_endpoint: api/auth
   commit_messages:
     create: 'content: create {{collection}} "{{slug}}"'
     update: 'content: update {{collection}} "{{slug}}"'
     delete: 'content: delete {{collection}} "{{slug}}"'
     uploadMedia: 'content: upload {{path}}'
     deleteMedia: 'content: delete {{path}}'
+
+publish_mode: simple
 
 site_url: https://www.wssl.org
 display_url: https://www.wssl.org

@@ -1,4 +1,11 @@
 ANTHROPIC_API_KEY=sk-ant-...
-GITHUB_OAUTH_CLIENT_ID=
-GITHUB_OAUTH_CLIENT_SECRET=
 DAILY_CAP=1500
+
+# Fine-grained GitHub PAT the editor commits with (Contents: read/write, Metadata: read,
+# on the content repo only). In production this is a Cloudflare Pages secret.
+GITHUB_BOT_TOKEN=github_pat_...
+
+# Leave CF_ACCESS_AUD unset locally: with no Access in front of `wrangler pages dev`,
+# /api/cms/v1 accepts unauthenticated requests from localhost only and commits as
+# "Local editor <local@wssl.org>". Setting it makes a valid Access JWT mandatory again.
+# CF_ACCESS_AUD=

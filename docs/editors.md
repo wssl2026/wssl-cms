@@ -1,9 +1,13 @@
 # Editing wssl.org
 
-## One-time setup (per editor)
-1. Create a free GitHub account at https://github.com/signup (use your @wssl.org email).
-2. Send your GitHub username to the webmaster, who adds you as a collaborator with **Write** access on the content repository. Every editor has the same access.
-3. Go to https://www.wssl.org/admin/ and click **Login with GitHub**.
+## Signing in
+You do not need an account or a password — just your email.
+
+1. Go to https://www.wssl.org/admin/.
+2. Type your email address and click **Send me a code**.
+3. Open the email, copy the one-time code, paste it in.
+
+That's it; the editor opens. The sign-in lasts a while, so you will not be asked every time. If your email is not on the list of editors you will be turned away — ask the webmaster to add it.
 
 ## Editing a page
 - Pick the section (Programs, Registration, Schedules, Fields, Volunteers, About), open the page, edit, click **Publish**.
@@ -16,4 +20,4 @@
 Site Settings → Alert banner → tick "Show banner", write the message, Publish. Untick to remove.
 
 ## Undo
-Every publish is a Git commit. Ask the webmaster to revert a change (`git revert <commit>`), or re-edit the page.
+Every publish is a Git commit recorded under your email address, so the webmaster can see who changed what and revert a change (`git revert <commit>`). You can also just re-edit the page.
