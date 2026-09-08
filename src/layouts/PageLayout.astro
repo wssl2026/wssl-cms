@@ -1,19 +1,11 @@
 ---
-import '../styles/global.css';
+import BaseLayout from './BaseLayout.astro';
 interface Props { title: string; description?: string }
 const { title, description } = Astro.props;
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} - West Side Soccer League</title>
-    {description && <meta name="description" content={description} />}
-  </head>
-  <body class="font-sans">
-    <main class="mx-auto max-w-4xl px-4 py-8">
-      <h1 class="text-3xl font-bold text-navy mb-6">{title}</h1>
-      <div class="prose max-w-none"><slot /></div>
-    </main>
-  </body>
-</html>
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-4xl px-4 py-8">
+    <h1 class="text-3xl font-bold text-navy mb-6">{title}</h1>
+    <div class="prose prose-lg max-w-none prose-a:text-navy prose-headings:text-navy"><slot /></div>
+  </article>
+</BaseLayout>
