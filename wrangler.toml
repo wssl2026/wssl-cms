@@ -4,7 +4,8 @@ compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
 [vars]
-DAILY_CAP = "1500"
+# Questions answered per day before Ask WSSL turns itself off. See README "Cost".
+DAILY_CAP = "200"
 
 [[kv_namespaces]]
 binding = "USAGE"

@@ -36,4 +36,19 @@ describe('Decap admin page', () => {
     expect(html).toContain('CMS_MANUAL_INIT = true');
     expect(html).toContain('local_backend: true');
   });
+  it('loads Decap from an exact pinned version, never a floating range', () => {
+    const html = readFileSync('public/admin/index.html', 'utf8');
+    expect(html).toMatch(/decap-cms@\d+\.\d+\.\d+\/dist\/decap-cms\.js/);
+    expect(html).not.toContain('decap-cms@^');
+  });
+});
+
+describe('public/_headers', () => {
+  it('sets the baseline security headers and keeps the OAuth callback uncached', () => {
+    const headers = readFileSync('public/_headers', 'utf8');
+    expect(headers).toContain('X-Content-Type-Options: nosniff');
+    expect(headers).toContain('Referrer-Policy: strict-origin-when-cross-origin');
+    expect(headers).toContain('X-Frame-Options: DENY');
+    expect(headers).toMatch(/\/api\/callback\n\s+Cache-Control: no-store/);
+  });
 });
