@@ -15,6 +15,7 @@ export function encodeEvent(e: ClientEvent): string {
 
 type UpstreamStream = AsyncIterable<Anthropic.Beta.BetaRawMessageStreamEvent> & {
   finalMessage(): Promise<Anthropic.Beta.BetaMessage>;
+  abort?(): void;
 };
 
 export function streamToClient(stream: UpstreamStream, docUrls: string[], onFinal?: (m: Anthropic.Beta.BetaMessage) => void): ReadableStream<Uint8Array> {
@@ -36,11 +37,22 @@ export function streamToClient(stream: UpstreamStream, docUrls: string[], onFina
         onFinal?.(final);
         if (final.stop_reason === 'refusal') send({ type: 'text', text: REFUSAL_TEXT });
         send({ type: 'done', served_by: final.model });
-      } catch {
+      } catch (err) {
+        // Metadata only — request and answer content must never reach the logs.
+        console.error(JSON.stringify({
+          event: 'chat_upstream_error',
+          name: (err as Error)?.name,
+          status: (err as { status?: number })?.status,
+          message: (err as Error)?.message,
+        }));
         send({ type: 'error', message: ERROR_TEXT });
       } finally {
         controller.close();
       }
+    },
+    cancel() {
+      // The visitor closed the panel or navigated away: stop paying for tokens.
+      stream.abort?.();
     },
   });
 }

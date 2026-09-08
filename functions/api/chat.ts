@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import corpusJson from '../_lib/corpus.json';
 import type { CorpusDoc } from '../_lib/corpus-types';
-import { MODEL, SYSTEM_PROMPT, buildMessages, validateHistory } from '../_lib/chat';
+import { buildRequest, validateHistory } from '../_lib/chat';
 import { streamToClient } from '../_lib/sse';
 import { checkDailyCap } from '../_lib/usage';
 
@@ -25,23 +25,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   let cap;
   try {
-    cap = await checkDailyCap(env.USAGE, Number(env.DAILY_CAP ?? 1500));
+    cap = await checkDailyCap(env.USAGE, Number(env.DAILY_CAP ?? 200));
   } catch {
     return json({ error: 'Ask WSSL is temporarily unavailable. Please try again later or use the Contact page.' }, 503);
   }
   if (!cap.ok) return json({ error: 'Ask WSSL has reached its daily limit. Please try again tomorrow or use the Contact page.' }, 429);
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-  const stream = client.beta.messages.stream({
-    model: MODEL,
-    max_tokens: 4096,
-    betas: ['server-side-fallback-2026-07-01'],
-    ...({ fallbacks: 'default' } as Record<string, unknown>),
-    thinking: { type: 'adaptive' },
-    output_config: { effort: 'medium' },
-    system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral', ttl: '1h' } }],
-    messages: buildMessages(corpus, history),
-  });
+  const stream = client.beta.messages.stream(buildRequest(corpus, history) as never);
 
   return new Response(
     streamToClient(stream, docUrls, (final) => console.log(JSON.stringify({ usage: final.usage, model: final.model, stop: final.stop_reason, day_count: cap.count }))),

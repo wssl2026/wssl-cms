@@ -39,4 +39,25 @@ describe('streamToClient', () => {
     const out = await collect(streamToClient(broken, docUrls));
     expect(out).toEqual([{ type: 'error', message: 'The assistant is unavailable right now. Please try again in a minute.' }]);
   });
+
+  it('logs the upstream failure without any request content', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const err = Object.assign(new Error('overloaded'), { name: 'APIError', status: 529 });
+    const broken = { async *[Symbol.asyncIterator]() { throw err; }, finalMessage: async () => ({}) } as any;
+    await collect(streamToClient(broken, docUrls));
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(spy.mock.calls[0][0] as string)).toEqual({ event: 'chat_upstream_error', name: 'APIError', status: 529, message: 'overloaded' });
+    spy.mockRestore();
+  });
+
+  it('aborts the upstream when the client cancels the response stream', async () => {
+    let aborted = 0;
+    const pending = {
+      async *[Symbol.asyncIterator]() { await new Promise(() => {}); },
+      finalMessage: async () => ({}),
+      abort: () => { aborted++; },
+    } as any;
+    await streamToClient(pending, docUrls).cancel();
+    expect(aborted).toBe(1);
+  });
 });

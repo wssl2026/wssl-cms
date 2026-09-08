@@ -38,6 +38,7 @@ const suggestions = [
   const list = $('ask-messages'), form = $('ask-form') as HTMLFormElement, input = $('ask-input') as HTMLInputElement, send = $('ask-send') as HTMLButtonElement;
 
   const STORAGE = 'askwssl:history';
+  let inFlight: AbortController | null = null;
   let history: ChatMessage[] = [];
   try { history = JSON.parse(sessionStorage.getItem(STORAGE) ?? '[]'); } catch { history = []; }
 
@@ -76,8 +77,12 @@ const suggestions = [
       else if (e.type === 'error') { text = text || e.message; out.innerHTML = render(text); }
       scroll();
     };
-    try { await streamChat(history, onEvent); }
+    inFlight?.abort();
+    const controller = new AbortController();
+    inFlight = controller;
+    try { await streamChat(history, onEvent, controller.signal); }
     finally {
+      if (inFlight === controller) inFlight = null;
       if (sources.size) {
         const s = sourcesEl();
         s.append('Sources: ');
@@ -92,7 +97,9 @@ const suggestions = [
           if (i < entries.length - 1) s.append(' · ');
         }
       }
-      history.push({ role: 'assistant', content: text });
+      // An empty assistant turn would be rejected by the API on the next
+      // question, so only remember a turn that actually said something.
+      if (text.trim()) history.push({ role: 'assistant', content: text });
       history = history.slice(-20);
       try { sessionStorage.setItem(STORAGE, JSON.stringify(history)); } catch { /* storage unavailable */ }
       send.disabled = false; input.disabled = false; input.focus(); scroll();
@@ -100,7 +107,7 @@ const suggestions = [
   }
 
   openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); });
-  closeBtn.addEventListener('click', () => { panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
+  closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
   form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
   list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
 </script>

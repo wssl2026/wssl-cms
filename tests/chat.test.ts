@@ -1,4 +1,4 @@
-import { validateHistory, buildMessages, SYSTEM_PROMPT, MODEL, MAX_MESSAGE_CHARS } from '../functions/_lib/chat';
+import { validateHistory, buildMessages, buildRequest, SYSTEM_PROMPT, MODEL, MAX_MESSAGE_CHARS } from '../functions/_lib/chat';
 
 const corpus = [
   { title: 'A', url: 'https://www.wssl.org/a/', text: 'aaa' },
@@ -44,5 +44,29 @@ describe('buildMessages', () => {
     expect(MODEL).toBe('claude-opus-5');
     expect(SYSTEM_PROMPT).toContain('wssl.org');
     expect(SYSTEM_PROMPT).not.toMatch(/\d{4}-\d{2}-\d{2}/); // no dates → stable cache
+  });
+});
+
+describe('buildRequest', () => {
+  const req = buildRequest(corpus, [{ role: 'user', content: 'hi' }]) as any;
+
+  it('pins the model, the fallback beta and adaptive thinking at medium effort', () => {
+    expect(req.model).toBe('claude-opus-5');
+    expect(req.max_tokens).toBe(8192);
+    expect(req.betas).toEqual(['server-side-fallback-2026-07-01']);
+    expect(req.fallbacks).toBe('default');
+    expect(req.thinking.type).toBe('adaptive');
+    expect(req.output_config.effort).toBe('medium');
+  });
+
+  it('caches the system prompt for an hour and carries the corpus messages', () => {
+    expect(req.system[0].cache_control).toEqual({ type: 'ephemeral', ttl: '1h' });
+    expect(req.system[0].text).toBe(SYSTEM_PROMPT);
+    expect(req.messages).toEqual(buildMessages(corpus, [{ role: 'user', content: 'hi' }]));
+  });
+
+  it('sets no sampling or thinking-budget parameters', () => {
+    for (const key of ['temperature', 'top_p', 'top_k', 'budget_tokens']) expect(Object.keys(req)).not.toContain(key);
+    expect(Object.keys(req.thinking)).not.toContain('budget_tokens');
   });
 });

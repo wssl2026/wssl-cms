@@ -81,6 +81,20 @@ describe('POST /api/chat handler', () => {
     expect(body.error).toContain('temporarily unavailable');
   });
 
+  it('POST once the daily cap is reached → 429 with the daily-limit message', async () => {
+    const kv = { get: async () => '200', put: async () => {} } as any;
+    const env = { ANTHROPIC_API_KEY: 'x', USAGE: kv, DAILY_CAP: '200' };
+    const request = makeRequest(
+      'https://example.com/api/chat',
+      { messages: [{ role: 'user', content: 'hi' }] },
+      'https://example.com'
+    );
+    const response = await onRequestPost(makeFakeContext(request, env));
+    expect(response.status).toBe(429);
+    const body = await response.json();
+    expect(body.error).toContain('daily limit');
+  });
+
   it('POST with matching Origin but empty messages → 400 (regression guard)', async () => {
     const kv = { get: async () => null, put: async () => {} } as any;
     const env = { ANTHROPIC_API_KEY: 'x', USAGE: kv, DAILY_CAP: '5' };

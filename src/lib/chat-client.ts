@@ -43,6 +43,7 @@ export async function streamChat(messages: ChatMessage[], onEvent: (e: ClientEve
       parsed.events.forEach(onEvent);
     }
   } catch {
+    if (signal?.aborted) return;   // the visitor closed the panel; nothing to report
     onEvent({ type: 'error', message: 'Could not reach the assistant. Check your connection and try again.' });
   }
 }

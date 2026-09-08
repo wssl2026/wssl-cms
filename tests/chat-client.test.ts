@@ -23,6 +23,18 @@ describe('streamChat', () => {
     vi.unstubAllGlobals();
   });
 
+  it('stays silent when the caller aborts the request', async () => {
+    const controller = new AbortController();
+    vi.stubGlobal('fetch', vi.fn(async (_url: string, init: RequestInit) => {
+      controller.abort();
+      throw Object.assign(new Error('aborted'), { name: 'AbortError' });
+    }));
+    const onEvent = vi.fn();
+    await streamChat([{ role: 'user', content: 'hi' }], onEvent, controller.signal);
+    expect(onEvent).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
   it('produces error event for non-OK JSON response', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ error: 'nope' }), { status: 429 })));
     const onEvent = vi.fn();

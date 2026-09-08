@@ -2,6 +2,8 @@ import type Anthropic from '@anthropic-ai/sdk';
 import type { CorpusDoc } from './corpus-types';
 
 export const MODEL = 'claude-opus-5';
+export const MAX_TOKENS = 8192;       // adaptive thinking shares this budget with the answer
+export const FALLBACK_BETA = 'server-side-fallback-2026-07-01';
 export const MAX_TURNS = 13;          // trailing turns kept (odd → starts and ends with user)
 export const MAX_MESSAGE_CHARS = 2000;
 
@@ -57,4 +59,21 @@ export function buildMessages(corpus: CorpusDoc[], history: ClientMessage[]): An
     { role: 'assistant', content: CORPUS_ACK },
     ...history.map((m) => ({ role: m.role, content: m.content })),
   ] as unknown as Anthropic.Beta.BetaMessageParam[];
+}
+
+/**
+ * The exact parameter object sent to `client.beta.messages.stream`. Kept here,
+ * away from the handler, so the request shape is covered by unit tests.
+ */
+export function buildRequest(corpus: CorpusDoc[], history: ClientMessage[]): Record<string, unknown> {
+  return {
+    model: MODEL,
+    max_tokens: MAX_TOKENS,
+    betas: [FALLBACK_BETA],
+    fallbacks: 'default',
+    thinking: { type: 'adaptive' },
+    output_config: { effort: 'medium' },
+    system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+    messages: buildMessages(corpus, history),
+  };
 }
