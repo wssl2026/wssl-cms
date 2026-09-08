@@ -41,11 +41,19 @@ export function isInternalPage(href: string): boolean {
   return p.startsWith('/') && !p.startsWith(LEGACY_ASSET_PREFIX) && !p.startsWith('/index.cfm') && !p.startsWith('/core/');
 }
 
+/**
+ * Fragment ids are sanitized the same way as the `<a name="…">` anchors they
+ * point at, so a legacy `#field set up` still finds `<a id="fieldsetup">`.
+ */
+export function sanitizeFragment(fragment: string): string {
+  return safeDecode(fragment).replace(/[^A-Za-z0-9_-]/g, '');
+}
+
 export function normalizeInternal(href: string): string {
   const p = stripHost(href);
-  const m = p.match(/^([^?#]*)(.*)$/)!;
+  const m = p.match(/^([^?#]*)([^#]*)(?:#(.*))?$/)!;
   let path = m[1];
-  const suffix = m[2];
+  const suffix = m[2] + (m[3] === undefined ? '' : `#${sanitizeFragment(m[3])}`);
   // Directory-style paths get a trailing slash; a path ending in a filename
   // (…/schedule.cfm, …/handbook.pdf) must be left exactly as it is.
   const isFile = /\.[A-Za-z0-9]{1,8}$/.test(path);
@@ -137,6 +145,8 @@ function rewriteKeptTableLinks(table: any, assets: Set<string>): void {
       a.setAttribute('href', localAssetPath(href));
     } else if (isInternalPage(href)) {
       a.setAttribute('href', normalizeInternal(href));
+    } else if (href.startsWith('#')) {
+      a.setAttribute('href', `#${sanitizeFragment(href.slice(1))}`);
     }
   }
   for (const img of Array.from(table.querySelectorAll('img[src]')) as any[]) {
@@ -213,6 +223,11 @@ export function htmlToMarkdown(html: string): ConvertResult {
   td.addRule('internalLink', {
     filter: (node) => node.nodeName === 'A' && isInternalPage(node.getAttribute('href') ?? ''),
     replacement: (content, node) => `[${content}](${normalizeInternal((node as HTMLElement).getAttribute('href') ?? '')})`,
+  });
+
+  td.addRule('samePageLink', {
+    filter: (node) => node.nodeName === 'A' && (node.getAttribute('href') ?? '').startsWith('#'),
+    replacement: (content, node) => `[${content}](#${sanitizeFragment(((node as HTMLElement).getAttribute('href') ?? '').slice(1))})`,
   });
 
   // Legacy pages target in-page links (#coaches) at empty `<a name="…">`

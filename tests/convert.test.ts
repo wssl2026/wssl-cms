@@ -80,6 +80,10 @@ describe('in-page anchors', () => {
     expect(htmlToMarkdown('<a id="top"></a><p>a</p>').markdown).toContain('<a id="top"></a>');
     expect(htmlToMarkdown('<a name="!!!"></a><p>a</p>').markdown).toBe('a');
   });
+  it('sanitizes fragment links the same way as the anchors they point at', () => {
+    const { markdown } = htmlToMarkdown('<p><a href="#field set up">Setup</a> <a href="/programs/#what teams">Teams</a></p>');
+    expect(markdown).toBe('[Setup](#fieldsetup) [Teams](/programs/#whatteams)');
+  });
   it('leaves an anchor with text content as a normal link', () => {
     const { markdown } = htmlToMarkdown('<p><a name="x" href="/about/">About</a></p>');
     expect(markdown).toBe('[About](/about/)');
