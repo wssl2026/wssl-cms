@@ -15,4 +15,27 @@ The founding Board Members of West Side Soccer League were Neville Coleman (Comm
 
 ## Historical Timeline
 
-<table style="width:559px"><tbody><tr><td width="92">1987</td><td width="451">West Side Soccer League Founded &amp; Associated with AYSO</td></tr><tr><td>&nbsp;</td><td>Neville Coleman becomes first WSSL Commissioner</td></tr><tr><td>&nbsp;</td><td>Starts with 10 teams of 118 players and core philosophy of Everybody Plays &amp; Good Sportsmanship</td></tr><tr><td>1996</td><td>Travel teams separate from WSSL to become Manhattan Soccer Club</td></tr><tr><td>1997</td><td>Marc Freedman becomes second WSSL Commissioner</td></tr><tr><td>&nbsp;</td><td>Opened 101st Street Field in Riverside Park</td></tr><tr><td>&nbsp;</td><td>2500 players registered</td></tr><tr><td>1999</td><td>Kantor Fields open on Randall's Island</td></tr><tr><td>2001</td><td>Eddy Collyns becomes third WSSL Commissioner</td></tr><tr><td>&nbsp;</td><td>Registration exceeds 4,000 players</td></tr><tr><td>&nbsp;</td><td>Coach Education Nights Launched</td></tr><tr><td>&nbsp;</td><td>WSSL supports Riverside Park field development with $400K</td></tr><tr><td>2005</td><td>Dana DiPrima becomes fourth WSSL Commissioner</td></tr><tr><td>&nbsp;</td><td>WSSL opens new artificial turf fields at 103rd and 107th Street in Riverside Park (Thanks Marc &amp; Eddy!!)</td></tr><tr><td>&nbsp;</td><td>On-line registration &amp; website management for divisions &amp; teams launched</td></tr><tr><td>2006</td><td>Small sided games introduced for all divisions</td></tr><tr><td>2007</td><td>First Annual "WSSL Salutes" Volunteer Appreciation Event</td></tr><tr><td>2011</td><td>Riverside Park Honors WSSL for its commitment to the Park</td></tr><tr><td>&nbsp;</td><td>WSSL Partners with NY Futsal for Winter Futsal Program</td></tr><tr><td>2012</td><td>WSSL Launches Tournament Program (Spring)</td></tr><tr><td>&nbsp;</td><td>WSSL Launches new Travel Program (Fall)</td></tr><tr><td>2015</td><td>Meredith Berkowitz becomes fifth WSSL Commissioner</td></tr><tr><td>&nbsp;</td><td><p>WSSL Launches new Development Academy Program (Fall)</p><p>&nbsp;</p></td></tr></tbody></table>
+| 1987 | West Side Soccer League Founded & Associated with AYSO |
+| --- | --- |
+|   | Neville Coleman becomes first WSSL Commissioner |
+|   | Starts with 10 teams of 118 players and core philosophy of Everybody Plays & Good Sportsmanship |
+| 1996 | Travel teams separate from WSSL to become Manhattan Soccer Club |
+| 1997 | Marc Freedman becomes second WSSL Commissioner |
+|   | Opened 101st Street Field in Riverside Park |
+|   | 2500 players registered |
+| 1999 | Kantor Fields open on Randall's Island |
+| 2001 | Eddy Collyns becomes third WSSL Commissioner |
+|   | Registration exceeds 4,000 players |
+|   | Coach Education Nights Launched |
+|   | WSSL supports Riverside Park field development with $400K |
+| 2005 | Dana DiPrima becomes fourth WSSL Commissioner |
+|   | WSSL opens new artificial turf fields at 103rd and 107th Street in Riverside Park (Thanks Marc & Eddy!!) |
+|   | On-line registration & website management for divisions & teams launched |
+| 2006 | Small sided games introduced for all divisions |
+| 2007 | First Annual "WSSL Salutes" Volunteer Appreciation Event |
+| 2011 | Riverside Park Honors WSSL for its commitment to the Park |
+|   | WSSL Partners with NY Futsal for Winter Futsal Program |
+| 2012 | WSSL Launches Tournament Program (Spring) |
+|   | WSSL Launches new Travel Program (Fall) |
+| 2015 | Meredith Berkowitz becomes fifth WSSL Commissioner |
+|   | WSSL Launches new Development Academy Program (Fall)   |

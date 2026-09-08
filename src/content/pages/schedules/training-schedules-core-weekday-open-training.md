@@ -15,6 +15,10 @@ All age groups (U6 through U19) may attend each session.
 
 Sessions will take place from 3:45-5:00pm on:
 
-<table><tbody><tr><td>Friday, April 24, 2026</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Friday, May 1, 2026</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Friday, May 22, 2026</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Friday, May 29, 2026</td></tr></tbody></table>
+| Friday, April 24, 2026 |   |   |
+| --- | --- | --- |
+| Friday, May 1, 2026 |   |   |
+| Friday, May 22, 2026 |   |   |
+| Friday, May 29, 2026 |
 
 ## **Fall 2026 - Please check back in August 2026.**

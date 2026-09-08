@@ -11,7 +11,14 @@ League Volunteers
 >
 > Currently, WSSL is looking for the following League volunteers to fill vacant positions or to take over for volunteers who will vacate their positions in the next year or so.
 
-<table><tbody><tr><td style="width:175px"><p class="alert alert-success">Volunteer Role</p></td><td style="width:514px"><p class="alert alert-success">Description</p></td><td><p class="alert alert-success">time commitment</p></td></tr><tr><td style="width:175px">&nbsp;</td><td style="width:514px">&nbsp;</td><td>&nbsp;</td></tr><tr><td style="width:175px">Registrar Support<br>&nbsp;</td><td style="width:514px">Assist with registration functions, including checking proof of age</td><td>Medium</td></tr><tr><td style="width:175px"><p>Awards Manager&nbsp;</p></td><td style="width:514px"><p>Order trophies/medals</p></td><td><p>Minimal</p></td></tr><tr><td style="width:175px">Sponsorship Manager<br>&nbsp;</td><td style="width:514px">Help to secure and manage corporate sponsors for WSSL</td><td>Minimal</td></tr><tr><td style="width:175px">&nbsp;</td><td><p>&nbsp;</p></td></tr><tr><td style="width:175px">Social Media Manager</td><td style="width:514px">Help WSSL maintain and oversee its facebook, instagram and twitter accounts</td><td>Minimal&nbsp;</td></tr></tbody></table>
+| Volunteer Role | Description | time commitment |
+| --- | --- | --- |
+|   |   |   |
+| Registrar Support   | Assist with registration functions, including checking proof of age | Medium |
+| Awards Manager  | Order trophies/medals | Minimal |
+| Sponsorship Manager   | Help to secure and manage corporate sponsors for WSSL | Minimal |
+|   |   |
+| Social Media Manager | Help WSSL maintain and oversee its facebook, instagram and twitter accounts | Minimal  |
 
 Join the WSSL Board
 
