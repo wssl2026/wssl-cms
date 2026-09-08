@@ -1,0 +1,13 @@
+name = "wssl-cms"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[vars]
+DAILY_CAP = "1500"
+
+[[kv_namespaces]]
+binding = "USAGE"
+# Replace with the ids printed by: npx wrangler kv namespace create USAGE [--preview]  (Task 12)
+id = "00000000000000000000000000000000"
+preview_id = "00000000000000000000000000000000"
