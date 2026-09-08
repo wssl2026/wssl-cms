@@ -1,11 +1,6 @@
 {
   "name": "wssl-cms",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "test": "vitest run",
     "dev": "astro dev",
@@ -19,7 +14,10 @@
   "author": "",
   "license": "ISC",
   "type": "module",
-  "private": "true",
+  "engines": {
+    "node": ">=24"
+  },
+  "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",
     "@astrojs/sitemap": "^3.7.4",
