@@ -19,6 +19,10 @@ describe('asset helpers', () => {
     expect(normalizeInternal('https://www.wssl.org/fields/overview/')).toBe('/fields/overview/');
     expect(normalizeInternal('/about/contact/#form')).toBe('/about/contact/#form');
   });
+  it('leaves a path whose last segment is a file alone', () => {
+    expect(normalizeInternal('http://www.wssl.org/inleague/schedule/schedule.cfm?team=1')).toBe('/inleague/schedule/schedule.cfm?team=1');
+    expect(normalizeInternal('/documents/handbook.pdf')).toBe('/documents/handbook.pdf');
+  });
   it('tolerates malformed percent-encoding instead of throwing', () => {
     expect(localAssetPath('/sites/wssl/assets/File/50% off.pdf')).toBe('/assets/legacy/File/50-off.pdf');
   });
@@ -64,6 +68,21 @@ describe('htmlToMarkdown', () => {
   it('does not throw on empty tables and produces no output', () => {
     const { markdown } = htmlToMarkdown('<p>a</p><table></table><table><tbody></tbody></table><p>b</p>');
     expect(markdown).toBe('a\n\nb');
+  });
+});
+
+describe('in-page anchors', () => {
+  it('keeps an empty named anchor as a raw HTML id', () => {
+    const { markdown } = htmlToMarkdown('<p>a</p><a name="Coaches Corner!"></a><h2>Coaches</h2>');
+    expect(markdown).toContain('<a id="CoachesCorner"></a>');
+  });
+  it('keeps an empty id anchor and drops one with no usable name', () => {
+    expect(htmlToMarkdown('<a id="top"></a><p>a</p>').markdown).toContain('<a id="top"></a>');
+    expect(htmlToMarkdown('<a name="!!!"></a><p>a</p>').markdown).toBe('a');
+  });
+  it('leaves an anchor with text content as a normal link', () => {
+    const { markdown } = htmlToMarkdown('<p><a name="x" href="/about/">About</a></p>');
+    expect(markdown).toBe('[About](/about/)');
   });
 });
 
@@ -121,5 +140,24 @@ describe('htmlToMarkdown legacy table cleanup', () => {
     expect(markdown).toContain('<table>');
     expect(markdown).toContain('colspan="2"');
     expect(markdown).not.toContain('style=');
+  });
+
+  it('f. rewrites links and images inside a kept raw-HTML table', () => {
+    const { markdown, assets } = htmlToMarkdown(
+      '<table><tbody><tr><td colspan="2">' +
+      '<a href="https://cms.wssl.org/programs/playground/">Playground</a>' +
+      '<a href="http://www.wssl.org/inleague/x.cfm?y=1">Schedule</a>' +
+      '<a href="https://www.wssl.org/sites/wssl/assets/File/A.pdf">PDF</a>' +
+      '<img src="http://www.wssl.org/sites/wssl/assets/Image/b.png">' +
+      '<a href="https://randallsisland.org/map">Map</a>' +
+      '</td></tr><tr><td>A</td><td>B</td></tr></tbody></table>'
+    );
+    expect(markdown).toContain('href="/programs/playground/"');
+    expect(markdown).toContain('href="/inleague/x.cfm?y=1"');
+    expect(markdown).toContain('href="/assets/legacy/File/A.pdf"');
+    expect(markdown).toContain('src="/assets/legacy/Image/b.png"');
+    expect(markdown).toContain('href="https://randallsisland.org/map"');
+    expect(markdown).not.toContain('wssl.org');
+    expect(assets.sort()).toEqual(['/sites/wssl/assets/File/A.pdf', '/sites/wssl/assets/Image/b.png']);
   });
 });

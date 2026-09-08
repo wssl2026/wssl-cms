@@ -46,7 +46,10 @@ export function normalizeInternal(href: string): string {
   const m = p.match(/^([^?#]*)(.*)$/)!;
   let path = m[1];
   const suffix = m[2];
-  if (!path.endsWith('/')) path += '/';
+  // Directory-style paths get a trailing slash; a path ending in a filename
+  // (…/schedule.cfm, …/handbook.pdf) must be left exactly as it is.
+  const isFile = /\.[A-Za-z0-9]{1,8}$/.test(path);
+  if (!path.endsWith('/') && !isFile) path += '/';
   return path + suffix;
 }
 
@@ -120,7 +123,32 @@ function flattenLineBreaks(cell: any, doc: any): void {
  * genuinely irregular (nested tables, spanning cells) are left as raw HTML,
  * but with the same attribute/tag cleanup applied.
  */
-function cleanTables(root: any): void {
+/**
+ * Tables that stay raw HTML never reach turndown's link rules, so their
+ * legacy asset and same-host page links would survive the migration pointing
+ * at wssl.org (404 after cutover). Rewrite them in place, collecting any
+ * legacy assets so the migration downloads them.
+ */
+function rewriteKeptTableLinks(table: any, assets: Set<string>): void {
+  for (const a of Array.from(table.querySelectorAll('a[href]')) as any[]) {
+    const href = a.getAttribute('href') ?? '';
+    if (isLegacyAsset(href)) {
+      assets.add(stripHost(href));
+      a.setAttribute('href', localAssetPath(href));
+    } else if (isInternalPage(href)) {
+      a.setAttribute('href', normalizeInternal(href));
+    }
+  }
+  for (const img of Array.from(table.querySelectorAll('img[src]')) as any[]) {
+    const src = img.getAttribute('src') ?? '';
+    if (isLegacyAsset(src)) {
+      assets.add(stripHost(src));
+      img.setAttribute('src', localAssetPath(src));
+    }
+  }
+}
+
+function cleanTables(root: any, assets: Set<string>): void {
   const doc = root.ownerDocument;
 
   // a. drop layout-only column hints entirely.
@@ -138,6 +166,7 @@ function cleanTables(root: any): void {
     // d/e. promote to a Markdown table when it's simple enough; otherwise leave as clean raw HTML.
     const hasNestedTable = !!table.querySelector('table');
     const hasSpanningCell = Array.from(table.querySelectorAll('td, th')).some((cell: any) => cellSpan(cell) > 1);
+    if (hasNestedTable || hasSpanningCell) rewriteKeptTableLinks(table, assets);
     if (!hasNestedTable && !hasSpanningCell) {
       Array.from(table.querySelectorAll('td, th')).forEach((cell: any) => flattenLineBreaks(cell, doc));
       const firstRow = table.rows[0];
@@ -186,9 +215,26 @@ export function htmlToMarkdown(html: string): ConvertResult {
     replacement: (content, node) => `[${content}](${normalizeInternal((node as HTMLElement).getAttribute('href') ?? '')})`,
   });
 
+  // Legacy pages target in-page links (#coaches) at empty `<a name="…">`
+  // anchors; turndown drops empty inline elements, which would kill every
+  // fragment link on the site. Keep them as a raw, sanitized `<a id="…">`.
+  td.addRule('inPageAnchor', {
+    filter: (node) => {
+      const el = node as HTMLElement;
+      if (el.nodeName !== 'A' || el.getAttribute('href')) return false;
+      if ((el.textContent ?? '').trim() !== '') return false;
+      return !!(el.getAttribute('name') || el.getAttribute('id'));
+    },
+    replacement: (_content, node) => {
+      const el = node as HTMLElement;
+      const id = (el.getAttribute('name') || el.getAttribute('id') || '').replace(/[^A-Za-z0-9_-]/g, '');
+      return id ? `<a id="${id}"></a>` : '';
+    },
+  });
+
   const doc = (domino as any).createDocument(`<x-turndown id="turndown-root">${html}</x-turndown>`);
   const root = doc.getElementById('turndown-root');
-  cleanTables(root);
+  cleanTables(root, assets);
 
   let markdown = td.turndown(root);
   markdown = markdown

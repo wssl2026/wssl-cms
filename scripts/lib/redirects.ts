@@ -3,6 +3,9 @@ export const STATIC_REDIRECTS = [
   '/blog                 /                      301',
   '/blog/*               /                      301',
   '/fields/overview      /fields/overview/      301',
+  // Legacy same-host links into the old ColdFusion app, kept alive on inLeague.
+  '/inleague/*           https://inleague.wssl.org/:splat  301',
+  '/login                https://inleague.wssl.org/  301',
 ];
 
 export const ASSET_FALLBACK = '/sites/wssl/assets/*  /assets/legacy/:splat  301';

@@ -38,22 +38,25 @@ async function main() {
     assetsOk: [] as string[],
     assetsMissing: [] as string[],
     collisions: [] as string[],
+    pageCollisions: [] as string[],
   };
   const allAssets = new Set<string>();
+  const writtenTargets = new Map<string, string>();
 
   for (const item of items) {
-    if (item.filename === '' || item.filename === 'index') {
-      const { markdown } = htmlToMarkdown(item.body ?? '');
-      await mkdir('src/data', { recursive: true });
-      await writeFile('src/data/home-legacy.md', markdown + '\n');
-      report.written.push('src/data/home-legacy.md');
-      continue;
-    }
     const target = targetFor(item.filename);
     if (!target || item.type !== 'Page') {
       report.skipped.push(`${item.type}:${item.filename}`);
       continue;
     }
+    // targetFor flattens nested paths, so two Mura items can land on one file.
+    // Keep the first and report the clash instead of silently overwriting.
+    const claimed = writtenTargets.get(target.file);
+    if (claimed !== undefined) {
+      report.pageCollisions.push(`${item.filename} collides with ${claimed} at ${target.file}`);
+      continue;
+    }
+    writtenTargets.set(target.file, item.filename);
     const { markdown, assets } = htmlToMarkdown(item.body ?? '');
     assets.forEach((a) => allAssets.add(a));
     const out = join('src/content/pages', target.file);
@@ -77,10 +80,11 @@ async function main() {
   await mkdir('src/data', { recursive: true });
   await writeFile('src/data/nav.json', JSON.stringify({ items: buildNav(items) }, null, 2) + '\n');
   await writeFile('scripts/migration-report.json', JSON.stringify(report, null, 2) + '\n');
-  console.log(`written=${report.written.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} collisions=${report.collisions.length}`);
+  console.log(`written=${report.written.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} collisions=${report.collisions.length} pageCollisions=${report.pageCollisions.length}`);
   console.log('skipped:', report.skipped.join(', '));
   console.log('missing assets:', report.assetsMissing.join(', '));
   console.log('collisions:', report.collisions.join(', '));
+  console.log('page collisions:', report.pageCollisions.join(', '));
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

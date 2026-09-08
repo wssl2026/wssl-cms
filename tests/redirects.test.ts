@@ -27,6 +27,13 @@ describe('assetRedirectLines', () => {
   });
 });
 
+describe('STATIC_REDIRECTS', () => {
+  it('sends the legacy inLeague paths to the inLeague host', () => {
+    expect(STATIC_REDIRECTS).toContain('/inleague/*           https://inleague.wssl.org/:splat  301');
+    expect(STATIC_REDIRECTS).toContain('/login                https://inleague.wssl.org/  301');
+  });
+});
+
 describe('buildRedirectsFile', () => {
   it('orders asset lines first, then the fallback, then the static rules, ending with a newline', () => {
     const downloads = [
