@@ -14,6 +14,12 @@ Record anything you cannot fix as a line in this file under "Open items".
 
 ## Open items
 
+- (g) **Ten dead in-page links (`#fragment`) that were already dead on the old site.** The migration now preserves legacy `<a name="…">` anchors, so 98 of the 108 fragment links in the built site resolve. The ten below point at anchors that do not exist in the Mura HTML either (verified against the live API), so they were broken on wssl.org before the migration; `npm run check-links` reports them as "broken fragment links" until the webmaster adds the missing section anchors or removes the links in the CMS:
+  - `/about/wssl-leadership/` → `#division`, `#travel`, `#other`, `#emeritus`
+  - `/programs/travel-teams/travel-faq/` → `#tryouts`
+  - `/schedules/training-schedules/winter-training/` → `#flex`, `#preseason`
+  - `/volunteers/referees/referee-faq/` → `#teens`
+  - `/programs/core/divisions/spring-2026/` → `#G9`, `#G11`
 - (e) **Seasonal divisions pages in the Ask WSSL corpus.** The `programs/core/divisions/<season>` pages (Fall 2025, Spring 2026, …) are part of the corpus the assistant reads, so it can answer from a season that has passed. Whether to keep, prune or rewrite them is a content decision for the webmaster: either retire the stale season pages (set `draft: true`, which drops them from the corpus) or leave them and accept that answers may quote an old season. Raised by the final review; deliberately not changed by the fix wave.
 - (f) **No Content-Security-Policy on the site.** `public/_headers` sets `X-Content-Type-Options`, `Referrer-Policy` and `X-Frame-Options`, but no CSP: a useful policy has to allow the Decap CMS bundle on unpkg, Google Fonts and the CMS's inline styles, and needs testing against `/admin` before it can be turned on. Deferred from the final review.
 

@@ -17,7 +17,7 @@ Beyond the New York Red Bulls' excellence on an individual and group level, the 
 [Player Evaluations](#player_eval)
 [Access to Professional Soccer](#prof_soccer)
 [Developmental Emphasis](#emphasis)
-[Trainer Selection Process](#trainer_selection)
+[Trainer Selection Process](#trainer_selection)<a id="building_blocks"></a>
 
 Building Blocks of Player Development
 
@@ -29,7 +29,7 @@ The training program for the WSSL Red Bulls Travel teams is built on three metho
 
 The training is supported by these essential elements and training sessions include a progression of activities that are designed for each team according to 1) what is age appropriate, and 2) what is most needed by the individuals and overall team (determined by assessment). The building blocks include:
 
-![](/assets/legacy/Image/Programs/BuildingBlocks.jpg)
+![](/assets/legacy/Image/Programs/BuildingBlocks.jpg)<a id="development_plan"></a>
 
 Season Development Plans
 
@@ -50,7 +50,7 @@ The overall themes of weekly training include:
 - Possession & Combination Play
 - Attacking Principles (level 1 & 2)
 - Shooting & Finishing
-- Defending Principles (level 1 & 2)
+- Defending Principles (level 1 & 2)<a id="training_sessions"></a>
 
 Detailed Training Session Plans
 
@@ -62,7 +62,7 @@ Every session of every week follows a plan (outlined above). Each trainer shares
 
 Each of the eight parts of a training session include specific planning of how each session is organized on the field, the specific instructions for each segment, the key coaching points and the progressions for each activity.
 
-Every training session is incredibly focused and intense with not a minute wasted. Every WSSL Parent Coach -- whether in Core, Tournament or Travel -- has the opportunity to receive a personal log in that gives them access to an extensive library of lesson plans and videos.
+Every training session is incredibly focused and intense with not a minute wasted. Every WSSL Parent Coach -- whether in Core, Tournament or Travel -- has the opportunity to receive a personal log in that gives them access to an extensive library of lesson plans and videos.<a id="game_analysis"></a>
 
 Game Analysis Reports
 
@@ -71,7 +71,7 @@ The WSSL Red Bulls trainers attend many matches with the teams they train. They 
 - Positives
 - Challenges
 - Half Time Talking Points
-- Training Session Recommendations
+- Training Session Recommendations<a id="team_eval"></a>
 
 End of Season Team Evaluation
 
@@ -83,19 +83,19 @@ Each team, via the Parent Coach, receives a full team evaluation. This is instru
 - Possession & Combination Play
 - Attacking Principles
 - Shooting & Finishing
-- Defending Principles
+- Defending Principles<a id="player_eval"></a>
 
 End of Season Player Evaluation
 
-Every single player in WSSL's travel program receives a personal evaluation of their progress and their skills at the end of each Fall and Spring season. This kind of evaluation is designed to congratulate the player on his/her accomplishments as well as to help them understand what s/he needs to do in order to reach the next level. The evaluations are detailed and in narrative form.
+Every single player in WSSL's travel program receives a personal evaluation of their progress and their skills at the end of each Fall and Spring season. This kind of evaluation is designed to congratulate the player on his/her accomplishments as well as to help them understand what s/he needs to do in order to reach the next level. The evaluations are detailed and in narrative form.<a id="prof_soccer"></a>
 
 Access to Professional Soccer
 
-WSSL has season tickets and works with each team to arrange at least one team outing to see the New York Red Bulls take on their MSL competitors. Seeing the game is a very important part of playing the game. Kids watch, are inspired and see the field in a different way. It is critical for kids to connect the soccer that they play with a higher level of excellence in order to advance as a player.
+WSSL has season tickets and works with each team to arrange at least one team outing to see the New York Red Bulls take on their MSL competitors. Seeing the game is a very important part of playing the game. Kids watch, are inspired and see the field in a different way. It is critical for kids to connect the soccer that they play with a higher level of excellence in order to advance as a player.<a id="emphasis"></a>
 
 Emphasis on Development Over Winning
 
-For the most part, particularly in the younger ages, we believe that development is more important than winning. There is a point where development and winning matches become equals, but winning never trumps development at any level.
+For the most part, particularly in the younger ages, we believe that development is more important than winning. There is a point where development and winning matches become equals, but winning never trumps development at any level.<a id="trainer_selection"></a>
 
 Selection Process for Trainers
 

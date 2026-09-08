@@ -50,7 +50,7 @@ The Chief Referees in each division should be your first point of contact about 
 
 If you are not sure which Division your child is in, or if you are trying to reach your division's Chief Referee, you can check under [DIVISIONS](/programs/core/divisions/).
 
-We have a manual for the division Chief Referees. To view it, please click here: [Chief Referee Manual](/assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf).
+We have a manual for the division Chief Referees. To view it, please click here: [Chief Referee Manual](/assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf).<a id="refleader"></a>
 
 Referee Leadership Team
 

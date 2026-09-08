@@ -24,7 +24,7 @@ Location:  Fields 60 and 61 are located at the very south end of Randalls Island
 ![](/assets/legacy/Image/Fields/kantorlockup.jpg)**Equipment:**  For ages U7-U8, 8 pairs of Pugg goals (and a few spares) and cones are located in the storage container near the entrance
 to the fields. For ages U9-U10, there are two sets of 6x18 pop up goals in the storage container. For ages U11 and older, there are sets of movable goals (7x21 and 8x24) with nets at the fields. The container is secured by a combination lock. Coaches must obtain the code from their [Division Head for Core](/programs/core/divisions/), or from the [Director of Travel](mailto:wssl.bobhong@gmail.com) for travel.
 
-**Set Up:**  Pugg goals (U7-U8) and pop up Bownet goals (U9-U10) are activated on a spring-like mechanism. They generally POP out of their bags. Cones are used to mark the corners of each lined field. For ages U7-U8, set up mini 20x30 yard fields. The fields should be marked both for small sided (ages U9-U12) and for full sided (ages U13 and older). Please see the [picture below](<#field set up>) for how to set up each field for play.
+**Set Up:**  Pugg goals (U7-U8) and pop up Bownet goals (U9-U10) are activated on a spring-like mechanism. They generally POP out of their bags. Cones are used to mark the corners of each lined field. For ages U7-U8, set up mini 20x30 yard fields. The fields should be marked both for small sided (ages U9-U12) and for full sided (ages U13 and older). Please see the [picture below](#fieldsetup) for how to set up each field for play.
 
 Break Down:  Teams with the last games need to return the Pugg and Bownet goals neatly into their bags and then return the bags and cones to the storage container. Please place in the storage container neatly as indicated in the picture at right.
 
@@ -33,7 +33,7 @@ These videos show how to close the Pugg and Bownet goals:
 [Pugg Goal Video](https://www.youtube.com/watch?v=viaK3eXL0KM)
 [Bownet Goal Video](https://www.youtube.com/watch?v=0QcTExk1oPA)
 
-Pugg and Bownet goals may NOT be left in the container open and strewn about (it sounds obvious... but...). All lost and found -- balls, sweatshirts, etc -- must be stored neatly in the storage container. A large box of black plastic bags is available for storing random items. Cones must be stacked neatly and left on the shelves. The container must be locked -- tug the lock a few times to be sure. Once all is secure, the closing coach must call the Division Head in charge to communicate that all has been taken care of properly.
+Pugg and Bownet goals may NOT be left in the container open and strewn about (it sounds obvious... but...). All lost and found -- balls, sweatshirts, etc -- must be stored neatly in the storage container. A large box of black plastic bags is available for storing random items. Cones must be stacked neatly and left on the shelves. The container must be locked -- tug the lock a few times to be sure. Once all is secure, the closing coach must call the Division Head in charge to communicate that all has been taken care of properly. <a id="fieldsetup"></a>
 
 ![](/assets/legacy/Image/Fields/SitePlanKantorFieldsTMcC-2013-04-09.jpg)
 

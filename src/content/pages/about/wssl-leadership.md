@@ -10,7 +10,7 @@ updated: 2026-08-18
 [Referee Leadership](#refs)
 [Program Leadership](#travel)
 [Other Key Volunteers](#other)
-[Commissioners Emeritus](#emeritus)
+[Commissioners Emeritus](#emeritus)**<a id="board"></a>**
 
 **WSSL Board of Directors**
 
@@ -84,7 +84,7 @@ Vacant, Core Program Director
 
 [Division Heads](/programs/core/divisions/)
 
-[Chief Referees](/programs/core/divisions/)
+[Chief Referees](/programs/core/divisions/)**<a id="refs"></a>**
 
 > **Referee Leadership**
 >

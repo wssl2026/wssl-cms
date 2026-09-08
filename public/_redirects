@@ -13,3 +13,5 @@
 /blog                 /                      301
 /blog/*               /                      301
 /fields/overview      /fields/overview/      301
+/inleague/*           https://inleague.wssl.org/:splat  301
+/login                https://inleague.wssl.org/  301

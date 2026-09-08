@@ -9,13 +9,13 @@ West Side Soccer League has the overarching goal of providing the best possible 
 
 [**What is the philosophy of the WSSL Programs?**](#philosophy)
 [**What is the difference between the Core, Travel and Tournament Programs?**](#philosophy)
-[What are the season dates?](<#season dates>)
-[**What are the practice and game schedules?**](<#practice and game schedule>)
+[What are the season dates?](#seasondates)
+[**What are the practice and game schedules?**](#practiceandgameschedule)
 [**Who coaches the teams?**](#coaches)
 **[What is the commitment level?](#commitment)
 [How much does it cost?](#cost)
-[How do I choose the right program for my child?](<#choosing a program>)**
-[How do I register?](#register)
+[How do I choose the right program for my child?](#choosingaprogram)**
+[How do I register?](#register)**<a id="philosophy"></a>**
 
 > * * *
 >
@@ -25,7 +25,7 @@ West Side Soccer League has the overarching goal of providing the best possible 
 >
 > At WSSL, we want you to know that we have -- through our partnership with the New York Red Bulls Training Program -- invested in your kids with the best soccer program available. Our program has years and years of experience and excellence behind it. Every single team, no matter what age group, no matter what level, receives the endless benefits of a well honed program with soccer details a mile deep.
 >
-> WSSL is part of the American Youth Soccer Organization (AYSO), and we follow the six basic tenets of AYSO soccer:  Everyone Plays, Open Registration, Balanced Teams, Positive Coaching, Good Sportsmanship and Player Development.
+> WSSL is part of the American Youth Soccer Organization (AYSO), and we follow the six basic tenets of AYSO soccer:  Everyone Plays, Open Registration, Balanced Teams, Positive Coaching, Good Sportsmanship and Player Development.**<a id="programdifferences"></a>**
 >
 > **What is the difference between the Core, Travel and Tournament Programs?**
 >
@@ -41,7 +41,7 @@ West Side Soccer League has the overarching goal of providing the best possible 
 >
 > [WSSL Travel Program](/programs/travel-teams/)
 >
-> [WSSL Tournament Program](/programs/tournament-teams/)
+> [WSSL Tournament Program](/programs/tournament-teams/)<a id="seasondates"></a>
 >
 > What are the season dates?
 >
@@ -49,7 +49,7 @@ West Side Soccer League has the overarching goal of providing the best possible 
 > Winter - January through March
 > Spring - April through mid-June
 >
-> We do not play on Yom Kippur, Columbus Day/Indigenous Peoples' Day weekend, Easter Sunday or Memorial Day weekend. We do play on other religious holidays but attendance is not required for those observing.
+> We do not play on Yom Kippur, Columbus Day/Indigenous Peoples' Day weekend, Easter Sunday or Memorial Day weekend. We do play on other religious holidays but attendance is not required for those observing.**<a id="practiceandgameschedule"></a>**
 >
 > **What are the practice and game schedules?**
 >
@@ -57,19 +57,19 @@ West Side Soccer League has the overarching goal of providing the best possible 
 >
 > Tournament teams practice weekly on the weekends, usually in Riverside Park or in Central Park. In addition, players must commit to one fall tournament (Columbus Day weekend) and two spring tournaments (Memorial Day weekend and Father’s Day weekend). The tournaments are held in Long Island, Westchester and NJ.
 
-> Core games are held on the weekends, with a team practice immediately before the game (back-to-back). Each age group has an assigned day of play. For more information on your child's day of play (based on age) please select [Divisions](/programs/core/divisions/) (located in the submenus under Programs - Core).
+> Core games are held on the weekends, with a team practice immediately before the game (back-to-back). Each age group has an assigned day of play. For more information on your child's day of play (based on age) please select [Divisions](/programs/core/divisions/) (located in the submenus under Programs - Core).**<a id="coaches"></a>**
 
 **Who coaches the teams?**
 
 > Our Travel and Tournament teams are coached by professional Red Bulls trainers who are themselves educated in the Red Bulls Program and who have backgrounds in playing and coaching soccer. In addition, trained parent coaches work with the Red Bulls trainers on each team. All Red Bulls trainers and parent coaches have certifications in education programs by the National Soccer Coaches Association of America and the U.S. Soccer Federation. Training sessions follow a detailed plan and curriculum designed to improve individual and team skills. The New York Red Bulls are second to none in the New York area in terms of training expertise. With over 80 coaches on staff, the New York Red Bulls are committed to sharing a love of soccer with young people. They are professionals with a highly developed curriculum and high standards for the trainers in their organization. Trainers are selected through a competitive process. Over 500 trainers from around the world compete for each training position. After initial selections are made, a group of 150 trainers are brought in for face-to-face interviews and an on-field practical session. The trainers are evaluated on several factors, including their expert knowledge of the game and their ability to communicate with and engage young players. Trainers receive weekly professional development training during the season as well as periodic evaluations. Beyond the New York Red Bulls' excellence on an individual and group level, the New York Red Bulls and WSSL have the same philosophy regarding player development. Young players need to be inspired. They need to have fun. They need to be given the tools to develop mastery, to build confidence, to become a skilled player.
 
-> Our core teams are parent coached. Like our parent coaches for our tournament and travel teams, parent coaches are trained and meet required AYSO certifications for each age group. They also receive training in Safe Haven and Concussion Awareness.
+> Our core teams are parent coached. Like our parent coaches for our tournament and travel teams, parent coaches are trained and meet required AYSO certifications for each age group. They also receive training in Safe Haven and Concussion Awareness.**<a id="commitment"></a>**
 
 > **What is the commitment level?**
 >
 > WSSL players (whether core, tournament or travel players) are expected to attend ALL practices and games. Poor attendance can result in our not inviting a player to return.
 >
-> For our Travel and Tournament teams, participation in winter training is highly recommended, and mandatory for Premier team players. In order to participate on a WSSL travel team, soccer should be a player's primary sport during the fall and spring seasons.
+> For our Travel and Tournament teams, participation in winter training is highly recommended, and mandatory for Premier team players. In order to participate on a WSSL travel team, soccer should be a player's primary sport during the fall and spring seasons.**<a id="cost"></a>**
 >
 > **How much does it cost?**
 >
@@ -91,11 +91,11 @@ West Side Soccer League has the overarching goal of providing the best possible 
 >
 > Fees for optional winter training are expected to be $400-500 per player. Gym contracts are finalized over the summer and final costs for winter training will be emailed when registration opens in the fall).
 >
-> Financial aid is available by emailing [scholarship@wssl.org](<mailto: scholarship@wssl.org>).
+> Financial aid is available by emailing [scholarship@wssl.org](<mailto: scholarship@wssl.org>).**<a id="choosingaprogram"></a>**
 >
 > **How do I choose the right program for my child?**
 >
-> Choosing the right program is family and child dependent. Talk to your child. Assess both their level and your level of commitment and interest. WSSL offers a program for everyone. For more information about each program, choose that program from the menu options on our home page.
+> Choosing the right program is family and child dependent. Talk to your child. Assess both their level and your level of commitment and interest. WSSL offers a program for everyone. For more information about each program, choose that program from the menu options on our home page<a id="register"></a>.
 >
 > How do I register?
 >
