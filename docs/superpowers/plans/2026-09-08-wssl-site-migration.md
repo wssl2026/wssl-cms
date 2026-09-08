@@ -2626,3 +2626,52 @@ Send the board `docs/editors.md`, the `/admin/` URL, and the runbook location. A
 - **Spec coverage**: extraction (Task 3–4), layouts/nav/alerts/footer/docs styling (Task 5–6), transactional links preserved (external links untouched in Task 3, Register CTAs in Task 5–6), CMS schema + validation + auth (Task 7), deployment + AI in root layout + DNS (Tasks 9–13), permissions delta = all editors equal (Task 7 config, Task 12 collaborators), custom assistant with latest model/features (Task 9), cost table respected (Task 12 runbook), forms → Google Forms (Task 11 QA list). Blog, PDF-text corpus, role zones are declared non-goals in the spec.
 - **Type consistency**: `urlFor(id, path)` used identically in Tasks 2, 5, 8; `CorpusDoc {title,url,text}` shared by Tasks 8–9; `ClientEvent` union identical in `functions/_lib/sse.ts` and `src/lib/chat-client.ts`; `PAGE_FIELD_NAMES` order matches the Decap field order in Task 7; `validateHistory` returns exactly `ClientMessage[] | {error}` as the handler checks with `'error' in history`.
 - **Known judgment calls for the executor**: exact `yaml.stringify` quoting in Task 4 Step 4; SDK type names for `context`/`ttl`/`fallbacks` in Task 9 — adjust annotations, never the request payload.
+
+---
+
+### Task 14: Home page and header parity with the legacy site
+
+Added 2026-09-08 after the owner compared the new home page with the live one and asked to "keep the same layout and styles". Reference captures of the live site are in the SDD workspace: `legacy-home-template.html` (the home body), `legacy-custom.css` and `legacy-site.css` (the theme), `legacy-home.html` (full page).
+
+**Files:**
+- Create: `src/data/home.json`, `src/components/Carousel.astro`, `src/components/HomeCard.astro`, `tests/home.test.ts`
+- Modify: `src/pages/index.astro`, `src/components/Header.astro`, `src/components/Footer.astro`, `src/data/site.json`, `public/admin/config.yml`, `scripts/migrate.ts` (`THEME_IMAGES`), `tests/cms-config.test.ts`, `tests/nav.test.ts` (site.json shape)
+- Download once (and add to `THEME_IMAGES` so re-runs keep them): `https://www.wssl.org/sites/wssl/assets/Carousel/carousel-5.png` → `public/images/carousel-5.png`, `https://www.wssl.org/sites/wssl/assets/Image/soccerball-icon.png` → `public/images/soccerball-icon.png`, `https://www.wssl.org/sites/wssl/assets/Image/referee-icon.png` → `public/images/referee-icon.png`
+
+**Interfaces:**
+- `site.json` gains `loginUrl: "https://inleague.wssl.org"`, `searchCx: "012165111916761362607:zaoi28ltsvu"`, `footerNote` (the AYSO 501(c)(3)/donations paragraph from the legacy footer, plain text, two sentences allowed as one string with `\n\n`).
+- `home.json` shape:
+```json
+{
+  "fieldStatus": "",
+  "carousel": ["/images/carousel-1.png", "/images/carousel-2.png", "/images/carousel-3.png", "/images/carousel-4.png", "/images/carousel-5.png"],
+  "programButtons": [
+    { "label": "Core League U6-U19", "href": "/programs/core/" },
+    { "label": "Development Academy U6-U14", "href": "/programs/da/" },
+    { "label": "Travel Teams U8-U19", "href": "/programs/travel-teams/" },
+    { "label": "Tournament Teams U9-U14", "href": "/programs/tournament-teams/" },
+    { "label": "VIP Program (Special Needs)", "href": "/programs/epic/" },
+    { "label": "Playground (3 and 4 year olds)", "href": "/programs/playground/" }
+  ],
+  "cards": [
+    { "title": "Registration and Tryouts", "icon": "/images/soccerball-icon.png", "body": "<markdown of the legacy card 0 text, links preserved>" },
+    { "title": "Volunteer Training", "icon": "/images/referee-icon.png", "body": "<markdown of the legacy card 1 text, links preserved>" }
+  ]
+}
+```
+- Card `body` is Markdown rendered at build time with `marked` (editors are trusted; no DOMPurify on the server).
+
+**Layout to reproduce (from `legacy-home-template.html`):**
+1. Header: the banner image `/images/wssl-header-lg.png` centered above the nav (max width ~1200px, white/light background), then the navy nav bar: uppercase bold links in PT Sans, `Home` first, the six sections with dropdowns, then `Login` → `site.loginUrl`. Mobile keeps the Menu toggle.
+2. Home body, in a `max-w-6xl` container: (a) a full-width row with the Google Programmable Search box: `<div class="gcse-searchbox-only"></div>` plus `<script async src={`https://cse.google.com/cse.js?cx=${site.searchCx}`}></script>` (home page only); (b) a two-column row at `md+`: left = `Carousel` (the five images, auto-rotating every 5s with a tiny inline script, first image visible without JS) followed by the program buttons as a stacked `list-group` (navy background, white text, centered, gold on hover); right = `**FIELD STATUS:**` line with `home.fieldStatus` (rendered even when empty, like the legacy site), then the two `HomeCard`s (navy header bar with gold uppercase title, white body, icon before the first line).
+3. Footer: `site.footerNote` paragraph, a divider, then the social links, then the copyright line. Keep the existing quick links.
+4. Colors/typography come from `legacy-custom.css` (`.card-header`, `.list-group-item`, `.navbar` rules) — reproduce them with Tailwind utilities or a few rules in `src/styles/global.css`; do not import the legacy CSS files.
+5. Delete the four cards + "Have a question?" section from the current `index.astro`; the Ask WSSL button remains (it is in `BaseLayout`).
+
+**Decap:** add a `home` file to the `settings` collection editing `src/data/home.json` with fields: `fieldStatus` (string, optional), `carousel` (list of `image` widgets with `media_folder: public/images`, `public_folder: /images`), `programButtons` (list of `{label: string, href: string}`), `cards` (list of `{title: string, icon: string, body: markdown}`). Add `loginUrl`, `searchCx`, `footerNote` to the `site` file's fields.
+
+**Tests** (`tests/home.test.ts`): `home.json` has exactly the keys above; every `programButtons[].href` and every internal link inside `cards[].body` resolves to a published content page (reuse the `contentUrls()` approach from `tests/nav.test.ts`, extracted into `tests/helpers/content-urls.ts` and imported by both tests); every `carousel[]` and `cards[].icon` path exists under `public/`; `site.json` has `loginUrl`, `searchCx`, `footerNote`. Update `tests/cms-config.test.ts` so the settings files list includes `src/data/home.json` and the `home` file's field names equal `['fieldStatus','carousel','programButtons','cards']`.
+
+**Build checks:** after `npm run build`: `dist/index.html` contains `gcse-searchbox-only`, `cse.js?cx=012165111916761362607`, `Registration and Tryouts`, `Volunteer Training`, `Core League U6-U19`, `FIELD STATUS`, `wssl-header-lg.png`, `href="https://inleague.wssl.org"` (Login), and the footer note's "95-6205398"; `dist/registration/refund-policy/index.html` contains `wssl-header-lg.png` (banner on every page) and `>Login<`. `npm run check-links` stays clean. Take a screenshot of `http://localhost:8788/` in the in-app browser at desktop width and compare against the legacy structure: banner, navy nav, search row, carousel+buttons left, field status+cards right.
+
+**Commit:** `feat: home page and header layout matching the legacy site`
