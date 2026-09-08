@@ -1,4 +1,5 @@
 import { stringify } from 'yaml';
+import { stripHost } from './convert';
 
 export interface MuraItem {
   contentid: string;
@@ -101,7 +102,12 @@ export function frontmatter(item: MuraItem, path: string): string {
 }
 
 function hrefFor(item: MuraItem): string | null {
-  if (item.type === 'Link') return item.url ?? null;
+  if (item.type === 'Link') {
+    if (!item.url) return null;
+    // Exclude Link items whose URL points to a WSSL host (Mura-only pages)
+    if (stripHost(item.url) !== item.url) return null;
+    return item.url;
+  }
   if (item.type !== 'Page') return null;
   return targetFor(item.filename) ? `/${item.filename.replace(/\/+$/, '')}/` : null;
 }

@@ -116,4 +116,16 @@ describe('buildNav', () => {
     ];
     expect(buildNav(items)).toEqual([{ label: 'About', href: '/about/', children: [] }]);
   });
+
+  it('excludes a nav Link item whose URL points to a Mura-only host', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'about', menutitle: 'About', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'tryout-form', title: 'Tryout', menutitle: 'Tryout', type: 'Link', parentid: HOME, orderno: 2, url: 'https://www.wssl.org/tryout-inquiry-form2/' }),
+      item({ contentid: 'C', filename: 'form-link', title: 'Form', menutitle: 'Form', type: 'Link', parentid: HOME, orderno: 3, url: 'https://forms.gle/x' }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'About', href: '/about/', children: [] },
+      { label: 'Form', href: 'https://forms.gle/x', children: [] },
+    ]);
+  });
 });

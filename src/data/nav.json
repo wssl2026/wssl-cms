@@ -1,11 +1,6 @@
 {
   "items": [
     {
-      "label": "Tryout Inquiry Form",
-      "href": "https://www.wssl.org/tryout-inquiry-form2/",
-      "children": []
-    },
-    {
       "label": "Programs",
       "href": "/programs/",
       "children": [
