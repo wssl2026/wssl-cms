@@ -15,7 +15,7 @@ We have several resources that are meant to support you as you participate as a 
 
 We have compiled a list of frequently asked questions (FAQs). You can find them [here](/volunteers/referees/referee-faq/).
 
-There are three members of the AYSO "Team" - Coaches, Referees and Parents. We have assembled some guidelines on how Coaches and Referees can cooperate to improve the experience for our players. You can see them [here](/volunteers/referees/working-with-coaches/). Parents who aren't Coaches or Referees may find it interesting as well.
+There are three members of the AYSO "Team" - Coaches, Referees and Parents. We have assembled some guidelines on how Coaches and Referees can cooperate to improve the experience for our players. You can see them [here](/volunteers/referees/referee-resources/). Parents who aren't Coaches or Referees may find it interesting as well.
 
 See you on the pitch!
 
@@ -64,4 +64,4 @@ John Drayton is our Regional Director of Youth Referees. Please contact John for
 
 Heading the Ball
 
-For information about heading the ball, please go to **[Heading the Ball](/volunteers/referees/heading-the-ball/).**
+For information about heading the ball, please go to **[Heading the Ball](/volunteers/referees/referee-resources/).**

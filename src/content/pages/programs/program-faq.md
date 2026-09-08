@@ -39,9 +39,9 @@ West Side Soccer League has the overarching goal of providing the best possible 
 >
 > [WSSL Core Program](/programs/core/)
 >
-> [WSSL Travel Program](/programs/travel-tournament/travel-overview/)
+> [WSSL Travel Program](/programs/travel-teams/)
 >
-> [WSSL Tournament Program](/programs/travel-tournament/tournament-teams/)
+> [WSSL Tournament Program](/programs/tournament-teams/)
 >
 > What are the season dates?
 >
