@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fetchAllContent, targetFor, frontmatter, buildNav, type MuraItem } from './lib/mura';
 import { htmlToMarkdown, localAssetPath } from './lib/convert';
 import { planAssetDownloads } from './lib/assets';
+import { buildRedirectsFile } from './lib/redirects';
 
 const THEME_IMAGES: Record<string, string> = {
   'https://www.wssl.org/sites/wssl/themes/wssl-theme/images/wssl-header-lg.png': 'public/images/wssl-header-lg.png',
@@ -63,6 +64,8 @@ async function main() {
 
   const { downloads, collisions } = planAssetDownloads(allAssets);
   report.collisions.push(...collisions);
+
+  await writeFile('public/_redirects', buildRedirectsFile(downloads));
 
   for (const { source } of downloads) {
     (await downloadLegacyAsset(source)) === 'ok' ? report.assetsOk.push(source) : report.assetsMissing.push(source);

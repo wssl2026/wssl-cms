@@ -1,3 +1,13 @@
+/sites/wssl/assets/Image/WSSL/WSSL%20g11%2019.png  /assets/legacy/Image/WSSL/WSSL-g11-19.png  301
+/sites/wssl/assets/Image/WSSL/g11%20core%20-%201%20(1).jpeg  /assets/legacy/Image/WSSL/g11-core-1-1-.jpeg  301
+/sites/wssl/assets/Image/WSSL/g11%20core%20-%201%20(2).jpeg  /assets/legacy/Image/WSSL/g11-core-1-2-.jpeg  301
+/sites/wssl/assets/Image/WSSL/g11%20core%20-%201%20(4).jpeg  /assets/legacy/Image/WSSL/g11-core-1-4-.jpeg  301
+/sites/wssl/assets/Image/WSSL/g11%20core%20-%201%20(5).jpeg  /assets/legacy/Image/WSSL/g11-core-1-5-.jpeg  301
+/sites/wssl/assets/File/Referee%20Scheduling%20Guide%20September%202015%20v02.pdf  /assets/legacy/File/Referee-Scheduling-Guide-September-2015-v02.pdf  301
+/sites/wssl/assets/Image/referees/wssl%20ref%20-%203.jpeg  /assets/legacy/Image/referees/wssl-ref-3.jpeg  301
+/sites/wssl/assets/Image/referees/WSSL_Chief%20Referee%20Manual_2022_v2.pdf  /assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf  301
+/sites/wssl/assets/Image/referees/wssl%20ref%20-%205.jpeg  /assets/legacy/Image/referees/wssl-ref-5.jpeg  301
+/sites/wssl/assets/Image/Fields/Central%20Park%20North%20Meadow%20Field%20Map.jpg  /assets/legacy/Image/Fields/Central-Park-North-Meadow-Field-Map.jpg  301
 /sites/wssl/assets/*  /assets/legacy/:splat  301
 /index.cfm/*          /                      301
 /blog                 /                      301
