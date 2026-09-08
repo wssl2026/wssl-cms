@@ -13,14 +13,14 @@ const suggestions = [
     <span class="font-bold">Ask WSSL</span>
     <button id="ask-close" class="text-white/80 hover:text-white" aria-label="Close">✕</button>
   </header>
-  <div id="ask-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
+  <div id="ask-messages" aria-live="polite" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
     <div class="text-gray-700">Hi! I answer questions using the pages on wssl.org and link you to them. What would you like to know?</div>
     <div id="ask-suggestions" class="flex flex-wrap gap-2">
       {suggestions.map((s) => <button class="ask-suggest border border-navy text-navy rounded-full px-3 py-1 text-xs hover:bg-navy hover:text-white">{s}</button>)}
     </div>
   </div>
   <form id="ask-form" class="border-t border-gray-200 p-3 flex gap-2">
-    <input id="ask-input" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Ask about registration, schedules, fields…" maxlength="2000" autocomplete="off" required />
+    <input id="ask-input" aria-label="Your question" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Ask about registration, schedules, fields…" maxlength="2000" autocomplete="off" required />
     <button id="ask-send" class="bg-navy text-white font-bold px-4 rounded disabled:opacity-50" type="submit">Send</button>
   </form>
   <p class="text-[11px] text-gray-500 px-3 pb-2">Answers come from wssl.org pages and may be incomplete — check the linked page. Don't share personal or medical details.</p>
@@ -59,6 +59,7 @@ const suggestions = [
   function scroll() { list.scrollTop = list.scrollHeight; }
 
   for (const m of history) { bubble(m.role).innerHTML = m.role === 'user' ? DOMPurify.sanitize(m.content) : render(m.content); }
+  if (history.length) $('ask-suggestions')?.remove();
 
   async function ask(question: string) {
     $('ask-suggestions')?.remove();
@@ -79,16 +80,27 @@ const suggestions = [
     finally {
       if (sources.size) {
         const s = sourcesEl();
-        s.innerHTML = 'Sources: ' + [...sources].map(([url, title]) => `<a class="underline" href="${url}">${DOMPurify.sanitize(title)}</a>`).join(' · ');
+        s.append('Sources: ');
+        const entries = [...sources].filter(([url]) => url.startsWith('https://www.wssl.org/'));
+        for (let i = 0; i < entries.length; i++) {
+          const [url, title] = entries[i];
+          const a = document.createElement('a');
+          a.href = url;
+          a.textContent = title || url;
+          a.className = 'underline';
+          s.appendChild(a);
+          if (i < entries.length - 1) s.append(' · ');
+        }
       }
       history.push({ role: 'assistant', content: text });
-      try { sessionStorage.setItem(STORAGE, JSON.stringify(history.slice(-20))); } catch { /* storage unavailable */ }
+      history = history.slice(-20);
+      try { sessionStorage.setItem(STORAGE, JSON.stringify(history)); } catch { /* storage unavailable */ }
       send.disabled = false; input.disabled = false; input.focus(); scroll();
     }
   }
 
   openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); });
-  closeBtn.addEventListener('click', () => { panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); });
+  closeBtn.addEventListener('click', () => { panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
   form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
   list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
 </script>

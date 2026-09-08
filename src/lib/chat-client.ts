@@ -19,26 +19,30 @@ export function parseSseChunk(buffer: string): { events: ClientEvent[]; rest: st
 }
 
 export async function streamChat(messages: ChatMessage[], onEvent: (e: ClientEvent) => void, signal?: AbortSignal): Promise<void> {
-  const res = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages }),
-    signal,
-  });
-  if (!res.ok || !res.body) {
-    const data = await res.json().catch(() => ({ error: 'Request failed' }));
-    onEvent({ type: 'error', message: data.error ?? 'Request failed' });
-    return;
-  }
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const parsed = parseSseChunk(buffer);
-    buffer = parsed.rest;
-    parsed.events.forEach(onEvent);
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages }),
+      signal,
+    });
+    if (!res.ok || !res.body) {
+      const data = await res.json().catch(() => ({ error: 'Request failed' }));
+      onEvent({ type: 'error', message: data.error ?? 'Request failed' });
+      return;
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const parsed = parseSseChunk(buffer);
+      buffer = parsed.rest;
+      parsed.events.forEach(onEvent);
+    }
+  } catch {
+    onEvent({ type: 'error', message: 'Could not reach the assistant. Check your connection and try again.' });
   }
 }
