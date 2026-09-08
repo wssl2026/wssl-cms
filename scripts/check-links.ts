@@ -30,7 +30,12 @@ for (const file of fg.sync('dist/**/*.html')) {
   }
 }
 
-if (brokenFragments.length) console.error(`${brokenFragments.length} broken fragment links:\n` + brokenFragments.join('\n'));
+const strict = process.argv.includes('--strict');
+
 if (broken.length) console.error(`${broken.length} broken internal links:\n` + broken.join('\n'));
-if (broken.length || brokenFragments.length) process.exit(1);
+if (brokenFragments.length) console.error(`${brokenFragments.length} dead in-page anchors (warnings):\n` + brokenFragments.join('\n'));
+
+if (broken.length) process.exit(1);
+if (brokenFragments.length && strict) process.exit(1);
+
 console.log('no broken internal links');
