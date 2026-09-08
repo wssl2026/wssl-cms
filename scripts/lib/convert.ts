@@ -49,7 +49,25 @@ export function normalizeInternal(href: string): string {
   return path + suffix;
 }
 
+/**
+ * turndown-plugin-gfm's table rules read `table.rows[0]` and crash on a
+ * `<table>` with zero `<tr>` rows (Mura content has a few, likely leftover
+ * from pasted spreadsheets). Strip rowless tables, innermost first, so
+ * nested empty tables don't reach turndown at all.
+ */
+function stripEmptyTables(html: string): string {
+  let prev: string;
+  do {
+    prev = html;
+    html = html.replace(/<table\b(?:(?!<table\b)[\s\S])*?<\/table>/gi, (match) =>
+      /<tr[\s>]/i.test(match) ? match : ''
+    );
+  } while (html !== prev);
+  return html;
+}
+
 export function htmlToMarkdown(html: string): ConvertResult {
+  html = stripEmptyTables(html);
   const assets = new Set<string>();
   const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', codeBlockStyle: 'fenced', emDelimiter: '*' });
   td.use(gfm);
