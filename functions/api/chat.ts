@@ -16,14 +16,19 @@ const json = (body: unknown, status = 200) =>
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
-  if (origin && origin !== url.origin) return json({ error: 'forbidden' }, 403);
+  if (!origin || origin !== url.origin) return json({ error: 'forbidden' }, 403);
 
   let body: { messages?: unknown };
   try { body = await request.json(); } catch { return json({ error: 'invalid JSON' }, 400); }
   const history = validateHistory(body?.messages);
   if ('error' in history) return json({ error: history.error }, 400);
 
-  const cap = await checkDailyCap(env.USAGE, Number(env.DAILY_CAP ?? 1500));
+  let cap;
+  try {
+    cap = await checkDailyCap(env.USAGE, Number(env.DAILY_CAP ?? 1500));
+  } catch {
+    return json({ error: 'Ask WSSL is temporarily unavailable. Please try again later or use the Contact page.' }, 503);
+  }
   if (!cap.ok) return json({ error: 'Ask WSSL has reached its daily limit. Please try again tomorrow or use the Contact page.' }, 429);
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
