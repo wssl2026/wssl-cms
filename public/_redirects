@@ -1,0 +1,5 @@
+/sites/wssl/assets/*  /assets/legacy/:splat  301
+/index.cfm/*          /                      301
+/blog                 /                      301
+/blog/*               /                      301
+/fields/overview      /fields/overview/      301

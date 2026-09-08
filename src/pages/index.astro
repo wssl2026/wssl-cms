@@ -1,5 +1,32 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+const cards = [
+  { title: 'Register', text: 'Sign up for Core, Playground, EPIC, Development Academy and travel tryouts on inLeague.', href: site.registrationUrl },
+  { title: 'Schedules', text: 'Game and training schedules for every program.', href: '/schedules/' },
+  { title: 'Fields', text: 'Where we play, directions and rainout policy.', href: '/fields/overview/' },
+  { title: 'Volunteer', text: 'Coach, referee or help run the league.', href: '/volunteers/' },
+];
 ---
-<html lang="en"><head><meta charset="utf-8" /><title>West Side Soccer League</title></head>
-<body class="font-sans"><h1 class="text-navy text-3xl p-8">West Side Soccer League</h1></body></html>
+<BaseLayout title={site.name} description={site.tagline}>
+  <section class="relative bg-navy text-white">
+    <img src="/images/carousel-1.png" alt="" class="absolute inset-0 h-full w-full object-cover opacity-40" />
+    <div class="relative mx-auto max-w-6xl px-4 py-24 text-center">
+      <img src="/images/wssl-header-lg.png" alt={site.name} class="mx-auto max-h-32 w-auto mb-6" />
+      <p class="text-xl md:text-2xl font-semibold">{site.tagline}</p>
+      <a href={site.registrationUrl} class="inline-block mt-8 bg-gold text-navy font-bold px-6 py-3 rounded text-lg">Register on inLeague</a>
+    </div>
+  </section>
+  <section class="mx-auto max-w-6xl px-4 py-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    {cards.map((c) => (
+      <a href={c.href} class="block border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-navy">
+        <h2 class="text-xl font-bold text-navy mb-2">{c.title}</h2>
+        <p class="text-gray-700">{c.text}</p>
+      </a>
+    ))}
+  </section>
+  <section class="mx-auto max-w-4xl px-4 pb-16 text-center">
+    <h2 class="text-2xl font-bold text-navy mb-3">Have a question?</h2>
+    <p class="text-gray-700">Use the <strong>Ask WSSL</strong> button in the corner — it answers from this website and links you to the right page.</p>
+  </section>
+</BaseLayout>
