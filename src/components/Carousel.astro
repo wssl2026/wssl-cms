@@ -1,0 +1,28 @@
+---
+interface Props { images: string[] }
+const { images } = Astro.props;
+---
+<div class="carousel relative overflow-hidden rounded">
+  {images.map((src, i) => (
+    <img
+      src={src}
+      alt={`Carousel image ${i + 1}`}
+      class="carousel-slide w-full h-auto"
+      class:list={[{ hidden: i !== 0 }]}
+      data-index={i}
+    />
+  ))}
+</div>
+<script>
+  const carousels = document.querySelectorAll<HTMLElement>('.carousel');
+  carousels.forEach((carousel) => {
+    const slides = Array.from(carousel.querySelectorAll<HTMLImageElement>('.carousel-slide'));
+    if (slides.length < 2) return;
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.add('hidden');
+      current = (current + 1) % slides.length;
+      slides[current].classList.remove('hidden');
+    }, 5000);
+  });
+</script>

@@ -2,30 +2,31 @@
 import nav from '../data/nav.json';
 import site from '../data/site.json';
 ---
+<div id="banner-div" class="bg-[#f3f3f5] text-center">
+  <a href="/" class="inline-block">
+    <img src="/images/wssl-header-lg.png" alt={site.name} class="mx-auto max-w-[1200px] w-full h-auto" />
+  </a>
+</div>
 <header class="bg-navy text-white">
   <div class="mx-auto max-w-6xl px-4">
-    <div class="flex items-center justify-between h-16">
-      <a href="/" class="flex items-center gap-3">
-        <img src="/images/mobile-logo.png" alt={site.shortName} class="h-10 w-auto" />
-        <span class="font-bold text-lg hidden sm:inline">{site.name}</span>
-      </a>
-      <a href={site.registrationUrl} class="hidden lg:inline-block bg-gold text-navy font-bold px-4 py-2 rounded">Register</a>
-      <button id="nav-toggle" type="button" class="lg:hidden px-3 py-2 border border-white/40 rounded" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <div class="flex items-center justify-end h-12 lg:hidden">
+      <button id="nav-toggle" type="button" class="px-3 py-2 border border-white/40 rounded" aria-expanded="false" aria-controls="site-nav">Menu</button>
     </div>
-    <nav id="site-nav" class="hidden lg:block pb-2 lg:pb-0">
-      <ul class="flex flex-col lg:flex-row lg:gap-6">
+    <nav id="site-nav" class="hidden lg:block py-2">
+      <ul class="flex flex-col lg:flex-row lg:items-center lg:gap-2">
+        <li><a href="/" class="block py-2 font-bold uppercase hover:text-gold">Home</a></li>
         {nav.items.map((item) => (
           <li class="relative group">
-            <a href={item.href} class="block py-2 font-semibold hover:text-gold">{item.label}</a>
+            <a href={item.href} class="block py-2 font-bold uppercase hover:text-gold">{item.label}</a>
             {(item.children ?? []).length > 0 && (
-              <ul class="pl-4 lg:pl-0 lg:absolute lg:left-0 lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-navy lg:min-w-64 lg:shadow-lg lg:z-20">
+              <ul class="pl-4 lg:pl-0 lg:absolute lg:left-0 lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-white lg:min-w-64 lg:shadow-lg lg:z-20">
                 {(item.children ?? []).map((child) => (
                   <li>
-                    <a href={child.href} class="block px-4 py-2 hover:bg-white/10">{child.label}</a>
+                    <a href={child.href} class="block px-4 py-2 uppercase text-sm text-gray-800 hover:bg-navy hover:text-white lg:text-gray-800">{child.label}</a>
                     {(child.children ?? []).length > 0 && (
                       <ul class="pl-4">
                         {(child.children ?? []).map((g) => (
-                          <li><a href={g.href} class="block px-4 py-1 text-sm hover:bg-white/10">{g.label}</a></li>
+                          <li><a href={g.href} class="block px-4 py-1 text-sm uppercase text-gray-800 hover:bg-navy hover:text-white">{g.label}</a></li>
                         ))}
                       </ul>
                     )}
@@ -35,7 +36,7 @@ import site from '../data/site.json';
             )}
           </li>
         ))}
-        <li class="lg:hidden"><a href={site.registrationUrl} class="block py-2 font-bold text-gold">Register</a></li>
+        <li><a href={site.loginUrl} target="_blank" rel="noopener" class="block py-2 font-bold uppercase hover:text-gold">Login</a></li>
       </ul>
     </nav>
   </div>

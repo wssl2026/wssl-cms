@@ -12,6 +12,9 @@ const THEME_IMAGES: Record<string, string> = {
   'https://www.wssl.org/sites/wssl/assets/Carousel/carousel-2.png': 'public/images/carousel-2.png',
   'https://www.wssl.org/sites/wssl/assets/Carousel/carousel-3.png': 'public/images/carousel-3.png',
   'https://www.wssl.org/sites/wssl/assets/Carousel/carousel-4.png': 'public/images/carousel-4.png',
+  'https://www.wssl.org/sites/wssl/assets/Carousel/carousel-5.png': 'public/images/carousel-5.png',
+  'https://www.wssl.org/sites/wssl/assets/Image/soccerball-icon.png': 'public/images/soccerball-icon.png',
+  'https://www.wssl.org/sites/wssl/assets/Image/referee-icon.png': 'public/images/referee-icon.png',
 };
 
 async function download(url: string, dest: string): Promise<boolean> {

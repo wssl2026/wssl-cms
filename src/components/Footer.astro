@@ -1,6 +1,7 @@
 ---
 import site from '../data/site.json';
 const year = new Date().getFullYear();
+const footerNoteParagraphs = site.footerNote.split('\n\n');
 ---
 <footer class="bg-navy text-white mt-16">
   <div class="mx-auto max-w-6xl px-4 py-8 grid gap-6 md:grid-cols-3 text-sm">
@@ -25,6 +26,16 @@ const year = new Date().getFullYear();
         <li><a href={`mailto:${site.email}`} class="hover:text-gold">{site.email}</a></li>
       </ul>
     </div>
+  </div>
+  <div class="mx-auto max-w-6xl px-4 pb-4 text-xs text-white/80 space-y-2">
+    {footerNoteParagraphs.map((p) => <p>{p}</p>)}
+  </div>
+  <hr class="border-white/30" />
+  <div class="text-center py-4">
+    <ul class="flex justify-center gap-6">
+      <li><a href={site.facebook} target="_blank" rel="noopener" class="hover:text-gold">Facebook</a></li>
+      <li><a href={site.instagram} target="_blank" rel="noopener" class="hover:text-gold">Instagram</a></li>
+    </ul>
   </div>
   <div class="text-center text-white/60 text-xs pb-4">© {year} {site.name}</div>
 </footer>

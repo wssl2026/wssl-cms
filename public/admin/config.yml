@@ -100,6 +100,31 @@ collections:
           - { label: Registration URL, name: registrationUrl, widget: string }
           - { label: Facebook URL, name: facebook, widget: string }
           - { label: Instagram URL, name: instagram, widget: string }
+          - { label: Login URL, name: loginUrl, widget: string }
+          - { label: Google search engine ID (searchCx), name: searchCx, widget: string }
+          - { label: Footer tax note, name: footerNote, widget: text }
+      - name: home
+        label: Home page
+        file: src/data/home.json
+        fields:
+          - { label: Field status, name: fieldStatus, widget: string, required: false }
+          - label: Carousel images
+            name: carousel
+            widget: list
+            field: { label: Image, name: image, widget: image, media_folder: public/images, public_folder: /images }
+          - label: Program buttons
+            name: programButtons
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+          - label: Cards
+            name: cards
+            widget: list
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Icon, name: icon, widget: image, media_folder: public/images, public_folder: /images }
+              - { label: Body, name: body, widget: markdown }
       - name: nav
         label: Navigation menu
         file: src/data/nav.json

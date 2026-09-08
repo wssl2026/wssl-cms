@@ -23,7 +23,12 @@ describe('Decap config', () => {
   });
   it('site settings edit the JSON data files', () => {
     const settings = config.collections.find((c: any) => c.name === 'settings');
-    expect(settings.files.map((f: any) => f.file).sort()).toEqual(['src/data/alerts.json', 'src/data/nav.json', 'src/data/site.json']);
+    expect(settings.files.map((f: any) => f.file).sort()).toEqual(['src/data/alerts.json', 'src/data/home.json', 'src/data/nav.json', 'src/data/site.json']);
+  });
+  it('the home settings file edits the home page fields', () => {
+    const settings = config.collections.find((c: any) => c.name === 'settings');
+    const home = settings.files.find((f: any) => f.file === 'src/data/home.json');
+    expect(home.fields.map((f: any) => f.name)).toEqual(['fieldStatus', 'carousel', 'programButtons', 'cards']);
   });
   it('does not ship local_backend in the production config', () => {
     expect(config.local_backend).toBeUndefined();

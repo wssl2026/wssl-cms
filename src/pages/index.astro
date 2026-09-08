@@ -1,33 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Carousel from '../components/Carousel.astro';
+import HomeCard from '../components/HomeCard.astro';
 import site from '../data/site.json';
-const cards = [
-  { title: 'Register', text: 'Sign up for Core, Playground, EPIC, Development Academy and travel tryouts on inLeague.', href: site.registrationUrl },
-  { title: 'Schedules', text: 'Game and training schedules for every program.', href: '/schedules/' },
-  { title: 'Fields', text: 'Where we play, directions and rainout policy.', href: '/fields/overview/' },
-  { title: 'Volunteer', text: 'Coach, referee or help run the league.', href: '/volunteers/' },
-];
+import home from '../data/home.json';
 ---
 <BaseLayout title={site.name} description={site.tagline}>
-  <section class="relative bg-navy text-white">
-    <img src="/images/carousel-1.png" alt="" class="absolute inset-0 h-full w-full object-cover opacity-40" />
-    <div class="relative mx-auto max-w-6xl px-4 py-24 text-center">
-      <img src="/images/wssl-header-lg.png" alt={site.name} class="mx-auto max-h-32 w-auto mb-6" />
-      <h1 class="sr-only">{site.name}</h1>
-      <p class="text-xl md:text-2xl font-semibold">{site.tagline}</p>
-      <a href={site.registrationUrl} class="inline-block mt-8 bg-gold text-navy font-bold px-6 py-3 rounded text-lg">Register on inLeague</a>
+  <div class="mx-auto max-w-6xl px-4 py-6">
+    <div class="mb-6 text-center">
+      <div class="gcse-searchbox-only"></div>
+      <script async src={`https://cse.google.com/cse.js?cx=${site.searchCx}`}></script>
     </div>
-  </section>
-  <section class="mx-auto max-w-6xl px-4 py-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-    {cards.map((c) => (
-      <a href={c.href} class="block border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-navy">
-        <h2 class="text-xl font-bold text-navy mb-2">{c.title}</h2>
-        <p class="text-gray-700">{c.text}</p>
-      </a>
-    ))}
-  </section>
-  <section class="mx-auto max-w-4xl px-4 pb-16 text-center">
-    <h2 class="text-2xl font-bold text-navy mb-3">Have a question?</h2>
-    <p class="text-gray-700">Use the <strong>Ask WSSL</strong> button in the corner — it answers from this website and links you to the right page.</p>
-  </section>
+    <div class="grid gap-8 md:grid-cols-2">
+      <div>
+        <Carousel images={home.carousel} />
+        <div class="mt-4 flex flex-col gap-1">
+          {home.programButtons.map((b) => (
+            <a href={b.href} class="list-group-item block text-center rounded bg-navy text-white font-normal py-2 px-3 hover:bg-gold hover:text-navy border border-transparent">{b.label}</a>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="mb-4"><strong>FIELD STATUS:</strong> {home.fieldStatus}</p>
+        {home.cards.map((card) => (
+          <HomeCard title={card.title} icon={card.icon} body={card.body} />
+        ))}
+      </div>
+    </div>
+  </div>
 </BaseLayout>
