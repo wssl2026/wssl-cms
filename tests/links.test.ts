@@ -8,6 +8,9 @@ describe('internalHrefs', () => {
     const html = '<a href="/a/">x</a><a href="/a/#top">y</a><a href="https://inleague.wssl.org/">z</a><a href="mailto:x@y">m</a><img src="/images/l.png"><a href="/docs/f.pdf?v=1">p</a>';
     expect(internalHrefs(html)).toEqual(['/a/', '/images/l.png', '/docs/f.pdf']);
   });
+  it('keeps a malformed percent-encoded href instead of throwing', () => {
+    expect(internalHrefs('<a href="/a%zz/">x</a>')).toEqual(['/a%zz/']);
+  });
 });
 
 describe('resolveInternal', () => {
