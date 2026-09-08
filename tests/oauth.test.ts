@@ -44,6 +44,13 @@ describe('GET /api/callback', () => {
     expect(html).toContain("postMessage('authorizing:github', '*')");
     vi.unstubAllGlobals();
   });
+  it('does not let the handshake page be cached', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ access_token: 'gho_123' }), { headers: { 'Content-Type': 'application/json' } })));
+    const req = new Request('https://www.wssl.org/api/callback?code=abc&state=one', { headers: { Cookie: 'decap_oauth_state=one' } });
+    const res = await callback(ctx(req));
+    expect(res.headers.get('Cache-Control')).toBe('no-store');
+    vi.unstubAllGlobals();
+  });
 });
 
 describe('callbackHtml', () => {
@@ -52,5 +59,18 @@ describe('callbackHtml', () => {
   });
   it('only accepts a reply from the popup opener', () => {
     expect(callbackHtml('github', { token: 't', provider: 'github' })).toContain('e.source !== window.opener');
+  });
+  it('only accepts a reply from our own origin', () => {
+    expect(callbackHtml('github', { token: 't', provider: 'github' })).toContain('e.origin !== window.location.origin');
+  });
+  it('posts the token to our own origin, never to the sender origin', () => {
+    const html = callbackHtml('github', { token: 't', provider: 'github' });
+    expect(html).toContain('window.opener.postMessage(MSG, window.location.origin)');
+    expect(html).not.toContain('e.origin)');
+  });
+  it('renders a close-this-window message instead of throwing when there is no opener', () => {
+    const html = callbackHtml('github', { token: 't', provider: 'github' });
+    expect(html).toContain('if (!window.opener)');
+    expect(html).toContain('Close this window');
   });
 });

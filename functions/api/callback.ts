@@ -43,6 +43,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   return new Response(callbackHtml('github', { token: data.access_token, provider: 'github' }), {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store',
       'Set-Cookie': CLEAR_STATE_COOKIE,
     },
   });
