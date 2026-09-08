@@ -1,0 +1,127 @@
+backend:
+  name: github
+  repo: OWNER/REPO
+  branch: main
+  base_url: https://www.wssl.org
+  auth_endpoint: api/auth
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'content: upload {{path}}'
+    deleteMedia: 'content: delete {{path}}'
+
+local_backend: true
+site_url: https://www.wssl.org
+display_url: https://www.wssl.org
+logo_url: /images/mobile-logo.png
+media_folder: public/uploads
+public_folder: /uploads
+editor:
+  preview: false
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+collections:
+  - name: programs
+    label: Programs
+    folder: src/content/pages/programs
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /programs/{{path}}/'
+    fields: &page_fields
+      - { label: Title, name: title, widget: string }
+      - label: URL path
+        name: path
+        widget: string
+        hint: 'Under this section, lowercase with dashes, e.g. core/waitlists → /programs/core/waitlists/. Leave empty only for the section home page.'
+        pattern: ['^$|^[a-z0-9-]+(/[a-z0-9-]+)*$', 'Lowercase letters, numbers, dashes and slashes only']
+      - { label: Description (for search engines), name: description, widget: string, required: false }
+      - { label: Draft (hide from the site), name: draft, widget: boolean, default: false, required: false }
+      - { label: Last updated, name: updated, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - { label: Old site URL (reference only), name: legacyUrl, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown }
+  - name: registration
+    label: Registration
+    folder: src/content/pages/registration
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /registration/{{path}}/'
+    fields: *page_fields
+  - name: schedules
+    label: Schedules
+    folder: src/content/pages/schedules
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /schedules/{{path}}/'
+    fields: *page_fields
+  - name: fields
+    label: Fields
+    folder: src/content/pages/fields
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /fields/{{path}}/'
+    fields: *page_fields
+  - name: volunteers
+    label: Volunteers (coaches, referees)
+    folder: src/content/pages/volunteers
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /volunteers/{{path}}/'
+    fields: *page_fields
+  - name: about
+    label: About
+    folder: src/content/pages/about
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}} — /about/{{path}}/'
+    fields: *page_fields
+
+  - name: settings
+    label: Site Settings
+    files:
+      - name: alerts
+        label: Alert banner (rainouts, closures)
+        file: src/data/alerts.json
+        fields:
+          - { label: Show banner, name: active, widget: boolean, default: false }
+          - { label: Color, name: level, widget: select, options: [info, warning, danger], default: warning }
+          - { label: Message, name: message, widget: string }
+          - { label: Link (optional), name: href, widget: string, required: false }
+      - name: site
+        label: Contact & links
+        file: src/data/site.json
+        fields:
+          - { label: League name, name: name, widget: string }
+          - { label: Short name, name: shortName, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Contact email, name: email, widget: string }
+          - { label: Registration URL, name: registrationUrl, widget: string }
+          - { label: Facebook URL, name: facebook, widget: string }
+          - { label: Instagram URL, name: instagram, widget: string }
+      - name: nav
+        label: Navigation menu
+        file: src/data/nav.json
+        fields:
+          - label: Menu items
+            name: items
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+              - label: Sub-items
+                name: children
+                widget: list
+                required: false
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: Link, name: href, widget: string }
+                  - label: Sub-sub-items
+                    name: children
+                    widget: list
+                    required: false
+                    fields:
+                      - { label: Label, name: label, widget: string }
+                      - { label: Link, name: href, widget: string }
