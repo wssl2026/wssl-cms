@@ -9,7 +9,6 @@ const { images } = Astro.props;
       alt={`Carousel image ${i + 1}`}
       class="carousel-slide w-full h-auto"
       class:list={[{ hidden: i !== 0 }]}
-      data-index={i}
     />
   ))}
 </div>
