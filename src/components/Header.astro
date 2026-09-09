@@ -14,11 +14,11 @@ import site from '../data/site.json';
       <button id="nav-toggle" type="button" class="px-3 py-2 border border-white/40 rounded" aria-expanded="false" aria-controls="site-nav">Menu</button>
     </div>
     <nav id="site-nav" class="hidden lg:block py-2">
-      <ul class="flex flex-col lg:flex-row lg:items-center lg:gap-2">
-        <li><a href="/" class="block py-2 font-bold uppercase hover:text-gold">Home</a></li>
+      <ul class="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-6">
+        <li><a href="/" class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">Home</a></li>
         {nav.items.map((item) => (
           <li class="relative group">
-            <a href={item.href} class="block py-2 font-bold uppercase hover:text-gold">{item.label}</a>
+            <a href={item.href} class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">{item.label}</a>
             {(item.children ?? []).length > 0 && (
               <ul class="pl-4 lg:pl-0 lg:absolute lg:left-0 lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-white lg:min-w-64 lg:shadow-lg lg:z-20">
                 {(item.children ?? []).map((child) => (
@@ -37,7 +37,7 @@ import site from '../data/site.json';
             )}
           </li>
         ))}
-        <li><a href={site.loginUrl} target="_blank" rel="noopener" class="block py-2 font-bold uppercase hover:text-gold">Login</a></li>
+        <li><a href={site.loginUrl} target="_blank" rel="noopener" class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">Login</a></li>
       </ul>
     </nav>
   </div>
