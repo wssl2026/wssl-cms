@@ -35,6 +35,37 @@
 /** The only host this proxy ever forwards to. */
 export const GITHUB_API_ORIGIN = 'https://api.github.com';
 
+/**
+ * The only parts of the repository a commit assembled in the editor's browser may touch.
+ * Everything else — `functions/`, `wrangler.toml`, `package.json`, the build config — is
+ * off limits: this Worker runs whatever `functions/` contains, so a commit there is a
+ * deploy of arbitrary code with every secret this site holds.
+ */
+export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/uploads', 'public/images'];
+
+/**
+ * True when `path` is a plain, forward-slash-separated path that stays inside one of
+ * `ALLOWED_ROOTS`: no leading slash (that would make it absolute rather than repo-relative),
+ * no backslash (not how GitHub's API takes a path, and not how one would legitimately
+ * arrive here), and no `.`, `..` or empty segment — those are how a path that *looks* like
+ * it is under an allowed root escapes it.
+ */
+export function assertAllowedPath(path: unknown): path is string {
+  if (typeof path !== 'string' || !path || path.startsWith('/') || path.includes('\\')) return false;
+  const segments = path.split('/');
+  if (segments.some((segment) => segment === '' || segment === '.' || segment === '..')) return false;
+  return ALLOWED_ROOTS.some((root) => path === root || path.startsWith(`${root}/`));
+}
+
+/** A Git SHA-1: 40 hex characters, and the only "ref" that can never mean a moving branch. */
+const SHA_RE = /^[0-9a-fA-F]{40}$/;
+
+/** A ref may only be the one branch this site builds and deploys from, or a specific,
+ * immutable commit — never another branch, however it is spelled. */
+function isAllowedRef(ref: string, branch: string): boolean {
+  return typeof ref === 'string' && ref.length > 0 && (ref === branch || SHA_RE.test(ref));
+}
+
 export interface SyntheticUser {
   login: string;
   name: string;
@@ -66,6 +97,9 @@ export interface ClassifyInput {
   search?: string;
   /** `owner/name` of the one repository this editor may touch. */
   repo: string;
+  /** The one branch this site builds and deploys from — the only ref a commit, a tree
+   * listing or a GraphQL file read may name (besides a pinned commit SHA). */
+  branch: string;
   /** The signed-in editor, recorded on commits. */
   email: string;
   /** The raw request body, for GraphQL. */
@@ -125,13 +159,13 @@ const deny = (reason: string): ProxyDecision => ({ kind: 'deny', reason });
 const escapeRe = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export function classifyRequest(input: ClassifyInput): ProxyDecision {
-  const { repo, email, search = '' } = input;
+  const { repo, email, search = '', branch = '' } = input;
   const method = input.method.toUpperCase();
   const path = normalizeApiPath(input.path);
 
   if (path === '/graphql') {
     if (method !== 'POST') return deny('GraphQL is only reachable with POST');
-    return classifyGraphQL(input.body, repo, email);
+    return classifyGraphQL(input.body, repo, email, branch);
   }
 
   // Anything with a query string that is not the tree listing is refused below anyway;
@@ -149,7 +183,18 @@ export function classifyRequest(input: ClassifyInput): ProxyDecision {
       // no GitHub login to ask about — Access already decided — so answer it here rather
       // than forward a question about the bot's account.
       if (/^\/collaborators\/[^/]+$/.test(rest)) return { kind: 'synthetic', response: 'collaborator' };
-      if (/^\/git\/trees\/[^/]+$/.test(rest)) return { kind: 'forward', path: `${path}${search}` };
+      const treeMatch = /^\/git\/trees\/([^/]+)$/.exec(rest);
+      if (treeMatch) {
+        const ref = treeMatch[1];
+        // The character class rules out `%` (and everything else outside a plain ref name)
+        // before the ref is even compared to the branch, so a percent-encoded traversal
+        // like `main%2F..%2F..%2Fuser` is refused here rather than reaching GitHub as an
+        // unexpected path segment.
+        if (!/^[A-Za-z0-9._-]+$/.test(ref) || !isAllowedRef(ref, branch)) {
+          return deny(`This branch is not the one the editor may read: ${ref}`);
+        }
+        return { kind: 'forward', path: `${path}${search}` };
+      }
       if (/^\/git\/blobs\/[0-9a-fA-F]+$/.test(rest)) return { kind: 'forward', path: `${path}${search}` };
       return deny(`This part of the repository API is not available to the editor: ${rest}`);
     }
@@ -197,7 +242,7 @@ function isOnlyRootSelection(query: string, start: number): boolean {
   return /^[\s}]*$/.test(query.slice(i + 1));
 }
 
-function classifyGraphQL(rawBody: string | undefined, repo: string, email: string): ProxyDecision {
+function classifyGraphQL(rawBody: string | undefined, repo: string, email: string, branch: string): ProxyDecision {
   if (!rawBody) return deny('GraphQL request has no body');
 
   let parsed: unknown;
@@ -235,23 +280,84 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
 
   if (isMutation) {
     const input = isRecord(variables.input) ? { ...variables.input } : undefined;
-    const branch = input && isRecord(input.branch) ? input.branch : undefined;
-    if (!input || !branch) return deny('The commit names no branch');
-    if (branch.repositoryNameWithOwner !== repo) return deny('The commit is aimed at another repository');
+    const commitBranch = input && isRecord(input.branch) ? input.branch : undefined;
+    if (!input || !commitBranch) return deny('The commit names no branch');
+    if (commitBranch.repositoryNameWithOwner !== repo) return deny('The commit is aimed at another repository');
+    // I2: a commit may only land on the branch this site actually builds and deploys —
+    // never another branch, however plausible-looking.
+    if (commitBranch.branchName !== branch) return deny('The commit targets a branch the editor may not use');
+
+    // C1: every file this commit touches must fall inside the editable content roots.
+    // `createCommitOnBranch` takes the paths straight from the browser, so without this a
+    // commit into `functions/` or `wrangler.toml` would be a deploy of arbitrary code.
+    const fileChanges = isRecord(input.fileChanges) ? input.fileChanges : {};
+    const additions = Array.isArray(fileChanges.additions) ? fileChanges.additions : [];
+    const deletions = Array.isArray(fileChanges.deletions) ? fileChanges.deletions : [];
+    for (const change of [...additions, ...deletions]) {
+      const changePath = isRecord(change) ? change.path : undefined;
+      if (!assertAllowedPath(changePath)) {
+        const shown = typeof changePath === 'string' && changePath ? changePath : '(empty path)';
+        return deny(`This part of the repository is not available to the editor: ${shown}`);
+      }
+    }
 
     // `createCommitOnBranch` has no author or committer field — GitHub attributes the
     // commit to whoever the token belongs to, which is the bot. The editor is recorded in
     // a trailer instead, so `git log` still answers "who changed this". Any trailer the
     // browser sent is dropped first: only Access decides whose name goes on a commit.
     const message = isRecord(input.message) ? { ...input.message } : {};
+    if (typeof message.headline === 'string') message.headline = sanitizeHeadline(message.headline);
     const supplied = typeof message.body === 'string' ? stripCoAuthors(message.body) : '';
     const trailer = `Co-authored-by: ${email} <${email}>`;
     message.body = supplied ? `${supplied}\n\n${trailer}` : trailer;
     input.message = message;
     variables.input = input;
+  } else {
+    // I3: a query may still reach into the repository's file contents through
+    // `object(expression: "<ref>:<path>")`. Every such read must name the production
+    // branch (or a pinned commit) and a path under the content roots — the same rule a
+    // write follows, applied to reads.
+    const objectCallRe = /object\s*\(\s*expression\s*:\s*([^)]*)\)/g;
+    let call: RegExpExecArray | null;
+    while ((call = objectCallRe.exec(query))) {
+      const arg = call[1].trim();
+      const literal = /^"(?:[^"\\]|\\.)*"$/.test(arg) ? arg : undefined;
+      let expression: string | undefined;
+      try {
+        expression = literal ? (JSON.parse(literal) as string) : undefined;
+      } catch {
+        expression = undefined;
+      }
+      if (expression === undefined) {
+        return deny('A file read must name its ref and path directly, not through a variable');
+      }
+      const sep = expression.indexOf(':');
+      const ref = sep === -1 ? '' : expression.slice(0, sep);
+      const filePath = sep === -1 ? '' : expression.slice(sep + 1);
+      if (!isAllowedRef(ref, branch)) {
+        return deny('A file read must reference the production branch or a specific commit');
+      }
+      if (!assertAllowedPath(filePath)) {
+        return deny(`This part of the repository is not available to the editor: ${filePath || '(empty path)'}`);
+      }
+    }
   }
 
   return { kind: 'forward', path: '/graphql', body: JSON.stringify({ ...parsed, variables }) };
+}
+
+/**
+ * M5: a headline is one line. Folded newlines mean text after a break could later read as
+ * its own line once GitHub joins headline and body — exactly how a trailer would be
+ * smuggled in — so every line break is collapsed to a space, and any `Co-authored-by:`
+ * line within it is stripped the same way one in the body is.
+ */
+function sanitizeHeadline(headline: string): string {
+  return headline
+    .split(/\r\n|\r|\n/)
+    .filter((line) => !/^\s*co-authored-by\s*:/i.test(line))
+    .join(' ')
+    .trim();
 }
 
 function stripCoAuthors(body: string): string {

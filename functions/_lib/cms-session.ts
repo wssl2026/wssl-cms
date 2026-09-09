@@ -16,6 +16,20 @@
 /** Eight hours: longer than an editing session, shorter than a working day left unlocked. */
 export const DEFAULT_SESSION_TTL_SECONDS = 8 * 60 * 60;
 
+/**
+ * M8: a short `CMS_SESSION_SECRET` is brute-forceable; refuse to mint or verify against
+ * one rather than silently signing editors in with a weak key. 32 bytes of entropy is the
+ * usual floor for an HMAC key, and the secret is a string a person pastes in, not raw
+ * bytes, so this is measured in characters.
+ */
+export const MIN_SESSION_SECRET_LENGTH = 32;
+
+function assertSecretLength(secret: string, fn: string): void {
+  if (secret.length < MIN_SESSION_SECRET_LENGTH) {
+    throw new Error(`${fn}: signing secret must be at least ${MIN_SESSION_SECRET_LENGTH} characters`);
+  }
+}
+
 export interface SessionIdentity {
   email: string;
 }
@@ -84,6 +98,7 @@ export async function mintSession(
 ): Promise<string> {
   if (!email) throw new Error('mintSession: an email is required');
   if (!secret) throw new Error('mintSession: a signing secret is required');
+  assertSecretLength(secret, 'mintSession');
   const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
   const payload = base64urlFromBytes(encoder.encode(JSON.stringify({ email, exp })));
   return `${payload}.${base64urlFromBytes(await sign(payload, secret))}`;
@@ -100,6 +115,10 @@ export async function verifySession(
   { now = new Date() }: VerifySessionOptions = {},
 ): Promise<SessionIdentity | null> {
   if (!token || !secret) return null;
+  // A secret this short is a misconfiguration, not "no session" — surfaced as a thrown
+  // config error (turned into a 503 by the handlers) rather than silently accepted as a
+  // weak signing key.
+  assertSecretLength(secret, 'verifySession');
   const parts = token.split('.');
   if (parts.length !== 2) return null;
   const [payload, signature] = parts;

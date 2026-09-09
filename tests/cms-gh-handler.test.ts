@@ -3,7 +3,7 @@ import { createGitHubProxyHandler } from '../functions/api/cms/gh/[[path]]';
 import { mintSession } from '../functions/_lib/cms-session';
 
 const BOT_TOKEN = 'github_pat_do_not_log_me';
-const SECRET = 'cms-session-secret-for-tests';
+const SECRET = 'cms-session-secret-for-tests-000000';
 const REPO = 'wssl2026/wssl-cms';
 const EMAIL = 'editor@wssl.org';
 
@@ -92,7 +92,7 @@ describe('/api/cms/gh/* — authentication', () => {
   });
 
   it('rejects a session token signed with another secret (401)', async () => {
-    const forged = await mintSession(EMAIL, 'not-our-secret');
+    const forged = await mintSession(EMAIL, 'not-our-secret-but-still-32-plus-chars');
     const { res } = await call(rest('/user'), { session: forged });
     expect(res.status).toBe(401);
   });
@@ -143,6 +143,12 @@ describe('/api/cms/gh/* — configuration', () => {
     const { res } = await call(rest('/user'), { env: { ...PROD_ENV, GITHUB_REPO: undefined } });
     expect(res.status).toBe(503);
     expect(await res.text()).toContain('GITHUB_REPO');
+  });
+
+  it('returns 503 when CMS_SESSION_SECRET is shorter than 32 characters (M8)', async () => {
+    const { res } = await call(rest('/user'), { env: { ...PROD_ENV, CMS_SESSION_SECRET: 'too-short' } });
+    expect(res.status).toBe(503);
+    expect(await res.text()).toContain('CMS_SESSION_SECRET');
   });
 
   it('returns 502 with a clear message when the bot token is missing', async () => {
@@ -219,7 +225,7 @@ describe('/api/cms/gh/* — forwarding', () => {
       status: 404,
       headers: { 'Content-Type': 'application/json; charset=utf-8', 'Set-Cookie': 'a=b', ETag: 'W/"x"' },
     });
-    const { res } = await call(rest(`/repos/${REPO}/git/trees/nope`), { response: upstream });
+    const { res } = await call(rest(`/repos/${REPO}/git/trees/main`), { response: upstream });
     expect(res.status).toBe(404);
     expect(res.headers.get('Content-Type')).toBe('application/json; charset=utf-8');
     expect(res.headers.get('ETag')).toBe('W/"x"');
@@ -241,6 +247,46 @@ describe('/api/cms/gh/* — forwarding', () => {
     const res = await handler(context(request, PROD_ENV));
     expect(res.status).toBe(502);
     expect(await res.text()).not.toContain(BOT_TOKEN);
+  });
+
+  it('turns an upstream timeout into a 502, and asks fetch for one (M9)', async () => {
+    const fetchImpl = vi.fn(async () => {
+      throw Object.assign(new Error('The operation was aborted due to timeout'), { name: 'TimeoutError' });
+    });
+    const handler = createGitHubProxyHandler({ verifyJwt: okVerifier(), fetchImpl: fetchImpl as never });
+    const headers = new Headers({ 'Cf-Access-Jwt-Assertion': 'jwt', Authorization: `token ${await mintSession(EMAIL, SECRET)}` });
+    const request = new Request(`https://wssl-cms.pages.dev/api/cms/gh${rest(`/repos/${REPO}/git/trees/main`)}`, { headers });
+    const res = await handler(context(request, PROD_ENV));
+    expect(res.status).toBe(502);
+    const init = fetchImpl.mock.calls[0]?.[1] as RequestInit | undefined;
+    expect(init?.signal).toBeInstanceOf(AbortSignal);
+  });
+});
+
+describe('/api/cms/gh/* — the tree read is pinned to the production branch (I2, M4)', () => {
+  it('forwards a tree read for the configured branch', async () => {
+    const { res, calls } = await call(rest(`/repos/${REPO}/git/trees/main`));
+    expect(res.status).toBe(200);
+    expect(calls).toHaveLength(1);
+  });
+
+  it('forwards a tree read pinned to a 40-hex commit SHA', async () => {
+    const sha = 'a'.repeat(40);
+    const { res, calls } = await call(rest(`/repos/${REPO}/git/trees/${sha}`));
+    expect(res.status).toBe(200);
+    expect(calls).toHaveLength(1);
+  });
+
+  it('refuses a tree read for any other branch (403)', async () => {
+    const { res, calls } = await call(rest(`/repos/${REPO}/git/trees/feature-x`));
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('refuses a ref carrying a percent-encoded traversal attempt (403)', async () => {
+    const { res, calls } = await call(rest(`/repos/${REPO}/git/trees/main%2F..%2F..%2Fuser`));
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
   });
 });
 
@@ -311,6 +357,34 @@ describe('/api/cms/gh/* — GraphQL', () => {
   it('refuses a GraphQL request aimed at another repository (403)', async () => {
     const { res, calls } = await call('/api/graphql', {
       method: 'POST', body: JSON.stringify({ query: QUERY, variables: { owner: 'someone' } }),
+    });
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('refuses a commit that touches a path outside the content roots (403, C1)', async () => {
+    const input = {
+      branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+      expectedHeadOid: 'abc',
+      fileChanges: { additions: [{ path: 'functions/api/evil.ts', contents: 'ZXZpbA==' }], deletions: [] },
+      message: { headline: 'content: update about "index"' },
+    };
+    const { res, calls } = await call('/api/graphql', {
+      method: 'POST', body: JSON.stringify({ query: MUTATION, variables: { input } }),
+    });
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('refuses a commit aimed at a branch other than the configured one (403, I2)', async () => {
+    const input = {
+      branch: { repositoryNameWithOwner: REPO, branchName: 'feature-x' },
+      expectedHeadOid: 'abc',
+      fileChanges: { additions: [], deletions: [] },
+      message: { headline: 'content: update about "index"' },
+    };
+    const { res, calls } = await call('/api/graphql', {
+      method: 'POST', body: JSON.stringify({ query: MUTATION, variables: { input } }),
     });
     expect(res.status).toBe(403);
     expect(calls).toHaveLength(0);

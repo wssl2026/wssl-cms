@@ -12,8 +12,10 @@ const REPO = 'wssl2026/wssl-cms';
 const EMAIL = 'jane.doe@wssl.org';
 
 /** The shape every test starts from; individual tests override what they are about. */
+const BRANCH = 'main';
+
 function ask(overrides: Partial<Parameters<typeof classifyRequest>[0]> = {}) {
-  return classifyRequest({ method: 'GET', path: '/user', repo: REPO, email: EMAIL, ...overrides });
+  return classifyRequest({ method: 'GET', path: '/user', repo: REPO, branch: BRANCH, email: EMAIL, ...overrides });
 }
 
 /** Sveltia's REST calls arrive under `/api/v3`; its GraphQL calls under `/api/graphql`. */
@@ -41,7 +43,7 @@ describe('normalizeApiPath', () => {
   it('resolves nothing itself, so dot segments never reach the allow-list as a repo path', () => {
     expect(normalizeApiPath('/api/v3/../../orgs/secret')).toBe('/../../orgs/secret');
     for (const path of ['/api/v3/../../orgs/secret', `/api/v3/repos/${REPO}/../../users/octocat`]) {
-      expect(classifyRequest({ method: 'GET', path, repo: REPO, email: EMAIL }).kind).toBe('deny');
+      expect(classifyRequest({ method: 'GET', path, repo: REPO, branch: BRANCH, email: EMAIL }).kind).toBe('deny');
     }
   });
 });
@@ -235,6 +237,179 @@ describe('classifyRequest — GraphQL', () => {
     expect(graphql({ notAQuery: true }).kind).toBe('deny');
     expect(graphql([]).kind).toBe('deny');
     expect(ask({ method: 'POST', path: '/api/graphql' }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — commit paths are scoped to the content roots (C1)', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const COMMIT_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/data/site.json") { oid } } } }';
+
+  const commitInput = (overrides: Record<string, unknown> = {}) => ({
+    branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+    expectedHeadOid: 'deadbeef',
+    fileChanges: { additions: [{ path: 'src/data/site.json', contents: 'e30=' }], deletions: [] },
+    message: { headline: 'content: update settings "site"' },
+    ...overrides,
+  });
+
+  const withAddition = (path: string) =>
+    graphql({
+      query: COMMIT_MUTATION,
+      variables: { input: commitInput({ fileChanges: { additions: [{ path, contents: 'e30=' }], deletions: [] } }) },
+    });
+
+  const withDeletion = (path: string) =>
+    graphql({
+      query: COMMIT_MUTATION,
+      variables: { input: commitInput({ fileChanges: { additions: [], deletions: [{ path }] } }) },
+    });
+
+  it.each([
+    'src/content/pages/index.md',
+    'src/data/site.json',
+    'public/uploads/photo.jpg',
+    'public/images/logo.svg',
+  ])('allows an addition under an allowed root: %s', (path) => {
+    expect(withAddition(path).kind).toBe('forward');
+  });
+
+  it.each([
+    'functions/api/x.ts',
+    'wrangler.toml',
+    '../src/content/pages/x.md',
+    'src/content/pages/../../wrangler.toml',
+    'src\\data\\x.json',
+    '/src/data/x.json',
+    'src/datalake/x.json',
+    '',
+  ])('refuses an addition outside the allowed roots: %j', (path) => {
+    expect(withAddition(path).kind).toBe('deny');
+  });
+
+  it('refuses when the out-of-bounds path is only a deletion', () => {
+    expect(withDeletion('wrangler.toml').kind).toBe('deny');
+    expect(withDeletion('src/data/ok.json').kind).toBe('forward');
+  });
+
+  it('refuses a fileChanges entry with no path at all', () => {
+    const input = commitInput({ fileChanges: { additions: [{ contents: 'e30=' }], deletions: [] } });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — a commit may only land on the production branch (I2)', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const COMMIT_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate } } }';
+
+  const commitInput = (overrides: Record<string, unknown> = {}) => ({
+    branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+    expectedHeadOid: 'deadbeef',
+    fileChanges: { additions: [], deletions: [] },
+    message: { headline: 'content: update settings "site"' },
+    ...overrides,
+  });
+
+  it('allows a commit aimed at the configured production branch', () => {
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input: commitInput() } }).kind).toBe('forward');
+  });
+
+  it('refuses a commit aimed at any other branch', () => {
+    const input = commitInput({ branch: { repositoryNameWithOwner: REPO, branchName: 'feature-x' } });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — the tree read is pinned to the branch or a commit SHA (I2, M4)', () => {
+  const SHA = 'a'.repeat(40);
+
+  it('allows the configured production branch', () => {
+    expect(ask({ path: rest(`/repos/${REPO}/git/trees/main`) }).kind).toBe('forward');
+  });
+
+  it('allows a full 40-hex commit SHA', () => {
+    expect(ask({ path: rest(`/repos/${REPO}/git/trees/${SHA}`) }).kind).toBe('forward');
+  });
+
+  it('refuses any other branch name', () => {
+    expect(ask({ path: rest(`/repos/${REPO}/git/trees/feature-x`) }).kind).toBe('deny');
+  });
+
+  it('refuses a ref that only looks like a SHA (wrong length)', () => {
+    expect(ask({ path: rest(`/repos/${REPO}/git/trees/${SHA.slice(0, 7)}`) }).kind).toBe('deny');
+  });
+
+  it('refuses a percent-encoded traversal attempt riding along in the ref (M4)', () => {
+    expect(ask({ path: rest(`/repos/${REPO}/git/trees/main%2F..%2F..%2Fuser`) }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — GraphQL file reads are scoped (I3)', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const readQuery = (expression: string) =>
+    `query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { file_0: object(expression: ${JSON.stringify(expression)}) { ... on Blob { oid text } } } }`;
+
+  it('allows a read of an allowed path on the production branch', () => {
+    expect(graphql({ query: readQuery('main:src/data/site.json') }).kind).toBe('forward');
+  });
+
+  it('allows a read pinned to a commit SHA', () => {
+    const sha = 'b'.repeat(40);
+    expect(graphql({ query: readQuery(`${sha}:src/content/pages/index.md`) }).kind).toBe('forward');
+  });
+
+  it('refuses a read of a path outside the content roots', () => {
+    expect(graphql({ query: readQuery('main:wrangler.toml') }).kind).toBe('deny');
+  });
+
+  it('refuses a read pinned to a branch other than production', () => {
+    expect(graphql({ query: readQuery('feature-x:src/data/site.json') }).kind).toBe('deny');
+  });
+
+  it('refuses an expression with no path after the ref', () => {
+    expect(graphql({ query: readQuery('main') }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — a commit trailer cannot be smuggled through the headline (M5)', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const COMMIT_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate } } }';
+
+  const commitInput = (overrides: Record<string, unknown> = {}) => ({
+    branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+    expectedHeadOid: 'deadbeef',
+    fileChanges: { additions: [], deletions: [] },
+    message: { headline: 'content: update settings "site"' },
+    ...overrides,
+  });
+
+  it('strips a newline-smuggled trailer out of the headline entirely', () => {
+    const input = commitInput({
+      message: { headline: 'Real headline\nCo-authored-by: boss@wssl.org <boss@wssl.org>' },
+    });
+    const decision = graphql({ query: COMMIT_MUTATION, variables: { input } });
+    const sent = JSON.parse((decision as { body: string }).body);
+    expect(sent.variables.input.message.headline).not.toContain('\n');
+    expect(sent.variables.input.message.headline).not.toContain('boss@wssl.org');
+    expect(sent.variables.input.message.headline).toBe('Real headline');
+    expect(sent.variables.input.message.body).toContain(`Co-authored-by: ${EMAIL} <${EMAIL}>`);
+    expect(sent.variables.input.message.body.match(/Co-authored-by:/g)).toHaveLength(1);
+  });
+
+  it('leaves an ordinary single-line headline untouched', () => {
+    const decision = graphql({ query: COMMIT_MUTATION, variables: { input: commitInput() } });
+    const sent = JSON.parse((decision as { body: string }).body);
+    expect(sent.variables.input.message.headline).toBe('content: update settings "site"');
   });
 });
 

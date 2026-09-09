@@ -73,11 +73,12 @@ export async function resolveEditor(
     try {
       return await verifyJwt(token, { teamDomain: env.CF_ACCESS_TEAM_DOMAIN, aud: env.CF_ACCESS_AUD });
     } catch (e) {
-      // The verification reason (issuer/audience/key/claim) is diagnostic text, never the token.
+      // The verification reason (issuer/audience/key/claim) is diagnostic text — useful in
+      // the log, but not something to hand back to the browser: a client should not learn
+      // *why* a JWT it did not construct failed to verify. M7: log it, and answer with the
+      // same plain 401 every other sign-in failure gets.
       console.log(JSON.stringify({ event: 'cms_auth', status: 401, message: errorMessage(e) }));
-      return jsonError('Your sign-in has expired. Reload /admin/ and sign in again.', 401, {
-        detail: errorMessage(e),
-      });
+      return jsonError('Your sign-in has expired. Reload /admin/ and sign in again.', 401);
     }
   }
 

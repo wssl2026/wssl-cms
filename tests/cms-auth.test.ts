@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { createCmsAuthHandler } from '../functions/api/cms/auth';
 import { verifySession } from '../functions/_lib/cms-session';
 
-const SECRET = 'cms-session-secret-for-tests';
+const SECRET = 'cms-session-secret-for-tests-000000';
 
 const PROD_ENV = {
   GITHUB_REPO: 'wssl2026/wssl-cms',
@@ -88,6 +88,15 @@ describe('GET /api/cms/auth — configuration', () => {
   it('returns a 503 config error when CMS_SESSION_SECRET is missing', async () => {
     const handler = createCmsAuthHandler({ verifyJwt: okVerifier() });
     const res = await handler(context(authRequest({ jwt: 'jwt' }), { ...PROD_ENV, CMS_SESSION_SECRET: undefined }));
+    expect(res.status).toBe(503);
+    expect(await res.text()).toContain('CMS_SESSION_SECRET');
+  });
+
+  it('returns a 503 config error when CMS_SESSION_SECRET is shorter than 32 characters (M8)', async () => {
+    const handler = createCmsAuthHandler({ verifyJwt: okVerifier() });
+    const res = await handler(
+      context(authRequest({ jwt: 'jwt' }), { ...PROD_ENV, CMS_SESSION_SECRET: 'too-short' }),
+    );
     expect(res.status).toBe(503);
     expect(await res.text()).toContain('CMS_SESSION_SECRET');
   });

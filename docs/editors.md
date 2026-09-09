@@ -10,7 +10,7 @@ You do not need a GitHub account, and you do not need a password — just your e
 
 That fourth click is not a second sign-in and there is nothing to type: the editor calls the button "GitHub" because GitHub is where the site's pages are kept, but it is your email sign-in from step 3 that it checks. A small window may flash open and close — that is the editor collecting your session. If it does not, allow pop-ups for wssl.org and click the button again.
 
-The sign-in lasts a while, so you will not be asked every time. After about eight hours of editing the session runs out and the editor asks you to reload the page — reload `/admin/` and click the button again. If your email is not on the list of editors you will be turned away — ask the webmaster to add it.
+The sign-in lasts a while, so you will not be asked every time. After about eight hours of editing the session runs out and the editor asks you to reload the page — reload `/admin/` and click the button again. If you have had the editor open longer than that, clicking **Save** will fail with a sign-in error instead of publishing; your unsaved changes stay in the browser tab, so sign in again and save once more rather than closing the tab. If your email is not on the list of editors you will be turned away — ask the webmaster to add it.
 
 Ignore **Work with Local Repository**: that button only appears to developers running the site on their own machine.
 

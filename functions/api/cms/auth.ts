@@ -12,7 +12,7 @@
  * the same handshake. The GitHub bot token never leaves the server: `/api/cms/gh/*` swaps
  * the session token for it, and only for an editor whose Access JWT still agrees.
  */
-import { mintSession } from '../../_lib/cms-session';
+import { MIN_SESSION_SECRET_LENGTH, mintSession } from '../../_lib/cms-session';
 import { defaultVerifyJwt, jsonError, resolveEditor } from '../../_lib/cms-access';
 import type { CmsEnv, VerifyJwt } from '../../_lib/cms-access';
 
@@ -26,6 +26,12 @@ export function createCmsAuthHandler(overrides: Partial<CmsAuthDeps> = {}): Page
   return async ({ request, env }) => {
     if (!env.CMS_SESSION_SECRET) {
       return jsonError('The site editor is not configured: CMS_SESSION_SECRET is not set.', 503);
+    }
+    if (env.CMS_SESSION_SECRET.length < MIN_SESSION_SECRET_LENGTH) {
+      return jsonError(
+        `The site editor is not configured: CMS_SESSION_SECRET must be at least ${MIN_SESSION_SECRET_LENGTH} characters.`,
+        503,
+      );
     }
 
     const editor = await resolveEditor(request, env, verifyJwt);

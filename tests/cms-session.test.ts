@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { mintSession, verifySession, DEFAULT_SESSION_TTL_SECONDS } from '../functions/_lib/cms-session';
+import {
+  mintSession,
+  verifySession,
+  DEFAULT_SESSION_TTL_SECONDS,
+  MIN_SESSION_SECRET_LENGTH,
+} from '../functions/_lib/cms-session';
 
 const SECRET = 'a-long-random-cms-session-secret';
 const EMAIL = 'editor@wssl.org';
@@ -34,7 +39,7 @@ describe('cms session tokens', () => {
 
   it('rejects a token signed with another secret', async () => {
     const token = await mintSession(EMAIL, SECRET);
-    await expect(verifySession(token, 'some-other-secret')).resolves.toBeNull();
+    await expect(verifySession(token, 'some-other-secret-that-is-also-long-enough')).resolves.toBeNull();
   });
 
   it('rejects a token whose payload was edited to another email', async () => {
@@ -81,6 +86,25 @@ describe('cms session tokens', () => {
   it('verifies to null when the secret is empty rather than trusting anything', async () => {
     const token = await mintSession(EMAIL, SECRET);
     await expect(verifySession(token, '')).resolves.toBeNull();
+  });
+
+  it('rejects minting with a secret shorter than the minimum (M8)', async () => {
+    expect(MIN_SESSION_SECRET_LENGTH).toBe(32);
+    const shortSecret = 'x'.repeat(MIN_SESSION_SECRET_LENGTH - 1);
+    await expect(mintSession(EMAIL, shortSecret)).rejects.toThrow(/at least 32 characters/);
+  });
+
+  it('accepts minting with a secret exactly at the minimum', async () => {
+    const exactSecret = 'x'.repeat(MIN_SESSION_SECRET_LENGTH);
+    await expect(mintSession(EMAIL, exactSecret)).resolves.toEqual(expect.any(String));
+  });
+
+  it('rejects verifying against a secret shorter than the minimum, even a correct one (M8)', async () => {
+    const shortSecret = 'x'.repeat(MIN_SESSION_SECRET_LENGTH - 1);
+    // The token was never minted with this secret — a mint would itself have refused it —
+    // but verifySession must refuse on the secret's own shape before it even compares.
+    const token = await mintSession(EMAIL, SECRET);
+    await expect(verifySession(token, shortSecret)).rejects.toThrow(/at least 32 characters/);
   });
 
   it('gives two editors different tokens', async () => {

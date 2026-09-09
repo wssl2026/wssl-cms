@@ -14,7 +14,7 @@
  * What may be asked for at all is decided by `_lib/github-proxy.ts`, which is pure and
  * tested; this function is the plumbing around it.
  */
-import { verifySession } from '../../../_lib/cms-session';
+import { MIN_SESSION_SECRET_LENGTH, verifySession } from '../../../_lib/cms-session';
 import {
   defaultVerifyJwt,
   errorMessage,
@@ -39,6 +39,10 @@ export interface GitHubProxyDeps {
 
 /** Media uploads arrive as base64 inside a GraphQL mutation, so the cap is generous. */
 const MAX_BODY_BYTES = 15 * 1024 * 1024;
+
+/** M9: GitHub is expected to answer well inside this; past it, Sveltia should hear a clear
+ * 502 rather than the browser waiting on a request that may never resolve. */
+const UPSTREAM_TIMEOUT_MS = 30_000;
 
 const ROUTE_PREFIX = '/api/cms/gh';
 
@@ -73,6 +77,11 @@ export function createGitHubProxyHandler(overrides: Partial<GitHubProxyDeps> = {
     if (!env.CMS_SESSION_SECRET) {
       return done(jsonError('The site editor is not configured: CMS_SESSION_SECRET is not set.', 503));
     }
+    if (env.CMS_SESSION_SECRET.length < MIN_SESSION_SECRET_LENGTH) {
+      return done(
+        jsonError(`The site editor is not configured: CMS_SESSION_SECRET must be at least ${MIN_SESSION_SECRET_LENGTH} characters.`, 503),
+      );
+    }
     if (!env.GITHUB_REPO) {
       return done(jsonError('The site editor is not configured: GITHUB_REPO is not set.', 503));
     }
@@ -106,6 +115,7 @@ export function createGitHubProxyHandler(overrides: Partial<GitHubProxyDeps> = {
       path: rawPath,
       search: url.search,
       repo: env.GITHUB_REPO,
+      branch: env.GITHUB_BRANCH ?? '',
       email: editor.email,
       body,
     });
@@ -144,6 +154,7 @@ export function createGitHubProxyHandler(overrides: Partial<GitHubProxyDeps> = {
       upstream = await fetchUpstream(`${GITHUB_API_ORIGIN}${decision.path}`, {
         method,
         headers,
+        signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
         ...(upstreamBody === undefined ? {} : { body: upstreamBody }),
       });
     } catch (e) {
