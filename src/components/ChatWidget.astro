@@ -14,7 +14,7 @@ const suggestions = [
     <button id="ask-close" class="text-white/80 hover:text-white" aria-label="Close">✕</button>
   </header>
   <div id="ask-messages" aria-live="polite" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
-    <div class="text-gray-700">Hi! I answer questions using the pages on wssl.org and link you to them. What would you like to know?</div>
+    <div class="text-gray-700">Hi! I answer questions using the pages on wssl.org and link you to them. Answers may not be accurate, so please check the linked source. What would you like to know?</div>
     <div id="ask-suggestions" class="flex flex-wrap gap-2">
       {suggestions.map((s) => <button class="ask-suggest border border-navy text-navy rounded-full px-3 py-1 text-xs hover:bg-navy hover:text-white">{s}</button>)}
     </div>
@@ -23,7 +23,7 @@ const suggestions = [
     <input id="ask-input" aria-label="Your question" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Ask about registration, schedules, fields…" maxlength="2000" autocomplete="off" required />
     <button id="ask-send" class="bg-navy text-white font-bold px-4 rounded disabled:opacity-50" type="submit">Send</button>
   </form>
-  <p class="text-[11px] text-gray-500 px-3 pb-2">Answers come from wssl.org pages and may be incomplete — check the linked page. Don't share personal or medical details.</p>
+  <p class="text-[11px] text-gray-500 px-3 pb-2">Answers are generated automatically and may not be accurate. Please check the linked source page. Don't share personal or medical details.</p>
 </section>
 
 <script>
