@@ -39,6 +39,20 @@ export function validateHistory(input: unknown): ClientMessage[] | { error: stri
   return kept;
 }
 
+// Task 19 follow-up: an anonymous per-browser-session id the widget generates and sends
+// alongside `messages`, logged as `session_id`. Never rejects the request — anything that
+// isn't a plausible id (wrong type, too long, or outside this charset) is just treated as
+// absent, returning ''.
+const SESSION_ID_RE = /^[A-Za-z0-9-]+$/;
+const MAX_SESSION_CHARS = 64;
+
+export function validateSession(input: unknown): string {
+  if (typeof input === 'string' && input.length > 0 && input.length <= MAX_SESSION_CHARS && SESSION_ID_RE.test(input)) {
+    return input;
+  }
+  return '';
+}
+
 const CORPUS_INTRO = 'These documents are the complete, current content of wssl.org. Use them to answer my questions and cite the pages you rely on.';
 const CORPUS_ACK = 'Understood. I have the wssl.org pages loaded and will answer from them, citing the pages I use.';
 

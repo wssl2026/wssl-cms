@@ -155,7 +155,7 @@ describe('POST /api/chat handler', () => {
       };
       const request = makeRequest(
         'https://example.com/api/chat',
-        { messages: [{ role: 'user', content: 'How do I register?' }] },
+        { messages: [{ role: 'user', content: 'How do I register?' }], session: 'my-session-1' },
         'https://example.com',
       );
       const response = await onRequestPost(makeFakeContext(request, env as any, waitUntilCalls));
@@ -170,6 +170,7 @@ describe('POST /api/chat handler', () => {
       expect(url).toBe(env.QUESTION_LOG_URL);
       const sent = JSON.parse(init.body as string);
       expect(sent).toMatchObject({
+        session_id: 'my-session-1',
         question: 'How do I register?',
         answer_excerpt: 'Ask the Registrar.',
         provider: 'anthropic',
@@ -181,6 +182,33 @@ describe('POST /api/chat handler', () => {
         secret: 'topsecret',
       });
       expect(typeof sent.ms).toBe('number');
+      fetchSpy.mockRestore();
+    });
+
+    it('drops an invalid session id, logging session_id as an empty string', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('ok', { status: 200 }));
+      const waitUntilCalls: Promise<unknown>[] = [];
+      const env = {
+        ANTHROPIC_API_KEY: 'x',
+        LLM_PROVIDER: 'anthropic',
+        USAGE: fakeKV(),
+        DAILY_CAP: '5',
+        QUESTION_LOG_URL: 'https://script.google.com/macros/s/xyz/exec',
+        QUESTION_LOG_SECRET: 'topsecret',
+      };
+      const request = makeRequest(
+        'https://example.com/api/chat',
+        { messages: [{ role: 'user', content: 'How do I register?' }], session: 'has spaces!' },
+        'https://example.com',
+      );
+      const response = await onRequestPost(makeFakeContext(request, env as any, waitUntilCalls));
+      expect(response.status).toBe(200);
+      await response.text();
+      await waitUntilCalls[0];
+
+      const [, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
+      const sent = JSON.parse(init.body as string);
+      expect(sent.session_id).toBe('');
       fetchSpy.mockRestore();
     });
 

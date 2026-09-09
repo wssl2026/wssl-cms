@@ -49,9 +49,11 @@ Locally, `/admin` still expects `npx decap-server` on port 8081 and commits to y
 
 ## Question log (Google Sheet)
 
-Every answered Ask WSSL question can be logged to a Google Sheet, so the owner can see what families are asking and where the assistant falls short. It is **off by default** and entirely opt-in by configuration — set both `QUESTION_LOG_URL` and `QUESTION_LOG_SECRET` to turn it on. Logging never touches the visitor's answer: it happens after `functions/api/chat.ts` finishes streaming the SSE response, scheduled with `context.waitUntil` so it cannot delay or fail the request, and every failure (a rejected fetch, a non-2xx response, a timeout) is caught and reduced to a `question_log_error` log line carrying only the HTTP status — never thrown, never the question or answer content.
+Every answered Ask WSSL question can be logged to a Google Sheet, so the owner can see what families are asking and where the assistant falls short. It is **off by default** and entirely opt-in by configuration — set both `QUESTION_LOG_URL` and `QUESTION_LOG_SECRET` to turn it on. Logging never touches the visitor's answer: it happens after `functions/api/chat.ts` finishes streaming the SSE response, scheduled with `context.waitUntil` so it cannot delay or fail the request, and every failure (a rejected fetch, a non-2xx response, a timeout, or a wrong secret) is caught and reduced to a `question_log_error` log line carrying only the HTTP status and, when relevant, a short excerpt of the response body — never thrown, never the question or answer content. The Apps Script above answers a rejected secret with HTTP 200 and the body `forbidden` rather than an error status, so a 2xx response alone is not treated as success: only a body of exactly `ok` is — anything else (including `forbidden`) is logged as `question_log_error` so a mismatched `SECRET` / `QUESTION_LOG_SECRET` doesn't fail silently.
 
-What is recorded, one row per question: the timestamp, the question (trimmed, at most 2000 characters), the first 500 characters of the answer, the distinct source URLs cited, the provider and model, the retrieval mode (`index` / `cache` / `anthropic`), a status (`ok`, `error`, or `refusal`), how long the answer took, and the prompt/candidate token counts. **Nothing else** — no IP address, no user agent, no conversation history beyond the single question just asked.
+What is recorded, one row per question: the timestamp, an anonymous session id, the question (trimmed, at most 2000 characters), the first 2000 characters of the answer, the distinct source URLs cited, the provider and model, the retrieval mode (`index` / `cache` / `anthropic`), a status (`ok`, `error`, or `refusal`), how long the answer took, and the prompt/candidate token counts. **Nothing else** — no IP address, no user agent, no conversation history beyond the single question just asked.
+
+The session id is a random value the widget generates once per browser tab (`crypto.randomUUID()`, kept in `sessionStorage`) purely so the owner can see which rows came from the same visit — it carries no personal data, is never derived from anything about the visitor, and resets the moment the tab is closed or the browser is restarted. The server only accepts a well-formed id (letters, digits and hyphens, at most 64 characters); anything else is logged as an empty `session_id` rather than rejecting the question.
 
 ### Setting up the sheet (no coding required)
 
@@ -60,7 +62,7 @@ What is recorded, one row per question: the timestamp, the question (trimmed, at
 
    ```javascript
    const SECRET = PropertiesService.getScriptProperties().getProperty('SECRET');
-   const HEADERS = ['ts', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens'];
+   const HEADERS = ['ts', 'session_id', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens'];
    function doPost(e) {
      const body = JSON.parse(e.postData.contents || '{}');
      if (!SECRET || body.secret !== SECRET) return ContentService.createTextOutput('forbidden').setMimeType(ContentService.MimeType.TEXT);

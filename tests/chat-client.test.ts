@@ -42,4 +42,22 @@ describe('streamChat', () => {
     expect(onEvent).toHaveBeenCalledWith(expect.objectContaining({ type: 'error', message: 'nope' }));
     vi.unstubAllGlobals();
   });
+
+  it('sends the session id in the request body alongside messages', async () => {
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ error: 'nope' }), { status: 429 }));
+    vi.stubGlobal('fetch', fetchMock);
+    await streamChat([{ role: 'user', content: 'hi' }], vi.fn(), undefined, 'abc-123');
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(init.body as string)).toEqual({ messages: [{ role: 'user', content: 'hi' }], session: 'abc-123' });
+    vi.unstubAllGlobals();
+  });
+
+  it('omits session from the request body when not given', async () => {
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ error: 'nope' }), { status: 429 }));
+    vi.stubGlobal('fetch', fetchMock);
+    await streamChat([{ role: 'user', content: 'hi' }], vi.fn());
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(init.body as string)).toEqual({ messages: [{ role: 'user', content: 'hi' }] });
+    vi.unstubAllGlobals();
+  });
 });

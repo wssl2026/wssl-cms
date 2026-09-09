@@ -18,12 +18,12 @@ export function parseSseChunk(buffer: string): { events: ClientEvent[]; rest: st
   return { events, rest };
 }
 
-export async function streamChat(messages: ChatMessage[], onEvent: (e: ClientEvent) => void, signal?: AbortSignal): Promise<void> {
+export async function streamChat(messages: ChatMessage[], onEvent: (e: ClientEvent) => void, signal?: AbortSignal, session?: string): Promise<void> {
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify(session ? { messages, session } : { messages }),
       signal,
     });
     if (!res.ok || !res.body) {

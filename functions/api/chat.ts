@@ -2,7 +2,7 @@ import corpusJson from '../_lib/corpus.json';
 import indexJson from '../_lib/index.json';
 import type { CorpusDoc } from '../_lib/corpus-types';
 import type { IndexEntry } from '../_lib/index-types';
-import { validateHistory } from '../_lib/chat';
+import { validateHistory, validateSession } from '../_lib/chat';
 import { eventsToStream } from '../_lib/sse';
 import { checkDailyCap } from '../_lib/usage';
 import type { Provider } from '../_lib/providers/types';
@@ -58,10 +58,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
   const origin = request.headers.get('Origin');
   if (!origin || origin !== url.origin) return json({ error: 'forbidden' }, 403);
 
-  let body: { messages?: unknown };
+  let body: { messages?: unknown; session?: unknown };
   try { body = await request.json(); } catch { return json({ error: 'invalid JSON' }, 400); }
   const history = validateHistory(body?.messages);
   if ('error' in history) return json({ error: history.error }, 400);
+  // Optional anonymous session id from the widget (Task 19 follow-up). Never rejects the
+  // request: anything that isn't a plausible id just comes back as ''.
+  const session = validateSession(body?.session);
 
   let cap;
   try {
@@ -96,6 +99,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
     onComplete: shouldLog
       ? (info) => {
           const record = buildQuestionRecord({
+            session,
             question,
             answer: info.text,
             citations: info.citations,

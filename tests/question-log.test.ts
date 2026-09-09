@@ -21,6 +21,7 @@ describe('buildQuestionRecord', () => {
   it('builds the record in field order with the given values', () => {
     const record = buildQuestionRecord({
       ts: '2026-09-09T00:00:00.000Z',
+      session: 'abc-123',
       question: 'How do I register?',
       answer: 'Go to inLeague. [Registration](https://www.wssl.org/registration/)',
       citations: [{ url: 'https://www.wssl.org/registration/' }],
@@ -34,6 +35,7 @@ describe('buildQuestionRecord', () => {
     });
     expect(record).toEqual({
       ts: '2026-09-09T00:00:00.000Z',
+      session_id: 'abc-123',
       question: 'How do I register?',
       answer_excerpt: 'Go to inLeague. [Registration](https://www.wssl.org/registration/)',
       sources: 'https://www.wssl.org/registration/',
@@ -47,8 +49,13 @@ describe('buildQuestionRecord', () => {
       secret: 's3cr3t',
     });
     expect(Object.keys(record)).toEqual([
-      'ts', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens', 'secret',
+      'ts', 'session_id', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens', 'secret',
     ]);
+  });
+
+  it('defaults session_id to an empty string when no session is given', () => {
+    const record = buildQuestionRecord(base({ session: undefined }));
+    expect(record.session_id).toBe('');
   });
 
   it('trims and truncates the question to 2000 chars', () => {
@@ -57,10 +64,10 @@ describe('buildQuestionRecord', () => {
     expect(record.question).toBe('q'.repeat(2000));
   });
 
-  it('truncates the answer excerpt to the first 500 chars of the streamed answer', () => {
-    const record = buildQuestionRecord(base({ answer: 'a'.repeat(600) }));
-    expect(record.answer_excerpt.length).toBe(500);
-    expect(record.answer_excerpt).toBe('a'.repeat(500));
+  it('truncates the answer excerpt to the first 2000 chars of the streamed answer', () => {
+    const record = buildQuestionRecord(base({ answer: 'a'.repeat(2100) }));
+    expect(record.answer_excerpt.length).toBe(2000);
+    expect(record.answer_excerpt).toBe('a'.repeat(2000));
   });
 
   it('joins distinct cited URLs with "; ", dropping duplicates and empties', () => {
@@ -157,6 +164,28 @@ describe('sendQuestionRecord — fake fetch', () => {
     const fetchImpl = vi.fn(async () => new Response('ok', { status: 200 }));
     await sendQuestionRecord(env, sampleRecord(), fetchImpl as any);
     expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it('logs question_log_error when a 2xx response body is "forbidden" (wrong secret, silently accepted by Apps Script)', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const fetchImpl = vi.fn(async () => new Response('forbidden', { status: 200 }));
+    await expect(sendQuestionRecord(env, sampleRecord(), fetchImpl as any)).resolves.toBeUndefined();
+    expect(spy).toHaveBeenCalledTimes(1);
+    const logged = JSON.parse(spy.mock.calls[0][0] as string);
+    expect(logged.event).toBe('question_log_error');
+    expect(logged.status).toBe(200);
+    expect(logged.body).toBe('forbidden');
+    spy.mockRestore();
+  });
+
+  it('truncates a long 2xx error body to 40 chars in the log', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const longBody = 'x'.repeat(100);
+    const fetchImpl = vi.fn(async () => new Response(longBody, { status: 200 }));
+    await sendQuestionRecord(env, sampleRecord(), fetchImpl as any);
+    const logged = JSON.parse(spy.mock.calls[0][0] as string);
+    expect(logged.body).toBe('x'.repeat(40));
     spy.mockRestore();
   });
 

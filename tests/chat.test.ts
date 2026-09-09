@@ -1,4 +1,4 @@
-import { validateHistory, buildMessages, buildRequest, SYSTEM_PROMPT, MODEL, MAX_MESSAGE_CHARS } from '../functions/_lib/chat';
+import { validateHistory, validateSession, buildMessages, buildRequest, SYSTEM_PROMPT, MODEL, MAX_MESSAGE_CHARS } from '../functions/_lib/chat';
 
 const corpus = [
   { title: 'A', url: 'https://www.wssl.org/a/', text: 'aaa' },
@@ -23,6 +23,23 @@ describe('validateHistory', () => {
     expect(r.length).toBeLessThanOrEqual(13);
     expect(r[0].role).toBe('user');
     expect(r.at(-1).content).toBe('last');
+  });
+});
+
+describe('validateSession', () => {
+  it('accepts an alphanumeric-and-hyphen id up to 64 chars', () => {
+    expect(validateSession('abc-123')).toBe('abc-123');
+    expect(validateSession('a'.repeat(64))).toBe('a'.repeat(64));
+  });
+  it('treats anything invalid as absent, returning an empty string, never an error', () => {
+    expect(validateSession(undefined)).toBe('');
+    expect(validateSession(null)).toBe('');
+    expect(validateSession(123)).toBe('');
+    expect(validateSession('')).toBe('');
+    expect(validateSession('a'.repeat(65))).toBe('');
+    expect(validateSession('has spaces')).toBe('');
+    expect(validateSession('has_underscore')).toBe('');
+    expect(validateSession('<script>')).toBe('');
   });
 });
 

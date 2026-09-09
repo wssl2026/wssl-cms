@@ -41,9 +41,30 @@ const suggestions = [
   const list = $('ask-messages'), form = $('ask-form') as HTMLFormElement, input = $('ask-input') as HTMLInputElement, send = $('ask-send') as HTMLButtonElement;
 
   const STORAGE = 'askwssl:history';
+  const SESSION_STORAGE_KEY = 'askwssl:session';
   let inFlight: AbortController | null = null;
   let history: ChatMessage[] = [];
   try { history = JSON.parse(sessionStorage.getItem(STORAGE) ?? '[]'); } catch { history = []; }
+
+  // An anonymous id, random per browser session — no personal data, just lets the question
+  // log (Task 19) group a visitor's questions together. Generated once and reused for the
+  // life of the tab via sessionStorage; if storage is unavailable it just falls back to an
+  // id kept only in memory for this page load.
+  function newSessionId(): string {
+    return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+  }
+  let sessionId: string;
+  try {
+    sessionId = sessionStorage.getItem(SESSION_STORAGE_KEY) || '';
+    if (!sessionId) {
+      sessionId = newSessionId();
+      sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    }
+  } catch {
+    sessionId = newSessionId();
+  }
 
   function render(md: string): string {
     return DOMPurify.sanitize(marked.parse(md, { async: false }) as string, { ADD_ATTR: ['target'] });
@@ -85,7 +106,7 @@ const suggestions = [
     inFlight?.abort();
     const controller = new AbortController();
     inFlight = controller;
-    try { await streamChat(history, onEvent, controller.signal); }
+    try { await streamChat(history, onEvent, controller.signal, sessionId); }
     finally {
       if (inFlight === controller) inFlight = null;
       if (sources.size) {
