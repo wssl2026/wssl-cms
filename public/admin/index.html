@@ -26,6 +26,19 @@
             },
           },
     });
+
+    // Cloudflare Access has already authenticated the editor, so Decap's own "Login"
+    // screen is a redundant click for the proxy backend. Press it automatically.
+    (function autoLogin() {
+      var deadline = Date.now() + 15000;
+      var timer = setInterval(function () {
+        var button = Array.prototype.find.call(document.querySelectorAll('button'), function (b) {
+          return b.textContent.trim() === 'Login';
+        });
+        if (button) { button.click(); clearInterval(timer); }
+        else if (Date.now() > deadline) { clearInterval(timer); }
+      }, 250);
+    })();
   </script>
 </body>
 </html>
