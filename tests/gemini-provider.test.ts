@@ -196,6 +196,15 @@ describe('gemini provider — inline fallback', () => {
     expect(client.createCalls).toHaveLength(1);
     expect(lines2.filter((l) => l.event === 'gemini_cache_unavailable')).toHaveLength(0);
   });
+
+  it('keeps trying to cache after a transient failure, so one 5xx does not cost the isolate a cache', async () => {
+    const client = fakeClient({ createThrows: apiError('backend error', 503) });
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
+    await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
+    expect(client.createCalls).toHaveLength(2);
+    expect(geminiIsolateState.cacheUnavailable).toBe(false);
+  });
 });
 
 describe('gemini provider — streaming, citations and logging', () => {

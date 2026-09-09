@@ -98,12 +98,17 @@ async function createCache(
       },
     });
   } catch (err) {
-    // Too small to cache, or caching unsupported for this model: answer inline instead.
-    geminiIsolateState.cacheUnavailable = true;
+    // Answer inline instead. "Too small to cache" or "model does not support caching" is a
+    // permanent no for this deployment, so stop asking; a 429 or a 5xx is not, and must not
+    // condemn the isolate to paying full price for the corpus on every later question.
+    const status = (err as { status?: number })?.status;
+    const permanent = status === 400 || status === 404 || status === 501;
+    if (permanent) geminiIsolateState.cacheUnavailable = true;
     log?.({
       event: 'gemini_cache_unavailable',
       model,
-      status: (err as { status?: number })?.status,
+      status,
+      permanent,
       message: String((err as Error)?.message ?? '').slice(0, 300),
     });
     return null;
