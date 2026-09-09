@@ -1,10 +1,17 @@
-# Editors sign in by email through Cloudflare Access and never touch GitHub: the real
-# backend is the proxy at /api/cms/v1, wired up in index.html. This `github` block is
-# only the declared fallback Decap needs before it detects that proxy.
+# Editors sign in by email through Cloudflare Access and never touch GitHub. Sveltia CMS
+# still speaks the GitHub API, but every call goes to our own proxy at /api/cms/gh, which
+# is the only thing holding the bot token; `auth_endpoint` is the popup that turns the
+# Access session into the short-lived token Sveltia carries. `base_url` (the origin of
+# that popup) and `api_root` (the origin of the API) are set in index.html from
+# `window.location.origin`, because this editor is served from more than one host.
 backend:
   name: github
   repo: wssl2026/wssl-cms
   branch: main
+  auth_endpoint: api/cms/auth
+  # Only the button that goes through Cloudflare Access. There is no personal access
+  # token to paste: the proxy would refuse a real GitHub token anyway.
+  auth_methods: [oauth]
   commit_messages:
     create: 'content: create {{collection}} "{{slug}}"'
     update: 'content: update {{collection}} "{{slug}}"'

@@ -10,10 +10,16 @@ DAILY_CAP=1500
 # on the content repo only). In production this is a Cloudflare Pages secret.
 GITHUB_BOT_TOKEN=github_pat_...
 
-# Leave CF_ACCESS_AUD unset locally: with no Access in front of `wrangler pages dev`,
-# /api/cms/v1 accepts unauthenticated requests from localhost only and commits as
-# "Local editor <local@wssl.org>". Setting it makes a valid Access JWT mandatory again.
-# CF_ACCESS_AUD=
+# Signs the editor's session token (see README "How /admin signs editors in"). Any long
+# random string will do locally; in production it is a Cloudflare Pages secret. Without it
+# /api/cms/auth and /api/cms/gh/* both answer 503.
+CMS_SESSION_SECRET=
+
+# `wrangler.toml` sets CF_ACCESS_AUD, so blank it here to get the localhost development
+# path: with no Access in front of `wrangler pages dev`, /api/cms/auth and /api/cms/gh/*
+# accept unauthenticated requests from localhost only, as "local@wssl.org". Remove this
+# line to make a valid Access JWT mandatory again.
+CF_ACCESS_AUD=
 
 # Task 19: shared secret for the question-log Apps Script (QUESTION_LOG_URL is the plain
 # web-app URL, set in wrangler.toml). Leave both unset to keep logging off. See README

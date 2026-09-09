@@ -1,12 +1,12 @@
 # wssl-cms
-Source for https://www.wssl.org — Astro static site, content in `src/content/pages`, edited via Decap CMS at `/admin`, hosted on Cloudflare Pages. See `docs/editors.md` (editing) and `docs/runbook.md` (operations, created at deploy time).
+Source for https://www.wssl.org — Astro static site, content in `src/content/pages`, edited via Sveltia CMS at `/admin`, hosted on Cloudflare Pages. See `docs/editors.md` (editing) and `docs/runbook.md` (operations, created at deploy time).
 
 ## Commands
 
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Astro dev server |
-| `npm run build` | Rebuild the Ask WSSL corpus and page index, then `astro build` into `dist/` |
+| `npm run build` | Vendor the pinned Sveltia CMS bundle into `public/admin/`, rebuild the Ask WSSL corpus and page index, then `astro build` into `dist/` |
 | `npm test` | Vitest suite |
 | `npm run migrate` | Re-import every page from the old Mura site (~5 min, network) |
 | `npm run check-links` | Check `dist/` for broken internal links and dead `#fragments` |
@@ -20,13 +20,14 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
   - Policy: **Allow**, with `Emails` listing each editor, or `Emails ending in` `@wssl.org`.
   - Identity provider: **One-time PIN**.
   - Copy the application's **Application Audience (AUD) tag** into `CF_ACCESS_AUD` in `wrangler.toml`, and the team domain (Zero Trust → Settings → Custom Pages, e.g. `wssl.cloudflareaccess.com`) into `CF_ACCESS_TEAM_DOMAIN`.
-- **GitHub bot token** — create a **fine-grained personal access token** (Repository access: *only* the content repository; Repository permissions: **Contents: read and write**, **Metadata: read-only**) and store it as the `GITHUB_BOT_TOKEN` Pages secret. Every edit is committed by this token, with the signed-in editor recorded as the commit's author.
+- **GitHub bot token** — create a **fine-grained personal access token** (Repository access: *only* the content repository; Repository permissions: **Contents: read and write**, **Metadata: read-only**) and store it as the `GITHUB_BOT_TOKEN` Pages secret. Every edit is committed by this token, with the signed-in editor recorded in a `Co-authored-by:` trailer on the commit.
 - **`wrangler.toml`** — set `GITHUB_REPO` to the real `owner/repo` and `GITHUB_BRANCH` to the branch Pages builds from. The `USAGE` KV namespace `id` and `preview_id` are zeros; create them with `npx wrangler kv namespace create USAGE` (and `--preview`) and paste the ids in.
-- **`public/admin/config.yml`** — `backend.repo` is `wssl2026/wssl-cms` (the content repository). It is only the fallback Decap declares before it detects the `/api/cms/v1` proxy, but it must still be right.
+- **`public/admin/config.yml`** — `backend.repo` is `wssl2026/wssl-cms` (the content repository), and it must match `GITHUB_REPO`: the proxy refuses any call aimed anywhere else, so a mismatch shows up as a 403 on every request the editor makes.
 - **Cloudflare Pages secrets** (Settings → Environment variables, encrypted):
   - `GEMINI_API_KEY` — the Ask WSSL assistant on its default provider (Google AI Studio → Get API key).
   - `ANTHROPIC_API_KEY` — only needed if you switch `LLM_PROVIDER` to `anthropic`.
   - `GITHUB_BOT_TOKEN` — the fine-grained PAT above.
+  - `CMS_SESSION_SECRET` — a long random string (a password generator's output is fine) that signs the editor's session token. Without it `/admin` cannot sign anyone in: both `/api/cms/auth` and `/api/cms/gh/*` answer 503. Changing it signs every editor out; nothing else depends on its value.
 - **Ask WSSL's model** — `LLM_PROVIDER` in `wrangler.toml` is `gemini` (the alternative is `anthropic`; any other value makes the widget answer "temporarily unavailable" and logs `chat_provider_misconfigured`). `GEMINI_MODEL` is `gemini-3.8-flash` and `GEMINI_RETRIEVAL` is `index` (the alternative is `cache`; see "How Ask WSSL answers" and Cost). Confirm the key can actually call that model **once, before launch**: `GEMINI_API_KEY=... npm run check-gemini-model` lists every model the key may use and exits non-zero if `GEMINI_MODEL` is not among them.
 - **`DAILY_CAP`** (plain var, default `200`) — the number of Ask WSSL questions answered per UTC day before the widget answers "reached its daily limit". Raise or lower it after watching the first week; see Cost below.
 - **Question log** (optional) — set `QUESTION_LOG_URL` in `wrangler.toml` and the `QUESTION_LOG_SECRET` Pages secret to log every Ask WSSL question to a Google Sheet. See "Question log (Google Sheet)" below. Off by default — leave both unset to skip this.
@@ -34,9 +35,18 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
 
 ## How `/admin` signs editors in
 
-Cloudflare Access protects `/admin` and `/api/cms`, so an editor proves who they are with a one-time code sent to their email. Access then injects a signed `Cf-Access-Jwt-Assertion` header into every request it forwards. Decap CMS talks to `functions/api/cms/v1.ts` (its "proxy backend" protocol), which verifies that header against the team's public keys, checks it was minted for our Access application, and only then commits through the `GITHUB_BOT_TOKEN`. The bot is the *committer* of every commit; the editor's email is the *author*, so `git log` still shows who changed what. Editors may only read and write under `src/content/pages/`, `src/data/` and `public/uploads/` — anything else is refused.
+Cloudflare Access protects `/admin` and `/api/cms`, so an editor proves who they are with a one-time code sent to their email. Access then injects a signed `Cf-Access-Jwt-Assertion` header into every request it forwards.
 
-Locally, `/admin` still expects `npx decap-server` on port 8081 and commits to your working copy. To exercise the deployed path instead, run `npx wrangler pages dev dist` with `GITHUB_BOT_TOKEN` in `.dev.vars` and `CF_ACCESS_AUD` unset; `/api/cms/v1` then accepts unauthenticated requests from `localhost` only, committing as `Local editor <local@wssl.org>`.
+Sveltia CMS runs in the editor's browser and speaks the GitHub API, so it expects to hold a GitHub credential. It must never hold ours. Two functions stand between it and GitHub:
+
+- **`functions/api/cms/auth.ts`** (`GET /api/cms/auth`) is the sign-in popup Sveltia opens. It verifies the Access JWT and mints a **session token** — `base64url({email, exp})` plus an HMAC over it, signed with `CMS_SESSION_SECRET`, good for eight hours — then hands it to the editor through the postMessage handshake Sveltia listens for. The session token is not a GitHub credential and is worth nothing on its own.
+- **`functions/api/cms/gh/[[path]].ts`** (`ALL /api/cms/gh/*`) is the GitHub API as far as the editor is concerned; `public/admin/index.html` points Sveltia's `api_root` at it. Every request must carry **both** a valid Access JWT **and** a session token that decodes to the same email — a session copied out of one editor's browser is useless in another's. Only then does the proxy attach the `GITHUB_BOT_TOKEN` and forward.
+
+What may be forwarded at all is decided by `functions/_lib/github-proxy.ts`, and it is a short list: the recursive tree listing, blob reads, and the GraphQL endpoint — the last one only for a query that reads *this* repository through its `$owner`/`$repo` variables, or for the single `createCommitOnBranch` mutation aimed at this repository. `GET /user`, `GET /user/emails` and the collaborator check are answered from the Access email without calling GitHub at all, so the bot's own account is never described to the browser. Everything else — forks, pull requests, issues, refs, `dispatches`, other repositories, the `viewer` — is a 403.
+
+GitHub's `createCommitOnBranch` mutation has no author or committer field: it attributes the commit to whoever the token belongs to, which is the bot. So the proxy adds a `Co-authored-by: <editor email>` trailer to every commit it forwards, and strips any trailer the browser tried to send, which is what keeps `git log` able to answer "who changed this".
+
+Locally, run `npx wrangler pages dev dist --port 8790` with `GITHUB_BOT_TOKEN` and `CMS_SESSION_SECRET` in `.dev.vars` and `CF_ACCESS_AUD` empty (`.dev.vars` overrides `wrangler.toml`); both functions then accept unauthenticated requests from `localhost` only, as `local@wssl.org`. For editing against your own working copy there is no server to run at all — open `/admin` on localhost and use Sveltia's **Work with Local Repository** button, which reads and writes the checkout through the browser's File System Access API.
 
 ## How Ask WSSL answers
 

@@ -5,40 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
   <title>WSSL Site Editor</title>
+  <link href="/admin/config.yml" type="application/yaml" rel="cms-config-url" />
 </head>
 <body>
   <script>window.CMS_MANUAL_INIT = true;</script>
-  <!-- Pinned: a floating range would let the CDN ship new editor code into /admin unreviewed. -->
-  <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
+  <!-- Served from our own origin, vendored by `npm run build` from the exact @sveltia/cms
+       version pinned in package.json. Never a CDN: a third-party script tag here could
+       ship new code into the page that commits to the site. -->
+  <script src="/admin/sveltia-cms.js"></script>
   <script>
-    // Editors sign in by email through Cloudflare Access, which sits in front of /admin
-    // and /api/cms and injects the Access JWT that /api/cms/v1 verifies. Decap reaches
-    // that function through its proxy backend, so `local_backend` is what points at it.
-    var isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    // Everything that does not depend on where this page is served from lives in
+    // config.yml; Sveltia merges what follows over it. `base_url` (where the sign-in
+    // popup opens) and `api_root` (where the GitHub API calls go) are both this origin,
+    // and this page is served from three of them — wssl-cms.pages.dev, www.wssl.org and
+    // localhost during development — so they are read off the page rather than pinned to
+    // one host in the config file.
+    //
+    // /api/cms/auth returns the editor's session token; /api/cms/gh is the proxy that
+    // swaps it for the bot token. Cloudflare Access protects both, so the editor's email
+    // sign-in is what stands behind every commit. Sveltia turns `api_root` into
+    // `<api_root>/api/v3` for REST and `<api_root>/api/graphql` for GraphQL, and the
+    // proxy accepts both shapes.
     window.CMS.init({
-      config: isLocal
-        // Developing against `npx decap-server` on the local checkout.
-        ? { local_backend: true }
-        : {
-            local_backend: {
-              url: window.location.origin + '/api/cms/v1',
-              allowed_hosts: [window.location.hostname],
-            },
-          },
+      config: {
+        backend: {
+          base_url: window.location.origin,
+          api_root: window.location.origin + '/api/cms/gh',
+        },
+      },
     });
-
-    // Cloudflare Access has already authenticated the editor, so Decap's own "Login"
-    // screen is a redundant click for the proxy backend. Press it automatically.
-    (function autoLogin() {
-      var deadline = Date.now() + 15000;
-      var timer = setInterval(function () {
-        var button = Array.prototype.find.call(document.querySelectorAll('button'), function (b) {
-          return b.textContent.trim() === 'Login';
-        });
-        if (button) { button.click(); clearInterval(timer); }
-        else if (Date.now() > deadline) { clearInterval(timer); }
-      }, 250);
-    })();
   </script>
 </body>
 </html>

@@ -3,14 +3,33 @@ import { parse } from 'yaml';
 import { PAGE_FIELD_NAMES } from '../src/lib/page-schema';
 
 const config = parse(readFileSync('public/admin/config.yml', 'utf8'));
+const html = readFileSync('public/admin/index.html', 'utf8');
+const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+/** Sveltia ships the JSON schema for its own config file; option names are checked against it. */
+const schema = JSON.parse(readFileSync('node_modules/@sveltia/cms/schema/sveltia-cms.json', 'utf8'));
 
-describe('Decap config', () => {
-  it('declares the github backend as a fallback, with no OAuth endpoint of its own', () => {
+describe('Sveltia config', () => {
+  it('uses the github backend against the content repository', () => {
     expect(config.backend.name).toBe('github');
+    expect(config.backend.repo).toBe('wssl2026/wssl-cms');
     expect(config.backend.branch).toBe('main');
-    // Editors sign in through Cloudflare Access, not GitHub OAuth.
-    expect(config.backend.auth_endpoint).toBeUndefined();
+  });
+  it('points sign-in at our Access-protected handshake, not at GitHub OAuth', () => {
+    expect(config.backend.auth_endpoint).toBe('api/cms/auth');
+    expect(config.backend.auth_methods).toEqual(['oauth']);
+    // No personal-access-token dialog: the proxy would refuse a real GitHub token.
+    expect(config.backend.auth_methods).not.toContain('token');
+    expect(config.backend.app_id).toBeUndefined();
+  });
+  it('leaves the origin-dependent endpoints to the page, so every host works', () => {
     expect(config.backend.base_url).toBeUndefined();
+    expect(config.backend.api_root).toBeUndefined();
+  });
+  it('only uses option names Sveltia knows', () => {
+    const rootProps = Object.keys(schema.definitions.CmsConfig.properties);
+    expect(Object.keys(config).filter((key) => !rootProps.includes(key))).toEqual([]);
+    const backendProps = Object.keys(schema.definitions.GitHubBackend.properties);
+    expect(Object.keys(config.backend).filter((key) => !backendProps.includes(key))).toEqual([]);
   });
   it('publishes straight to the branch, with no editorial workflow', () => {
     expect(config.publish_mode).toBe('simple');
@@ -34,31 +53,47 @@ describe('Decap config', () => {
     const home = settings.files.find((f: any) => f.file === 'src/data/home.json');
     expect(home.fields.map((f: any) => f.name)).toEqual(['fieldStatus', 'carousel', 'programButtons', 'cards']);
   });
-  it('does not ship local_backend in the production config', () => {
+  it('ships no local_backend — Sveltia ignores it and warns', () => {
     expect(config.local_backend).toBeUndefined();
   });
 });
 
-describe('Decap admin page', () => {
-  it('manually initializes CMS and keeps decap-server as the localhost backend', () => {
-    const html = readFileSync('public/admin/index.html', 'utf8');
+describe('Sveltia admin page', () => {
+  it('loads the editor from our own origin, never a CDN', () => {
+    expect(html).toContain('<script src="/admin/sveltia-cms.js"></script>');
+    expect(html).not.toContain('//unpkg.com');
+    expect(html).not.toContain('//cdn.');
+    expect(html).not.toMatch(/<script[^>]+src="https?:/);
+  });
+  it('pins the editor to an exact version, never a floating range', () => {
+    expect(pkg.dependencies['@sveltia/cms']).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+  it('vendors that bundle as part of the build, and keeps the copy out of git', () => {
+    expect(pkg.scripts.build).toContain('scripts/copy-sveltia.ts');
+    expect(readFileSync('.gitignore', 'utf8')).toContain('public/admin/sveltia-cms.js');
+  });
+  it('points the editor at the Access-protected proxy on its own origin', () => {
     expect(html).toContain('CMS_MANUAL_INIT = true');
-    expect(html).toContain('local_backend: true');
+    expect(html).toContain("base_url: window.location.origin");
+    expect(html).toContain("api_root: window.location.origin + '/api/cms/gh'");
   });
-  it('points the deployed editor at the Access-protected proxy on its own origin', () => {
-    const html = readFileSync('public/admin/index.html', 'utf8');
-    expect(html).toContain("window.location.origin + '/api/cms/v1'");
-    expect(html).toContain('allowed_hosts: [window.location.hostname]');
+  it('tells Sveltia where the config file is', () => {
+    expect(html).toContain('rel="cms-config-url"');
+    expect(html).toContain('/admin/config.yml');
   });
-  it('keeps every trace of the retired GitHub OAuth flow out of the editor', () => {
-    const html = readFileSync('public/admin/index.html', 'utf8');
+  it('keeps the editor out of search results', () => {
+    expect(html).toContain('<meta name="robots" content="noindex" />');
+  });
+  it('keeps every trace of Decap and of the retired GitHub OAuth flow out of the editor', () => {
+    expect(html).not.toContain('decap');
+    expect(html).not.toContain('local_backend');
+    expect(html).not.toContain('/api/cms/v1');
     expect(html).not.toContain('/api/auth');
     expect(html).not.toContain('/api/callback');
   });
-  it('loads Decap from an exact pinned version, never a floating range', () => {
-    const html = readFileSync('public/admin/index.html', 'utf8');
-    expect(html).toMatch(/decap-cms@\d+\.\d+\.\d+\/dist\/decap-cms\.js/);
-    expect(html).not.toContain('decap-cms@^');
+  it('does not load the stylesheet or module attribute Sveltia warns about', () => {
+    expect(html).not.toContain('sveltia-cms.css');
+    expect(html).not.toMatch(/<script[^>]*type="module"[^>]*sveltia/);
   });
 });
 

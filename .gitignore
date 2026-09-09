@@ -3,6 +3,8 @@ dist/
 .astro/
 .wrangler/
 .dev.vars
+# Vendored by `npm run build` from the pinned @sveltia/cms dependency — see scripts/copy-sveltia.ts.
+public/admin/sveltia-cms.js
 functions/_lib/corpus.json
 functions/_lib/index.json
 scripts/migration-report.json
