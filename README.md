@@ -24,8 +24,10 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
 - **`wrangler.toml`** — set `GITHUB_REPO` to the real `owner/repo` and `GITHUB_BRANCH` to the branch Pages builds from. The `USAGE` KV namespace `id` and `preview_id` are zeros; create them with `npx wrangler kv namespace create USAGE` (and `--preview`) and paste the ids in.
 - **`public/admin/config.yml`** — `backend.repo` is `wssl2026/wssl-cms` (the content repository). It is only the fallback Decap declares before it detects the `/api/cms/v1` proxy, but it must still be right.
 - **Cloudflare Pages secrets** (Settings → Environment variables, encrypted):
-  - `ANTHROPIC_API_KEY` — the Ask WSSL assistant.
+  - `GEMINI_API_KEY` — the Ask WSSL assistant on its default provider (Google AI Studio → Get API key).
+  - `ANTHROPIC_API_KEY` — only needed if you switch `LLM_PROVIDER` to `anthropic`.
   - `GITHUB_BOT_TOKEN` — the fine-grained PAT above.
+- **Ask WSSL's model** — `LLM_PROVIDER` in `wrangler.toml` is `gemini` (the alternative is `anthropic`; any other value makes the widget answer "temporarily unavailable" and logs `chat_provider_misconfigured`). `GEMINI_MODEL` is `gemini-3.8-flash`. Confirm the key can actually call that model **once, before launch**: `GEMINI_API_KEY=... npm run check-gemini-model` lists every model the key may use and exits non-zero if `GEMINI_MODEL` is not among them.
 - **`DAILY_CAP`** (plain var, default `200`) — the number of Ask WSSL questions answered per UTC day before the widget answers "reached its daily limit". Raise or lower it after watching the first week; see Cost below.
 - **`docs/runbook.md`** — operations runbook, written in Task 12 at deploy time. It does not exist yet.
 
@@ -35,11 +37,29 @@ Cloudflare Access protects `/admin` and `/api/cms`, so an editor proves who they
 
 Locally, `/admin` still expects `npx decap-server` on port 8081 and commits to your working copy. To exercise the deployed path instead, run `npx wrangler pages dev dist` with `GITHUB_BOT_TOKEN` in `.dev.vars` and `CF_ACCESS_AUD` unset; `/api/cms/v1` then accepts unauthenticated requests from `localhost` only, committing as `Local editor <local@wssl.org>`.
 
+## How Ask WSSL answers
+
+`functions/api/chat.ts` owns the guards — same-origin only, history validation, the KV daily cap — and the SSE wire protocol the widget reads (`text`, `citation`, `done`, `error`). Behind them sits a small provider interface (`functions/_lib/providers/types.ts`) with two implementations, chosen by `LLM_PROVIDER`:
+
+- **`gemini`** (`functions/_lib/providers/gemini.ts`) — the whole corpus plus the system prompt goes into a Google **explicit context cache** that lives an hour; its name is recorded in the `USAGE` KV namespace under `gemini-cache:<model>:<sha256 of corpus+prompt>`, so every request in that hour reuses it (log line `gemini_cache_hit`). Change any page and the hash changes, so the next question writes a fresh cache instead of answering from stale content. If the cache turns out to be gone the function rebuilds it and retries once; if the model refuses to cache at all — usually the corpus is under the minimum token count — it logs `gemini_cache_unavailable` and sends the corpus inline instead. Gemini has no citation API, so the prompt asks the model to end with a `Sources:` list of wssl.org URLs; the reader sees that list and the server also parses it into `citation` events.
+- **`anthropic`** (`functions/_lib/providers/anthropic.ts`) — unchanged: the corpus as citation-enabled documents with a 1-hour prompt cache, and Claude's own citation deltas.
+
 ## Cost
 
-Ask WSSL sends the whole site to the model on every question: ~100K tokens of corpus and system prompt (Sonnet 5's tokenizer counts about 30% more than older models) (`npm run corpus` builds it, `npx tsx scripts/count-corpus-tokens.ts` measures it against the API). Claude Sonnet 5 costs $2 per million input tokens (the model is the `MODEL` constant in `functions/_lib/chat.ts`), so:
+Ask WSSL sends the whole site to the model on every question: ~100K tokens of corpus and system prompt (`npm run corpus` builds it, `npx tsx scripts/count-corpus-tokens.ts` measures it). The shape of the bill is the same either way — one expensive cold question per hour, cheap cached ones after it — but the numbers differ by provider. Check the current rates before trusting the arithmetic below: **Gemini** at <https://ai.google.dev/gemini-api/docs/pricing>, **Claude** at <https://claude.com/pricing#api>.
 
-- **Cold question** (nothing cached — first question of the hour, or after any content change): the corpus is written to the 1-hour cache at 2× the base rate, so ≈ 100K × $2 × 2 / 1M ≈ **$0.40**, plus a few cents of output.
-- **Warm question** (cache hit): cached input reads cost 10% of the base rate, so ≈ 100K × $2 × 0.1 / 1M ≈ **$0.02**.
+**Gemini (`gemini-3.8-flash`, the default).** Flash-class input is roughly $0.30 per million tokens, cached input about a tenth of that, plus a storage charge (~$1 per million tokens per hour) for as long as the explicit cache lives:
 
-At `DAILY_CAP = 200` the realistic day — a handful of cold cache writes plus warm reads — lands near **$5–8**; the absolute worst case, if every question missed the cache, is about $80. Watch the `usage` line the chat function logs (`cache_read_input_tokens` should dominate) before raising the cap. A publish invalidates the cache, so the first question after each content edit is a cold one.
+- **Cold question** (first of the hour, or the first after any content change): the corpus is read at full rate and then stored, so ≈ 100K × $0.30 / 1M ≈ **$0.03**, plus ≈ **$0.10** to hold the cache for the hour.
+- **Warm question** (cache hit): ≈ 100K × $0.03 / 1M ≈ **$0.003**, plus output.
+
+At `DAILY_CAP = 200` a realistic day is well under **$5** — the hourly cache storage, not the questions, dominates. The worst case, if every question missed the cache, is about $8.
+
+**Claude (`LLM_PROVIDER = anthropic`).** Sonnet 5 costs $2 per million input tokens (the model is the `MODEL` constant in `functions/_lib/chat.ts`), and its tokenizer counts about 30% more than older models:
+
+- **Cold question**: the corpus is written to the 1-hour cache at 2× the base rate, so ≈ 100K × $2 × 2 / 1M ≈ **$0.40**, plus a few cents of output.
+- **Warm question**: cached input reads cost 10% of the base rate, so ≈ 100K × $2 × 0.1 / 1M ≈ **$0.02**.
+
+At `DAILY_CAP = 200` that lands near **$5–8**, worst case about $80.
+
+Either way, watch the one JSON line the chat function logs per question before raising the cap: it carries the token counts (`cachedContentTokenCount` on Gemini, `cache_read_input_tokens` on Claude — one of those should dominate), the model and the day's count, and never any message content. A publish invalidates the cache, so the first question after each content edit is a cold one.

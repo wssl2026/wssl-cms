@@ -1,4 +1,6 @@
-import { encodeEvent, streamToClient } from '../functions/_lib/sse';
+import { encodeEvent } from '../functions/_lib/sse';
+// The Anthropic-specific adapter moved to the provider; the wire protocol it produces did not change.
+import { streamToClient } from '../functions/_lib/providers/anthropic';
 
 function fakeStream(events: any[], final: any) {
   const it = { async *[Symbol.asyncIterator]() { for (const e of events) yield e; }, finalMessage: async () => final };

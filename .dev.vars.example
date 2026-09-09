@@ -1,4 +1,9 @@
+# Ask WSSL runs on Gemini by default (LLM_PROVIDER in wrangler.toml). Set the key for
+# whichever provider you select; LLM_PROVIDER and GEMINI_MODEL can be overridden here too.
+GEMINI_API_KEY=AIza...
 ANTHROPIC_API_KEY=sk-ant-...
+# LLM_PROVIDER=anthropic
+# GEMINI_MODEL=gemini-3.8-flash
 DAILY_CAP=1500
 
 # Fine-grained GitHub PAT the editor commits with (Contents: read/write, Metadata: read,

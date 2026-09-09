@@ -1,17 +1,35 @@
-import Anthropic from '@anthropic-ai/sdk';
 import corpusJson from '../_lib/corpus.json';
 import type { CorpusDoc } from '../_lib/corpus-types';
-import { buildRequest, validateHistory } from '../_lib/chat';
-import { streamToClient } from '../_lib/sse';
+import { validateHistory } from '../_lib/chat';
+import { eventsToStream } from '../_lib/sse';
 import { checkDailyCap } from '../_lib/usage';
+import type { Provider } from '../_lib/providers/types';
+import { createAnthropicProvider } from '../_lib/providers/anthropic';
+import { createGeminiProvider } from '../_lib/providers/gemini';
 
-interface Env { ANTHROPIC_API_KEY: string; USAGE: KVNamespace; DAILY_CAP?: string }
+interface Env {
+  ANTHROPIC_API_KEY: string;
+  GEMINI_API_KEY: string;
+  GEMINI_MODEL?: string;
+  /** `gemini` (default) or `anthropic`. See README "Ask WSSL". */
+  LLM_PROVIDER?: string;
+  USAGE: KVNamespace;
+  DAILY_CAP?: string;
+}
 
 const corpus = corpusJson as CorpusDoc[];
-const docUrls = corpus.map((d) => d.url);
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+
+const UNAVAILABLE = 'Ask WSSL is temporarily unavailable. Please try again later or use the Contact page.';
+
+function selectProvider(env: Env): Provider | null {
+  const name = (env.LLM_PROVIDER ?? 'gemini').trim().toLowerCase();
+  if (name === 'gemini') return createGeminiProvider(env);
+  if (name === 'anthropic') return createAnthropicProvider(env);
+  return null;
+}
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const url = new URL(request.url);
@@ -27,15 +45,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
     cap = await checkDailyCap(env.USAGE, Number(env.DAILY_CAP ?? 200));
   } catch {
-    return json({ error: 'Ask WSSL is temporarily unavailable. Please try again later or use the Contact page.' }, 503);
+    return json({ error: UNAVAILABLE }, 503);
   }
   if (!cap.ok) return json({ error: 'Ask WSSL has reached its daily limit. Please try again tomorrow or use the Contact page.' }, 429);
 
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-  const stream = client.beta.messages.stream(buildRequest(corpus, history) as never);
+  const provider = selectProvider(env);
+  if (!provider) {
+    console.error(JSON.stringify({ event: 'chat_provider_misconfigured', provider: env.LLM_PROVIDER }));
+    return json({ error: UNAVAILABLE }, 503);
+  }
+
+  const log = (line: Record<string, unknown>) => console.log(JSON.stringify({ ...line, day_count: cap.count }));
 
   return new Response(
-    streamToClient(stream, docUrls, (final) => console.log(JSON.stringify({ usage: final.usage, model: final.model, stop: final.stop_reason, day_count: cap.count }))),
+    eventsToStream(provider.stream(history, corpus, { kv: env.USAGE, log })),
     { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no' } },
   );
 };

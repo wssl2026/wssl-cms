@@ -8,7 +8,8 @@
     "preview": "wrangler pages dev dist",
     "migrate": "tsx scripts/migrate.ts",
     "corpus": "tsx scripts/build-corpus.ts",
-    "check-links": "tsx scripts/check-links.ts"
+    "check-links": "tsx scripts/check-links.ts",
+    "check-gemini-model": "tsx scripts/check-gemini-model.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",
     "@astrojs/sitemap": "^3.7.4",
+    "@google/genai": "^2.21.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.1",

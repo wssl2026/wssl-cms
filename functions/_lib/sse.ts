@@ -1,4 +1,4 @@
-import type Anthropic from '@anthropic-ai/sdk';
+import type { ProviderStream } from './providers/types';
 
 export type ClientEvent =
   | { type: 'text'; text: string }
@@ -13,30 +13,18 @@ export function encodeEvent(e: ClientEvent): string {
   return `data: ${JSON.stringify(e)}\n\n`;
 }
 
-type UpstreamStream = AsyncIterable<Anthropic.Beta.BetaRawMessageStreamEvent> & {
-  finalMessage(): Promise<Anthropic.Beta.BetaMessage>;
-  abort?(): void;
-};
-
-export function streamToClient(stream: UpstreamStream, docUrls: string[], onFinal?: (m: Anthropic.Beta.BetaMessage) => void): ReadableStream<Uint8Array> {
+/**
+ * Turns a provider's ordered events into the SSE body the widget reads. Provider-agnostic:
+ * the wire protocol (`text` | `citation` | `done` | `error`) and the failure handling live
+ * here so every model behaves identically for the client.
+ */
+export function eventsToStream(source: ProviderStream): ReadableStream<Uint8Array> {
   const enc = new TextEncoder();
   return new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (e: ClientEvent) => controller.enqueue(enc.encode(encodeEvent(e)));
       try {
-        for await (const event of stream) {
-          if (event.type !== 'content_block_delta') continue;
-          const delta = event.delta as { type: string; text?: string; citation?: { document_index: number; document_title?: string | null; cited_text: string } };
-          if (delta.type === 'text_delta' && delta.text) send({ type: 'text', text: delta.text });
-          else if (delta.type === 'citations_delta' && delta.citation) {
-            const c = delta.citation;
-            send({ type: 'citation', title: c.document_title ?? '', url: docUrls[c.document_index] ?? '', quote: c.cited_text });
-          }
-        }
-        const final = await stream.finalMessage();
-        onFinal?.(final);
-        if (final.stop_reason === 'refusal') send({ type: 'text', text: REFUSAL_TEXT });
-        send({ type: 'done', served_by: final.model });
+        for await (const event of source.events) send(event);
       } catch (err) {
         // Metadata only — request and answer content must never reach the logs.
         console.error(JSON.stringify({
@@ -57,7 +45,7 @@ export function streamToClient(stream: UpstreamStream, docUrls: string[], onFina
     },
     cancel() {
       // The visitor closed the panel or navigated away: stop paying for tokens.
-      stream.abort?.();
+      source.cancel?.();
     },
   });
 }
