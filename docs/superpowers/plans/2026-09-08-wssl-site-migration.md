@@ -2748,3 +2748,34 @@ The owner prefers sending a small page index first and letting the model fetch o
 **Manual check (needs `GEMINI_API_KEY`; without it, unit tests + the invalid-key error path only):** ask "When are the Fall 2026 Core season dates?" → the log shows `rounds ≥ 1`, `pages_read ≥ 1`, and the answer cites the home announcements or the Core page.
 
 **Commit:** `feat(assistant): index-map retrieval mode for Gemini (read_pages tool), selectable via GEMINI_RETRIEVAL`
+
+---
+
+### Task 19: Log Ask WSSL questions to a Google Sheet (owner request, 2026-09-09)
+
+**Architecture:** after each answer, `functions/api/chat.ts` schedules (via `context.waitUntil`) one POST to a Google Apps Script web app that appends a row to a Google Sheet owned by the WSSL Google account. Config: `QUESTION_LOG_URL` (plain var, the deployed web-app URL) and `QUESTION_LOG_SECRET` (secret, shared with the script). When either is unset, logging is disabled (log `question_log_disabled` once per isolate). Logging must never delay, alter, or fail the assistant response: failures are caught and logged as `question_log_error` with the HTTP status only.
+
+**Record** (JSON body; the script writes columns in this order): `ts` (ISO), `question` (trimmed, ≤ 2000 chars), `answer_excerpt` (first 500 chars of the streamed answer), `sources` (distinct cited URLs joined by `; `), `provider`, `model`, `retrieval` (`index`/`cache`/`anthropic`), `status` (`ok` | `error` | `refusal`), `ms`, `prompt_tokens`, `candidates_tokens`, `secret`. Never IP, user agent, or history beyond the current question.
+
+**Files:**
+- Create: `functions/_lib/question-log.ts` — `buildQuestionRecord(input): QuestionRecord` (pure) and `sendQuestionRecord(env, record, fetchImpl?): Promise<void>` (POST JSON with `redirect: 'follow'` — Apps Script answers POSTs with a 302 — a 10 s timeout via `AbortSignal.timeout`, swallow all errors after logging). `tests/question-log.test.ts` (record shape/truncation; disabled when unset; POST body and URL with a fake fetch; a rejecting fetch or non-2xx does not throw).
+- Modify: `functions/_lib/sse.ts` (`eventsToStream` gains an `onComplete` callback receiving `{ text, citations, status, usage }`, invoked once per response), `functions/api/chat.ts` (capture start time; on complete → `context.waitUntil(sendQuestionRecord(...))`), the provider `done` event or `ProviderStream` metadata so usage is available to the handler (implementer's call; keep the SSE protocol unchanged), `wrangler.toml` (`QUESTION_LOG_URL = ""` documented), `.dev.vars.example` (`QUESTION_LOG_SECRET=`), `src/components/ChatWidget.astro` (footer adds "Questions are logged to help us improve the site."), `README.md` (new section "Question log (Google Sheet)" with the exact Apps Script below and the deployment steps), `tests/chat-handler.test.ts` (handler schedules the log via `waitUntil` when configured; nothing scheduled when not).
+
+**Apps Script (verbatim in README; the owner pastes it into Extensions → Apps Script of a new sheet named "Ask WSSL questions"):**
+```javascript
+const SECRET = PropertiesService.getScriptProperties().getProperty('SECRET');
+const HEADERS = ['ts', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens'];
+function doPost(e) {
+  const body = JSON.parse(e.postData.contents || '{}');
+  if (!SECRET || body.secret !== SECRET) return ContentService.createTextOutput('forbidden').setMimeType(ContentService.MimeType.TEXT);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  sheet.appendRow(HEADERS.map((h) => body[h] == null ? '' : String(body[h])));
+  return ContentService.createTextOutput('ok').setMimeType(ContentService.MimeType.TEXT);
+}
+```
+Deployment steps for README: Project Settings → Script properties → add `SECRET` (a long random string; the same value goes into the Pages secret `QUESTION_LOG_SECRET`); Deploy → New deployment → type Web app → Execute as **Me**, Who has access **Anyone** → copy the web app URL into `QUESTION_LOG_URL`. Note: "Anyone" is required so the Cloudflare function can post without a Google login; the secret is what protects the sheet. Retention: add a note that rows older than 12 months should be deleted (a time-driven trigger with a 5-line `prune()` function, included in README as optional).
+
+**Manual check (needs the owner's sheet):** ask one question on staging; a row appears within seconds. Without it: unit tests + a run with `QUESTION_LOG_URL` pointing at a local `node` HTTP server that prints the body (do it in the test suite with a real `http.createServer` on an ephemeral port, asserting the JSON received).
+
+**Commit:** `feat(assistant): log each question to a Google Sheet via Apps Script (opt-in by config)`
