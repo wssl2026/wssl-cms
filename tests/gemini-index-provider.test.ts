@@ -185,9 +185,12 @@ describe('gemini provider — index retrieval mode: the tool loop', () => {
       { url: corpus[0].url, title: 'Refund Policy', text: 'No refunds after week 3.' },
     ]);
 
-    // The answer is streamed by a final, tool-free call.
+    // The answer is streamed by a final call that is tool-free in behaviour (mode: 'NONE') but
+    // still declares the tool, so the earlier functionCall/functionResponse turns in `contents`
+    // are not left dangling with nothing to explain them.
     expect(client.streamCalls).toHaveLength(1);
-    expect(client.streamCalls[0].config.tools).toBeUndefined();
+    expect(client.streamCalls[0].config.tools).toEqual([{ functionDeclarations: [READ_PAGES_TOOL] }]);
+    expect(client.streamCalls[0].config.toolConfig).toEqual({ functionCallingConfig: { mode: 'NONE' } });
     expect(out.filter((e) => e.type === 'text')).toEqual([{ type: 'text', text: 'Refunds close after week 3.' }]);
     expect(out.filter((e) => e.type === 'citation')).toEqual([
       { type: 'citation', title: 'Refund Policy', url: corpus[0].url, quote: '' },
@@ -244,9 +247,102 @@ describe('gemini provider — index retrieval mode: the tool loop', () => {
     await collect(indexProvider(client, { index: manyIndex })
       .stream(history, manyCorpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
     expect(pagesSentBack(client, 0)).toHaveLength(4);
-    // The second round only has two pages of budget left.
-    expect(pagesSentBack(client, 1)).toHaveLength(MAX_PAGES_PER_QUESTION - 4);
+    // The second round only has two pages of budget left; the other two of its four requested
+    // URLs come back as "(page budget reached)" rather than being dropped.
+    const secondRound = pagesSentBack(client, 1);
+    expect(secondRound).toHaveLength(4);
+    expect(secondRound.filter((p: any) => p.text !== '(page budget reached)')).toHaveLength(MAX_PAGES_PER_QUESTION - 4);
+    expect(secondRound.filter((p: any) => p.text === '(page budget reached)')).toHaveLength(2);
     expect(lines.find((l) => l.event === 'chat_index_mode')!.pages_read).toBe(MAX_PAGES_PER_QUESTION);
+  });
+
+  it('reads the same URL once: a repeat request is answered from memory without spending budget', async () => {
+    const client = fakeClient({
+      responses: [
+        readPages([corpus[0].url, corpus[0].url]),
+        readPages([corpus[0].url, corpus[1].url]),
+      ],
+    });
+    const lines: Record<string, unknown>[] = [];
+    await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
+    // First call: the duplicate within the same call is answered from memory too.
+    expect(pagesSentBack(client, 0)).toEqual([
+      { url: corpus[0].url, title: 'Refund Policy', text: 'No refunds after week 3.' },
+      { url: corpus[0].url, title: 'Refund Policy', text: 'No refunds after week 3.' },
+    ]);
+    // Second call: the same page again, plus a new one — only the new one spends budget.
+    expect(pagesSentBack(client, 1)).toEqual([
+      { url: corpus[0].url, title: 'Refund Policy', text: 'No refunds after week 3.' },
+      { url: corpus[1].url, title: 'Contact', text: 'Email the registrar.' },
+    ]);
+    // pages_read counts distinct pages, not requests.
+    expect(lines.find((l) => l.event === 'chat_index_mode')!.pages_read).toBe(2);
+  });
+
+  it('answers remaining URLs "(page budget reached)" once the per-question cap is spent, instead of dropping them', async () => {
+    const sevenUrls = manyUrls.slice(0, 7); // one more than MAX_PAGES_PER_QUESTION
+    const client = fakeClient({
+      responses: [readPages(sevenUrls.slice(0, 4)), readPages(sevenUrls.slice(4, 7))],
+    });
+    const lines: Record<string, unknown>[] = [];
+    await collect(indexProvider(client, { index: manyIndex })
+      .stream(history, manyCorpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
+    // Round 2 asks for 3 URLs but only 2 pages of budget remain.
+    expect(pagesSentBack(client, 1)).toEqual([
+      { url: sevenUrls[4], title: 'Page 5', text: 'Body 5' },
+      { url: sevenUrls[5], title: 'Page 6', text: 'Body 6' },
+      { url: sevenUrls[6], title: '', text: '(page budget reached)' },
+    ]);
+    expect(lines.find((l) => l.event === 'chat_index_mode')!.pages_read).toBe(MAX_PAGES_PER_QUESTION);
+  });
+
+  it('replays text alongside a functionCall in the model turn, not just the call itself', async () => {
+    const client = fakeClient({
+      responses: [{
+        candidates: [{ content: { role: 'model', parts: [
+          { text: 'Let me check the refund page.' },
+          { functionCall: { name: 'read_pages', args: { urls: [corpus[0].url] } } },
+        ] } }],
+        functionCalls: [{ name: 'read_pages', args: { urls: [corpus[0].url] } }],
+      }],
+    });
+    await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV() }).events);
+    const modelTurn = client.streamCalls[0].contents[1];
+    expect(modelTurn.role).toBe('model');
+    expect(modelTurn.parts).toEqual([
+      { text: 'Let me check the refund page.' },
+      { functionCall: { name: 'read_pages', args: { urls: [corpus[0].url] } } },
+    ]);
+  });
+
+  it('carries prior conversation history into the tool-turn contents, not just the latest question', async () => {
+    const multiTurnHistory = [
+      { role: 'user' as const, content: 'What sports do you offer?' },
+      { role: 'assistant' as const, content: 'Soccer and lacrosse.' },
+      { role: 'user' as const, content: 'How do refunds work?' },
+    ];
+    const client = fakeClient({ responses: [readPages([corpus[0].url])] });
+    await collect(indexProvider(client).stream(multiTurnHistory, corpus, { kv: fakeKV() }).events);
+    const toolTurnContents = client.contentCalls[1].contents;
+    expect(toolTurnContents[0]).toEqual({ role: 'user', parts: [{ text: 'What sports do you offer?' }] });
+    expect(toolTurnContents[1]).toEqual({ role: 'model', parts: [{ text: 'Soccer and lacrosse.' }] });
+    expect(toolTurnContents[2]).toEqual({ role: 'user', parts: [{ text: 'How do refunds work?' }] });
+  });
+
+  it('gives tool turns the same thinking config as the stream, but a fixed 1024-token cap since their text is discarded', async () => {
+    const client = fakeClient({ responses: [readPages([corpus[0].url])] });
+    await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV() }).events);
+    expect(client.contentCalls[0].config.thinkingConfig).toEqual({ thinkingBudget: 0 });
+    expect(client.contentCalls[0].config.maxOutputTokens).toBe(1024);
+  });
+
+  it('builds a fresh read_pages declaration for every request, so the SDK cannot mutate one into another', async () => {
+    const client = fakeClient({ responses: [readPages([corpus[0].url])] });
+    await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV() }).events);
+    expect(client.contentCalls).toHaveLength(2);
+    expect(client.contentCalls[0].config.tools).not.toBe(client.contentCalls[1].config.tools);
+    expect(client.contentCalls[0].config.tools).toEqual(client.contentCalls[1].config.tools);
+    expect(client.contentCalls[0].config.tools).toEqual([{ functionDeclarations: [READ_PAGES_TOOL] }]);
   });
 
   it('never runs more than two tool rounds, however often the model asks', async () => {
@@ -313,11 +409,57 @@ describe('gemini provider — index retrieval mode: logging and errors', () => {
       pages_read: 1,
       prompt_tokens: 7000,
       candidates_tokens: 90,
+      thoughts_tokens: 0,
+      turns: 3, // two tool turns (round 1, then the offer that came back with no call) + the stream
     });
     const dumped = JSON.stringify(lines);
     expect(dumped).not.toContain('How do refunds work?');
     expect(dumped).not.toContain('Refunds close after week 3.');
     expect(dumped).not.toContain('No refunds after week 3.');
+  });
+
+  it('sums prompt, candidates and thoughts tokens across every tool turn and the final stream', async () => {
+    const client = fakeClient({
+      responses: [
+        { ...readPages([corpus[0].url]), usageMetadata: { promptTokenCount: 6000, candidatesTokenCount: 20, thoughtsTokenCount: 5 } },
+        { ...textTurn(), usageMetadata: { promptTokenCount: 6100, candidatesTokenCount: 15, thoughtsTokenCount: 3 } },
+      ],
+      chunks: [
+        { text: 'Refunds close after week 3.', usageMetadata: { promptTokenCount: 6150, candidatesTokenCount: 40, thoughtsTokenCount: 2 } },
+      ],
+    });
+    const lines: Record<string, unknown>[] = [];
+    await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
+    const line = lines.find((l) => l.event === 'chat_index_mode')!;
+    expect(line.prompt_tokens).toBe(6000 + 6100 + 6150);
+    expect(line.candidates_tokens).toBe(20 + 15 + 40);
+    expect(line.thoughts_tokens).toBe(5 + 3 + 2);
+    expect(line.turns).toBe(3);
+  });
+
+  it('ignores an unexpected functionCall on the tool-free final stream, logging gemini_unexpected_tool_call, and still answers', async () => {
+    const client = fakeClient({
+      responses: [readPages([corpus[0].url])],
+      chunks: [
+        { functionCalls: [{ name: 'read_pages', args: { urls: [corpus[1].url] } }] },
+        { text: 'Refunds close after week 3.' },
+      ],
+    });
+    const lines: Record<string, unknown>[] = [];
+    const out = await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
+    expect(lines).toContainEqual(expect.objectContaining({ event: 'gemini_unexpected_tool_call', model: DEFAULT_GEMINI_MODEL }));
+    expect(out.filter((e) => e.type === 'text')).toEqual([{ type: 'text', text: 'Refunds close after week 3.' }]);
+    expect(out.at(-1)!.type).toBe('done');
+  });
+
+  it('still emits done and citations for the pages it read when the final stream yields no text', async () => {
+    const client = fakeClient({ responses: [readPages([corpus[0].url])], chunks: [] });
+    const out = await collect(indexProvider(client).stream(history, corpus, { kv: fakeKV() }).events);
+    expect(out.filter((e) => e.type === 'text')).toEqual([]);
+    expect(out.filter((e) => e.type === 'citation')).toEqual([
+      { type: 'citation', title: 'Refund Policy', url: corpus[0].url, quote: '' },
+    ]);
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL });
   });
 
   it('surfaces an upstream failure on the first turn as the shared SSE error event', async () => {

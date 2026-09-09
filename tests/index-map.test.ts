@@ -96,4 +96,11 @@ describe('renderIndex', () => {
     const doc: CorpusDoc = { title: 'X', url: 'https://www.wssl.org/about/x/', text: 'Just a paragraph.' };
     expect(renderIndex(buildIndex([doc], {}))).toBe('- X — https://www.wssl.org/about/x/ — Just a paragraph.');
   });
+
+  it('omits the trailing " — " when the summary is empty', () => {
+    // e.g. a page whose entire body is a non-text embed (a Google Calendar iframe).
+    const doc: CorpusDoc = { title: 'Calendar', url: 'https://www.wssl.org/about/wssl-calendar/', text: '<iframe src="https://calendar.google.com/x"></iframe>' };
+    expect(buildIndex([doc], {})[0].summary).toBe('');
+    expect(renderIndex(buildIndex([doc], {}))).toBe('- Calendar — https://www.wssl.org/about/wssl-calendar/');
+  });
 });

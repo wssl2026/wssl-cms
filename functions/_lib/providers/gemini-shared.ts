@@ -40,11 +40,15 @@ export const geminiIsolateState = { cacheUnavailable: false, thinkingConfigUnsup
 export interface GeminiChunk {
   text?: string;
   modelVersion?: string;
-  candidates?: { finishReason?: string }[];
+  /** The real SDK exposes this getter on every `GenerateContentResponse`, streamed chunks included. */
+  functionCalls?: GeminiFunctionCall[];
+  candidates?: { finishReason?: string; content?: GeminiContent }[];
   usageMetadata?: {
     promptTokenCount?: number;
     cachedContentTokenCount?: number;
     candidatesTokenCount?: number;
+    /** Thinking-mode tokens, absent on models/requests with thinking off. */
+    thoughtsTokenCount?: number;
     totalTokenCount?: number;
   };
 }
@@ -56,7 +60,7 @@ export interface GeminiFunctionCall {
   args?: Record<string, unknown>;
 }
 
-/** One `Part`; only the two fields the tool loop reads or writes are modelled. */
+/** One `Part`; only the fields the tool loop reads or writes are modelled. */
 export interface GeminiPart {
   text?: string;
   functionCall?: GeminiFunctionCall;
@@ -73,6 +77,12 @@ export interface GeminiResponse {
   candidates?: { content?: GeminiContent; finishReason?: string }[];
   usageMetadata?: GeminiChunk['usageMetadata'];
 }
+
+/** The shape both `GeminiResponse` and `GeminiChunk` share, enough to read function calls off either. */
+export type GeminiFunctionCallSource = {
+  functionCalls?: GeminiFunctionCall[];
+  candidates?: { content?: GeminiContent }[];
+};
 
 export interface GeminiClient {
   caches: { create(params: Record<string, unknown>): Promise<{ name?: string; expireTime?: string }> };

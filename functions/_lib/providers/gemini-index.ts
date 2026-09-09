@@ -18,8 +18,8 @@ import type {
   GeminiClientFactory,
   GeminiContent,
   GeminiFunctionCall,
+  GeminiFunctionCallSource,
   GeminiPart,
-  GeminiResponse,
 } from './gemini-shared';
 
 /**
@@ -37,6 +37,9 @@ export const MAX_TOOL_ROUNDS = 2;
 export const MAX_PAGES_PER_CALL = 4;
 export const MAX_PAGES_PER_QUESTION = 6;
 export const NO_SUCH_PAGE = '(no such page)';
+export const PAGE_BUDGET_REACHED = '(page budget reached)';
+/** The tool turns' text is discarded — only the function call matters — so they get a small budget. */
+export const TOOL_TURN_MAX_OUTPUT_TOKENS = 1024;
 
 export const INDEX_PREAMBLE =
   'Below is the map of every page on wssl.org. Call `read_pages` with the URLs you need before answering; read at most 4 pages; if the map clearly cannot answer, say so.';
@@ -64,11 +67,11 @@ export const READ_PAGES_TOOL = {
 } as const;
 
 interface ReadPage { url: string; title: string; text: string }
-/** What one tool call produced: what goes back to the model, and which of it was a real page. */
+/** What one tool call produced: what goes back to the model, and which of it was a newly-read page. */
 interface ToolResult { pages: ReadPage[]; resolved: ReadPage[] }
 
 /** The SDK exposes `functionCalls` as a getter; a hand-built response may only carry candidates. */
-function functionCallsOf(response: GeminiResponse | undefined): GeminiFunctionCall[] {
+function functionCallsOf(response: GeminiFunctionCallSource | undefined): GeminiFunctionCall[] {
   if (!response) return [];
   if (response.functionCalls?.length) return response.functionCalls;
   const parts = response.candidates?.[0]?.content?.parts ?? [];
@@ -83,11 +86,29 @@ function urlsOf(call: GeminiFunctionCall): string[] {
 }
 
 /**
+ * A fresh copy of the tool declaration for every request. The SDK is known to mutate a
+ * `Schema` object it is handed (filling in defaults in place), so sharing the constant across
+ * requests risks one question's mutation leaking into the next; `structuredClone` makes each
+ * request's declaration independent.
+ */
+function readPagesTools() {
+  return [{ functionDeclarations: [structuredClone(READ_PAGES_TOOL)] }];
+}
+
+/**
  * Resolve one tool call against the corpus. Unknown URLs come back as `(no such page)` rather
  * than being dropped, so the model can see that its guess was wrong instead of assuming the
- * page was empty. `budget` is what is left of the per-question page allowance.
+ * page was empty. A URL already read this question is returned again from `alreadyRead` without
+ * touching the budget — so a model that asks for the same page twice doesn't burn its allowance
+ * — and once the per-question budget is spent, remaining URLs come back as
+ * `(page budget reached)` instead of silently vanishing from the response.
  */
-function readPages(call: GeminiFunctionCall, byPath: Map<string, CorpusDoc>, budget: number): ToolResult {
+function readPages(
+  call: GeminiFunctionCall,
+  byPath: Map<string, CorpusDoc>,
+  budget: number,
+  alreadyRead: Map<string, ReadPage>,
+): ToolResult {
   const pages: ReadPage[] = [];
   const resolved: ReadPage[] = [];
   let left = budget;
@@ -97,11 +118,20 @@ function readPages(call: GeminiFunctionCall, byPath: Map<string, CorpusDoc>, bud
       pages.push({ url, title: '', text: NO_SUCH_PAGE });
       continue;
     }
-    if (left <= 0) break; // the per-question cap; the model still has whatever it already read
+    const cached = alreadyRead.get(doc.url);
+    if (cached) {
+      pages.push(cached);
+      continue;
+    }
+    if (left <= 0) {
+      pages.push({ url, title: '', text: PAGE_BUDGET_REACHED });
+      continue;
+    }
     left -= 1;
     const page = { url: doc.url, title: doc.title, text: doc.text };
     pages.push(page);
     resolved.push(page);
+    alreadyRead.set(doc.url, page);
   }
   return { pages, resolved };
 }
@@ -125,7 +155,19 @@ export async function* geminiIndexEvents(
 
   const contents: GeminiContent[] = toContents(history);
   const read: ReadPage[] = [];
+  const alreadyRead = new Map<string, ReadPage>();
   let rounds = 0;
+  let turns = 0;
+  let promptTokens = 0;
+  let candidatesTokens = 0;
+  let thoughtsTokens = 0;
+
+  function addUsage(usage: GeminiChunk['usageMetadata'] | undefined) {
+    if (!usage) return;
+    promptTokens += usage.promptTokenCount ?? 0;
+    candidatesTokens += usage.candidatesTokenCount ?? 0;
+    thoughtsTokens += usage.thoughtsTokenCount ?? 0;
+  }
 
   while (rounds < MAX_TOOL_ROUNDS) {
     const response = await client.models.generateContent!({
@@ -134,12 +176,17 @@ export async function* geminiIndexEvents(
       contents: [...contents],
       config: {
         systemInstruction,
-        tools: [{ functionDeclarations: [READ_PAGES_TOOL] }],
-        // No thinking budget here: a tool turn emits a function call, not prose, and the
-        // visible answer gets its own budget on the streaming turn below.
+        tools: readPagesTools(),
+        // The visible answer gets its own budget on the streaming turn below; a tool turn's
+        // text (if any) is discarded, so it gets a small one and the same thinking config as
+        // the stream, overridden down to a fixed cap.
+        ...thinkingConfig(),
+        maxOutputTokens: TOOL_TURN_MAX_OUTPUT_TOKENS,
         abortSignal: signal,
       },
     });
+    turns += 1;
+    addUsage(response.usageMetadata);
 
     const calls = functionCallsOf(response);
     if (calls.length === 0) break; // the model wants to answer; let the streaming turn do it
@@ -159,18 +206,27 @@ export async function* geminiIndexEvents(
         parts.push({ functionResponse: { ...(call.id ? { id: call.id } : {}), name: String(call.name ?? ''), response: { pages: [] } } });
         continue;
       }
-      const { pages, resolved } = readPages(call, byPath, MAX_PAGES_PER_QUESTION - read.length);
+      const { pages, resolved } = readPages(call, byPath, MAX_PAGES_PER_QUESTION - read.length, alreadyRead);
       read.push(...resolved);
       parts.push({ functionResponse: { ...(call.id ? { id: call.id } : {}), name: READ_PAGES_TOOL_NAME, response: { pages } } });
     }
     contents.push({ role: 'user', parts });
   }
 
-  // The answer itself: always streamed, always tool-free, so the visitor sees text arriving.
+  // The answer itself: always streamed, always tool-free — `toolConfig.mode: 'NONE'` tells the
+  // model not to call the tool this turn, but the declaration stays on the request. Passing no
+  // tools at all would make this turn replay the earlier functionCall/functionResponse history
+  // with nothing declared to explain it, which some models reject or answer oddly to.
   const streamRequest = () => ({
     model,
     contents: [...contents],
-    config: { systemInstruction, ...thinkingConfig(), abortSignal: signal },
+    config: {
+      systemInstruction,
+      tools: readPagesTools(),
+      toolConfig: { functionCallingConfig: { mode: 'NONE' } },
+      ...thinkingConfig(),
+      abortSignal: signal,
+    },
   });
 
   let stream: AsyncIterable<GeminiChunk>;
@@ -194,9 +250,16 @@ export async function* geminiIndexEvents(
       answer += chunk.text;
       yield { type: 'text', text: chunk.text };
     }
+    // `toolConfig.mode: 'NONE'` should prevent this, but if the model returns a functionCall
+    // part anyway on this tool-free turn, it is not actionable here — ignore it and log.
+    if (functionCallsOf(chunk).length) {
+      log?.({ event: 'gemini_unexpected_tool_call', model });
+    }
     if (chunk.usageMetadata) usage = chunk.usageMetadata;
     if (chunk.modelVersion) served = chunk.modelVersion;
   }
+  turns += 1;
+  addUsage(usage);
 
   // Metadata only: never the map, the pages, the question or the answer.
   log?.({
@@ -204,8 +267,10 @@ export async function* geminiIndexEvents(
     model: served,
     rounds,
     pages_read: read.length,
-    prompt_tokens: usage.promptTokenCount,
-    candidates_tokens: usage.candidatesTokenCount,
+    prompt_tokens: promptTokens,
+    candidates_tokens: candidatesTokens,
+    thoughts_tokens: thoughtsTokens,
+    turns,
   });
 
   // Sources are the pages the model actually read, in the order it read them, plus any other

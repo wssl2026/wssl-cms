@@ -22,7 +22,8 @@ export function renderIndex(index: IndexEntry[]): string {
   return index
     .map((e) => {
       const headings = e.headings.length ? ` [${e.headings.join(' | ')}]` : '';
-      return `- ${e.title} — ${e.url} — ${e.summary}${headings}`;
+      const summary = e.summary ? ` — ${e.summary}` : '';
+      return `- ${e.title} — ${e.url}${summary}${headings}`;
     })
     .join('\n');
 }

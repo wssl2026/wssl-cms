@@ -54,7 +54,7 @@ How much a question costs depends on the provider and, on Gemini, on the retriev
 
 - **Every question**: ≈ 20K × $0.30 / 1M ≈ **$0.006**, plus output. Nothing is stored between questions, so there is no cache storage charge and a content edit costs nothing extra.
 
-At `DAILY_CAP = 200` that is well under **$2** a day, and the bill scales with questions asked rather than with hours the site is up.
+At `DAILY_CAP = 200` that is well under **$2** a day, and the bill scales with questions asked rather than with hours the site is up. That 10–25K figure assumes typically-sized pages: a page's full text, once read, rides along in `contents` on every later call for that question (the second tool round's request, and always the final answer), so it is billed again each time rather than once. A worst-case question — the model reads all six pages, and each is unusually large — can reach roughly **60–70K** input tokens for that one question.
 
 **Gemini in `cache` mode (`GEMINI_RETRIEVAL = "cache"`).** Flash-class input is roughly $0.30 per million tokens, cached input about a tenth of that, plus a storage charge (~$1 per million tokens per hour) for as long as the explicit cache lives:
 
@@ -70,4 +70,4 @@ At `DAILY_CAP = 200` a realistic day is well under **$5** — the hourly cache s
 
 At `DAILY_CAP = 200` that lands near **$5–8**, worst case about $80.
 
-Either way, watch the one JSON line the chat function logs per question before raising the cap: `chat_index_mode` in Gemini's index mode (`rounds`, `pages_read`, `prompt_tokens`), and a token-count line in the other two (`cachedContentTokenCount` on Gemini's cache mode, `cache_read_input_tokens` on Claude — one of those should dominate). All of them carry the model and the day's count, and never any message content. In the two cached modes a publish invalidates the cache, so the first question after each content edit is a cold one; index mode has no cache to invalidate.
+Either way, watch the one JSON line the chat function logs per question before raising the cap: `chat_index_mode` in Gemini's index mode (`rounds`, `pages_read`, `prompt_tokens`, `candidates_tokens`, `thoughts_tokens`, `turns` — the token counts are summed across every tool turn and the final stream, not just the last one), and a token-count line in the other two (`cachedContentTokenCount` on Gemini's cache mode, `cache_read_input_tokens` on Claude — one of those should dominate). All of them carry the model and the day's count, and never any message content. In the two cached modes a publish invalidates the cache, so the first question after each content edit is a cold one; index mode has no cache to invalidate.
