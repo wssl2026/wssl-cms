@@ -2725,3 +2725,26 @@ The owner asked to run the assistant on Google Gemini (`gemini-3.8-flash`). Keep
 **Manual check (needs `GEMINI_API_KEY`; do what is possible without it):** with the key in `.dev.vars` and `LLM_PROVIDER=gemini`, `npm run build && npx wrangler pages dev dist --kv USAGE --port 8790`, ask "When are the Fall 2026 Core season dates?" once → streamed answer, a `citation` for the home announcements or Registration page, `done.served_by` = the model id; ask once more → the function log shows the cache was reused (log `gemini_cache_hit`). Without a key: run the unit tests, and verify a request with an invalid key yields the error event with status 400/403.
 
 **Commit:** `feat(assistant): Gemini provider (gemini-3.8-flash) with context caching, selectable via LLM_PROVIDER`
+
+---
+
+### Task 17: Index-map retrieval mode for the Gemini provider (owner request, 2026-09-09)
+
+The owner prefers sending a small page index first and letting the model fetch only the pages it needs. Add it as a second retrieval mode of the Gemini provider, selected by `env.GEMINI_RETRIEVAL` = `index` (default) | `cache` (the Task 16 behavior, unchanged).
+
+**Build time:** `scripts/build-corpus.ts` additionally writes `functions/_lib/index.json` (git-ignored, regenerated on every build) from the same `CorpusDoc[]`: for each doc `{ title, url, section, summary, headings }` where `section` is the first URL path segment, `summary` is the page's frontmatter `description` when present, else the first 200 characters of body text (Markdown stripped, deterministic), and `headings` is the list of `##`/`###` heading texts (max 10). The home-announcements doc is included. Pure builder `buildIndex(corpus, descriptions)` in `scripts/lib/index-map.ts` with tests (deterministic output, summary fallback, heading cap, section derivation).
+
+**Runtime (`functions/_lib/providers/gemini.ts`, index mode):**
+1. Turn 1 (non-streaming `generateContent`): system instruction = `SYSTEM_PROMPT` + an index preamble ("Below is the map of every page on wssl.org. Call `read_pages` with the URLs you need before answering; read at most 4 pages; if the map clearly cannot answer, say so.") + the rendered index (one line per page: `- <title> — <url> — <summary> [headings…]`); `contents` = history; `config.tools = [{ functionDeclarations: [read_pages] }]` where `read_pages` takes `{ urls: string[] }`.
+2. Tool loop: for each `functionCall` named `read_pages`, resolve each URL against the corpus (normalize like `extractCitations`; unknown URLs return `"(no such page)"`), cap at 4 pages per call and 6 pages per question, append the `functionResponse` part with `{ pages: [{ url, title, text }] }`, and call the model again. Maximum 2 tool rounds; after that, or when the model answers without a tool call, run the final turn with `generateContentStream` (no tools) to stream the answer.
+3. Citations: every page actually read is emitted as a `citation` event (title, url, quote `''`) at the end, merged with `extractCitations` over the answer text (dedupe by URL).
+4. Logging: one JSON line per question `{ event: 'chat_index_mode', model, rounds, pages_read, prompt_tokens, candidates_tokens }` — never page text, question, or answer.
+5. Cache mode is untouched; the two modes share client construction, abort handling, error mapping, and `served_by`.
+
+**Files:** create `scripts/lib/index-map.ts`, `tests/index-map.test.ts`, `functions/_lib/index-types.ts`; modify `scripts/build-corpus.ts`, `functions/_lib/providers/gemini.ts` (or split into `gemini-cache.ts` / `gemini-index.ts` if the file exceeds ~300 lines), `functions/_lib/gemini-corpus.ts` (URL normalization reuse), `tests/gemini-provider.test.ts` (fake client gains `generateContent` returning function calls; tests: one-round tool call → pages resolved → streamed answer + citations; unknown URL; 4-page cap; 2-round max; no tool call → direct streamed answer; `GEMINI_RETRIEVAL=cache` still uses the cache path; logging never includes text), `wrangler.toml` (`GEMINI_RETRIEVAL = "index"`), `README.md` (mode switch + cost note: index mode sends ~5–8K tokens of map plus the pages read, two to three model calls per question, no cache storage), `.gitignore` (`functions/_lib/index.json`).
+
+**SDK facts must come from the installed `@google/genai` (function declarations schema type, `functionCalls` accessor, `functionResponse` part shape).**
+
+**Manual check (needs `GEMINI_API_KEY`; without it, unit tests + the invalid-key error path only):** ask "When are the Fall 2026 Core season dates?" → the log shows `rounds ≥ 1`, `pages_read ≥ 1`, and the answer cites the home announcements or the Core page.
+
+**Commit:** `feat(assistant): index-map retrieval mode for Gemini (read_pages tool), selectable via GEMINI_RETRIEVAL`
