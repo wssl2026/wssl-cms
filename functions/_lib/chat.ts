@@ -1,7 +1,9 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { CorpusDoc } from './corpus-types';
 
-export const MODEL = 'claude-opus-5';
+export const MODEL = 'claude-sonnet-4-6';
+/** Server-side refusal fallbacks exist only on the Opus 5 / Fable tier. */
+export const FALLBACKS_SUPPORTED = /^claude-(opus-5|fable)/.test(MODEL);
 export const MAX_TOKENS = 8192;       // adaptive thinking shares this budget with the answer
 export const FALLBACK_BETA = 'server-side-fallback-2026-07-01';
 export const MAX_TURNS = 13;          // trailing turns kept (odd → starts and ends with user)
@@ -69,8 +71,7 @@ export function buildRequest(corpus: CorpusDoc[], history: ClientMessage[]): Rec
   return {
     model: MODEL,
     max_tokens: MAX_TOKENS,
-    betas: [FALLBACK_BETA],
-    fallbacks: 'default',
+    ...(FALLBACKS_SUPPORTED ? { betas: [FALLBACK_BETA], fallbacks: 'default' } : {}),
     thinking: { type: 'adaptive' },
     output_config: { effort: 'medium' },
     system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral', ttl: '1h' } }],

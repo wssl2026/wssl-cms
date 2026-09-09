@@ -41,7 +41,7 @@ describe('buildMessages', () => {
     expect(JSON.stringify(buildMessages(corpus, [{ role: 'user', content: 'x' }])[0])).toBe(JSON.stringify(buildMessages(corpus, [{ role: 'user', content: 'y' }])[0]));
   });
   it('constants', () => {
-    expect(MODEL).toBe('claude-opus-5');
+    expect(MODEL).toBe('claude-sonnet-4-6');
     expect(SYSTEM_PROMPT).toContain('wssl.org');
     expect(SYSTEM_PROMPT).not.toMatch(/\d{4}-\d{2}-\d{2}/); // no dates → stable cache
   });
@@ -50,11 +50,11 @@ describe('buildMessages', () => {
 describe('buildRequest', () => {
   const req = buildRequest(corpus, [{ role: 'user', content: 'hi' }]) as any;
 
-  it('pins the model, the fallback beta and adaptive thinking at medium effort', () => {
-    expect(req.model).toBe('claude-opus-5');
+  it('pins the model and adaptive thinking at medium effort; fallbacks only on the Opus 5 tier', () => {
+    expect(req.model).toBe('claude-sonnet-4-6');
     expect(req.max_tokens).toBe(8192);
-    expect(req.betas).toEqual(['server-side-fallback-2026-07-01']);
-    expect(req.fallbacks).toBe('default');
+    expect(req).not.toHaveProperty('betas');
+    expect(req).not.toHaveProperty('fallbacks');
     expect(req.thinking.type).toBe('adaptive');
     expect(req.output_config.effort).toBe('medium');
   });

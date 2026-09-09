@@ -37,9 +37,9 @@ Locally, `/admin` still expects `npx decap-server` on port 8081 and commits to y
 
 ## Cost
 
-Ask WSSL sends the whole site to the model on every question: ~90K tokens of corpus and system prompt (`npm run corpus` builds it, `npx tsx scripts/count-corpus-tokens.ts` measures it against the API). Claude Opus 5 costs $5 per million input tokens, so:
+Ask WSSL sends the whole site to the model on every question: ~90K tokens of corpus and system prompt (`npm run corpus` builds it, `npx tsx scripts/count-corpus-tokens.ts` measures it against the API). Claude Sonnet 4.6 costs $3 per million input tokens (the model is the `MODEL` constant in `functions/_lib/chat.ts`), so:
 
-- **Cold question** (nothing cached — first question of the hour, or after any content change): the corpus is written to the 1-hour cache at 2× the base rate, so ≈ 90K × $5 × 2 / 1M ≈ **$0.90**, plus a few cents of output.
-- **Warm question** (cache hit): cached input reads cost 10% of the base rate, so ≈ 90K × $5 × 0.1 / 1M ≈ **$0.05**.
+- **Cold question** (nothing cached — first question of the hour, or after any content change): the corpus is written to the 1-hour cache at 2× the base rate, so ≈ 90K × $3 × 2 / 1M ≈ **$0.54**, plus a few cents of output.
+- **Warm question** (cache hit): cached input reads cost 10% of the base rate, so ≈ 90K × $3 × 0.1 / 1M ≈ **$0.03**.
 
-At `DAILY_CAP = 200` the realistic day — a handful of cold cache writes plus warm reads — lands near **$10–15**; the absolute worst case, if every question missed the cache, is about $180. Watch the `usage` line the chat function logs (`cache_read_input_tokens` should dominate) before raising the cap. A publish invalidates the cache, so the first question after each content edit is a cold one.
+At `DAILY_CAP = 200` the realistic day — a handful of cold cache writes plus warm reads — lands near **$6–10**; the absolute worst case, if every question missed the cache, is about $110. Watch the `usage` line the chat function logs (`cache_read_input_tokens` should dominate) before raising the cap. A publish invalidates the cache, so the first question after each content edit is a cold one.
