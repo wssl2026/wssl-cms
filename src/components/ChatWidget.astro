@@ -8,10 +8,13 @@ const suggestions = [
 ---
 <button id="ask-open" class="fixed bottom-5 right-5 z-40 bg-navy text-white font-bold px-5 py-3 rounded-full shadow-lg hover:bg-gold hover:text-navy" aria-controls="ask-panel" aria-expanded="false">Ask WSSL</button>
 
-<section id="ask-panel" class="fixed bottom-5 right-5 z-50 w-[min(24rem,calc(100vw-2.5rem))] h-[min(36rem,calc(100vh-2.5rem))] bg-white border border-gray-300 rounded-xl shadow-2xl flex flex-col" hidden aria-label="Ask WSSL assistant">
+<section id="ask-panel" data-size="compact" class="fixed bottom-5 right-5 z-50 w-[min(24rem,calc(100vw-2.5rem))] h-[min(36rem,calc(100vh-2.5rem))] data-[size=large]:w-[min(56rem,calc(100vw-2.5rem))] data-[size=large]:h-[calc(100vh-2.5rem)] bg-white border border-gray-300 rounded-xl shadow-2xl flex flex-col" hidden aria-label="Ask WSSL assistant">
   <header class="flex items-center justify-between bg-navy text-white px-4 py-3 rounded-t-xl">
     <span class="font-bold">Ask WSSL</span>
-    <button id="ask-close" class="text-white/80 hover:text-white" aria-label="Close">✕</button>
+    <span class="flex items-center gap-3">
+      <button id="ask-expand" type="button" class="text-white/80 hover:text-white text-base leading-none" aria-label="Expand" aria-pressed="false" title="Expand">⤢</button>
+      <button id="ask-close" type="button" class="text-white/80 hover:text-white" aria-label="Close">✕</button>
+    </span>
   </header>
   <div id="ask-messages" aria-live="polite" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
     <div class="text-gray-700">Hi! I answer questions using the pages on wssl.org and link you to them. Answers may not be accurate, so please check the linked source. What would you like to know?</div>
@@ -34,7 +37,7 @@ const suggestions = [
   function $(id: string): HTMLElement {
     return document.getElementById(id) as HTMLElement;
   }
-  const panel = $('ask-panel'), openBtn = $('ask-open'), closeBtn = $('ask-close');
+  const panel = $('ask-panel'), openBtn = $('ask-open'), closeBtn = $('ask-close'), expandBtn = $('ask-expand');
   const list = $('ask-messages'), form = $('ask-form') as HTMLFormElement, input = $('ask-input') as HTMLInputElement, send = $('ask-send') as HTMLButtonElement;
 
   const STORAGE = 'askwssl:history';
@@ -66,8 +69,10 @@ const suggestions = [
     $('ask-suggestions')?.remove();
     history.push({ role: 'user', content: question });
     bubble('user').textContent = question;
+    scroll();
     const out = bubble('assistant');
     out.textContent = '…';
+    scroll();
     send.disabled = true; input.disabled = true;
     let text = '';
     const sources = new Map<string, string>();
@@ -106,7 +111,19 @@ const suggestions = [
     }
   }
 
-  openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); });
+  const SIZE_KEY = 'askwssl:size';
+  function setSize(large: boolean) {
+    panel.dataset.size = large ? 'large' : 'compact';
+    expandBtn.setAttribute('aria-pressed', String(large));
+    expandBtn.setAttribute('aria-label', large ? 'Shrink' : 'Expand');
+    expandBtn.title = large ? 'Shrink' : 'Expand';
+    expandBtn.textContent = large ? '⤡' : '⤢';
+    try { localStorage.setItem(SIZE_KEY, large ? 'large' : 'compact'); } catch { /* storage unavailable */ }
+    scroll();
+  }
+  try { if (localStorage.getItem(SIZE_KEY) === 'large') setSize(true); } catch { /* storage unavailable */ }
+  expandBtn.addEventListener('click', () => setSize(panel.dataset.size !== 'large'));
+  openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); scroll(); });
   closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
   form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
   list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
