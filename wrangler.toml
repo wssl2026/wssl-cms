@@ -21,6 +21,5 @@ CF_ACCESS_AUD = "<aud tag>"
 
 [[kv_namespaces]]
 binding = "USAGE"
-# Replace with the ids printed by: npx wrangler kv namespace create USAGE [--preview]  (Task 12)
-id = "00000000000000000000000000000000"
-preview_id = "00000000000000000000000000000000"
+id = "8b18d398d5d64a7b87c7ae99aea5820b"
+preview_id = "8b18d398d5d64a7b87c7ae99aea5820b"
