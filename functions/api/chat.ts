@@ -23,12 +23,26 @@ const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
 const UNAVAILABLE = 'Ask WSSL is temporarily unavailable. Please try again later or use the Contact page.';
+// Reused for both an unknown LLM_PROVIDER and a known one with no API key configured: both are
+// operator misconfiguration, not a transient outage, so the message says so — while still
+// containing "temporarily unavailable" for callers/tests that only know the generic wording.
+const PROVIDER_UNAVAILABLE = 'Ask WSSL is not configured and is temporarily unavailable. Please try again later or use the Contact page.';
 
-function selectProvider(env: Env): Provider | null {
+type ProviderSelection =
+  | { ok: true; provider: Provider }
+  | { ok: false; providerName: string; reason: 'unknown_provider' | 'missing_key' };
+
+function selectProvider(env: Env): ProviderSelection {
   const name = (env.LLM_PROVIDER ?? 'gemini').trim().toLowerCase();
-  if (name === 'gemini') return createGeminiProvider(env);
-  if (name === 'anthropic') return createAnthropicProvider(env);
-  return null;
+  if (name === 'gemini') {
+    if (!env.GEMINI_API_KEY?.trim()) return { ok: false, providerName: name, reason: 'missing_key' };
+    return { ok: true, provider: createGeminiProvider(env) };
+  }
+  if (name === 'anthropic') {
+    if (!env.ANTHROPIC_API_KEY?.trim()) return { ok: false, providerName: name, reason: 'missing_key' };
+    return { ok: true, provider: createAnthropicProvider(env) };
+  }
+  return { ok: false, providerName: name, reason: 'unknown_provider' };
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
@@ -49,11 +63,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
   if (!cap.ok) return json({ error: 'Ask WSSL has reached its daily limit. Please try again tomorrow or use the Contact page.' }, 429);
 
-  const provider = selectProvider(env);
-  if (!provider) {
-    console.error(JSON.stringify({ event: 'chat_provider_misconfigured', provider: env.LLM_PROVIDER }));
-    return json({ error: UNAVAILABLE }, 503);
+  const selection = selectProvider(env);
+  if (!selection.ok) {
+    // Never the key itself — only which provider was chosen and why it can't be used.
+    console.error(JSON.stringify({ event: 'chat_provider_misconfigured', provider: selection.providerName, reason: selection.reason }));
+    return json({ error: PROVIDER_UNAVAILABLE }, 503);
   }
+  const provider = selection.provider;
 
   const log = (line: Record<string, unknown>) => console.log(JSON.stringify({ ...line, day_count: cap.count }));
 

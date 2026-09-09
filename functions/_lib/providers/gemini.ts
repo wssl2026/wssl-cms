@@ -9,16 +9,19 @@ import type { LogLine, Provider, ProviderDeps, ProviderStream } from './types';
 
 export const DEFAULT_GEMINI_MODEL = 'gemini-3.8-flash';
 export const GEMINI_MAX_OUTPUT_TOKENS = 2048;
+// Thinking shares the output budget: when a model rejects thinkingConfig and the request is
+// retried without it, the whole budget belongs to the visible answer, so it gets more room.
+export const GEMINI_MAX_OUTPUT_TOKENS_NO_THINKING = 4096;
 export const GEMINI_CACHE_TTL_SECONDS = 3600;
 
 /**
- * Gemini has no citation API, so the answer has to name its own sources. The server
- * parses the same lines the reader sees.
+ * Gemini has no citation API. The shared `SYSTEM_PROMPT` already requires the model to put
+ * inline Markdown links to the pages it used in the answer itself; `extractCitations` reads
+ * those same links back out for the widget's source list. No separate instruction is needed
+ * here — one used to ask for a trailing `Sources:` block too, which just showed every source
+ * twice.
  */
-export const GEMINI_SOURCES_RULE =
-  '- Always end your answer with a line `Sources:` followed by the full https://www.wssl.org URLs of the pages you used, one per line.';
-
-export const GEMINI_SYSTEM_PROMPT = `${SYSTEM_PROMPT}\n${GEMINI_SOURCES_RULE}`;
+export const GEMINI_SYSTEM_PROMPT = SYSTEM_PROMPT;
 
 const CORPUS_INTRO = 'These documents are the complete, current content of wssl.org. Use them to answer my questions and cite the pages you rely on.';
 const CORPUS_ACK = 'Understood. I have the wssl.org pages loaded and will answer from them, citing the pages I use.';
@@ -102,7 +105,7 @@ async function createCache(
     // permanent no for this deployment, so stop asking; a 429 or a 5xx is not, and must not
     // condemn the isolate to paying full price for the corpus on every later question.
     const status = (err as { status?: number })?.status;
-    const permanent = status === 400 || status === 404 || status === 501;
+    const permanent = status === 400 || status === 403 || status === 404 || status === 501;
     if (permanent) geminiIsolateState.cacheUnavailable = true;
     log?.({
       event: 'gemini_cache_unavailable',
@@ -114,8 +117,10 @@ async function createCache(
     return null;
   }
   if (!created?.name) {
-    geminiIsolateState.cacheUnavailable = true;
-    log?.({ event: 'gemini_cache_unavailable', model, message: 'caches.create returned no name' });
+    // No exception, just a response with nothing usable in it — nothing here says the model
+    // can never be cached, so treat it the same as a transient failure: fall back inline for
+    // this request only, and keep trying to cache on the next one.
+    log?.({ event: 'gemini_cache_unavailable', model, reason: 'no_name', permanent: false });
     return null;
   }
   const record: CacheRecord = {
@@ -161,13 +166,20 @@ function isThinkingConfigRejected(err: unknown): boolean {
 /* ---------- the provider ---------- */
 
 async function* geminiEvents(
-  client: GeminiClient,
+  makeClient: GeminiClientFactory,
+  apiKey: string,
   model: string,
   history: ClientMessage[],
   corpus: CorpusDoc[],
   deps: ProviderDeps,
   signal: AbortSignal,
 ): AsyncGenerator<ClientEvent> {
+  // An async generator's body does not run until the first `.next()` call, so constructing
+  // the client here (rather than synchronously in `stream()`, before iteration begins) means
+  // a constructor throw — e.g. the SDK's "An API Key must be set" — surfaces through the same
+  // try/catch that `eventsToStream` already wraps around this iteration, becoming an `error`
+  // SSE event instead of an unhandled exception that escapes `onRequestPost`.
+  const client = makeClient(apiKey);
   const { kv, log } = deps;
   const key = cacheKey(model, await corpusHash(corpus, GEMINI_SYSTEM_PROMPT));
 
@@ -178,16 +190,19 @@ async function* geminiEvents(
     else cache = await createCache(client, kv, model, key, corpus, log);
   }
 
-  const request = (c: CacheRecord | null) => ({
-    model,
-    contents: c ? toContents(history) : inlineContents(history, corpus),
-    config: {
-      ...(c ? { cachedContent: c.name } : { systemInstruction: GEMINI_SYSTEM_PROMPT }),
-      ...(geminiIsolateState.thinkingConfigUnsupported ? {} : { thinkingConfig: { thinkingBudget: 0 } }),
-      maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
-      abortSignal: signal,
-    },
-  });
+  const request = (c: CacheRecord | null) => {
+    const thinkingEnabled = !geminiIsolateState.thinkingConfigUnsupported;
+    return {
+      model,
+      contents: c ? toContents(history) : inlineContents(history, corpus),
+      config: {
+        ...(c ? { cachedContent: c.name } : { systemInstruction: GEMINI_SYSTEM_PROMPT }),
+        ...(thinkingEnabled ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+        maxOutputTokens: thinkingEnabled ? GEMINI_MAX_OUTPUT_TOKENS : GEMINI_MAX_OUTPUT_TOKENS_NO_THINKING,
+        abortSignal: signal,
+      },
+    };
+  };
 
   let stream: AsyncIterable<GeminiChunk>;
   try {
@@ -246,9 +261,8 @@ export function createGeminiProvider(env: GeminiEnv, makeClient: GeminiClientFac
     name: 'gemini',
     stream(history: ClientMessage[], corpus: CorpusDoc[], deps: ProviderDeps): ProviderStream {
       const controller = new AbortController();
-      const client = makeClient(env.GEMINI_API_KEY);
       return {
-        events: geminiEvents(client, model, history, corpus, deps, controller.signal),
+        events: geminiEvents(makeClient, env.GEMINI_API_KEY, model, history, corpus, deps, controller.signal),
         cancel: () => controller.abort(),
       };
     },

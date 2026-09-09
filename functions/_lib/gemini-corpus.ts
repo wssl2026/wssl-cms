@@ -6,8 +6,6 @@ import type { CorpusDoc } from './corpus-types';
  * back into citation events. No SDK, no network — all of it is unit-tested.
  */
 
-export const SITE_ORIGIN = 'https://www.wssl.org';
-
 /** The whole site as one plain-text document, one `### title` section per page. */
 export function renderCorpus(corpus: CorpusDoc[]): string {
   return corpus.map((d) => `### ${d.title}\nURL: ${d.url}\n\n${d.text}`).join('\n\n');
@@ -37,9 +35,9 @@ function normalisePath(path: string): string {
 }
 
 /**
- * The pages this answer actually pointed at. Gemini has no citation API, so the
- * links in its answer (including the `Sources:` block the prompt asks for) are
- * matched against the corpus and reported as citation events.
+ * The pages this answer actually pointed at. Gemini has no citation API, so the inline
+ * Markdown links the system prompt requires (plus a trailing `Sources:` block, if the model
+ * adds one on its own) are matched against the corpus and reported as citation events.
  */
 export function extractCitations(text: string, corpus: CorpusDoc[]): { title: string; url: string }[] {
   const byPath = new Map<string, CorpusDoc>();

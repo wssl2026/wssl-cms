@@ -97,7 +97,45 @@ describe('provider selection', () => {
     expect(res.headers.get('Content-Type')).toBe('application/json');
     const body: any = await res.json();
     expect(body.error).toContain('temporarily unavailable');
-    expect(JSON.parse(spy.mock.calls[0][0] as string)).toMatchObject({ event: 'chat_provider_misconfigured', provider: 'bogus' });
+    expect(JSON.parse(spy.mock.calls[0][0] as string)).toMatchObject({
+      event: 'chat_provider_misconfigured',
+      provider: 'bogus',
+      reason: 'unknown_provider',
+    });
+    spy.mockRestore();
+  });
+
+  it('refuses gemini with a 503 config error when GEMINI_API_KEY is missing, without an opaque 500', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const res = await onRequestPost(makeContext({ ...base, GEMINI_API_KEY: '', USAGE: fakeKV(), LLM_PROVIDER: 'gemini' }));
+    expect(res.status).toBe(503);
+    expect(res.headers.get('Content-Type')).toBe('application/json');
+    const body: any = await res.json();
+    expect(body.error).toContain('not configured');
+    const logged = JSON.parse(spy.mock.calls[0][0] as string);
+    expect(logged).toEqual({ event: 'chat_provider_misconfigured', provider: 'gemini', reason: 'missing_key' }); // never a key field
+    spy.mockRestore();
+  });
+
+  it('refuses anthropic with a 503 config error when ANTHROPIC_API_KEY is missing', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const res = await onRequestPost(makeContext({ ...base, ANTHROPIC_API_KEY: '', USAGE: fakeKV(), LLM_PROVIDER: 'anthropic' }));
+    expect(res.status).toBe(503);
+    expect(res.headers.get('Content-Type')).toBe('application/json');
+    const body: any = await res.json();
+    expect(body.error).toContain('not configured');
+    expect(JSON.parse(spy.mock.calls[0][0] as string)).toMatchObject({
+      event: 'chat_provider_misconfigured',
+      provider: 'anthropic',
+      reason: 'missing_key',
+    });
+    spy.mockRestore();
+  });
+
+  it('treats a whitespace-only GEMINI_API_KEY as missing', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const res = await onRequestPost(makeContext({ ...base, GEMINI_API_KEY: '   ', USAGE: fakeKV(), LLM_PROVIDER: 'gemini' }));
+    expect(res.status).toBe(503);
     spy.mockRestore();
   });
 

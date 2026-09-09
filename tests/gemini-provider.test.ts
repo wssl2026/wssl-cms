@@ -3,6 +3,7 @@ import {
   DEFAULT_GEMINI_MODEL,
   GEMINI_SYSTEM_PROMPT,
   GEMINI_CACHE_TTL_SECONDS,
+  GEMINI_MAX_OUTPUT_TOKENS_NO_THINKING,
   geminiIsolateState,
 } from '../functions/_lib/providers/gemini';
 import { corpusHash, renderCorpus } from '../functions/_lib/gemini-corpus';
@@ -91,9 +92,10 @@ beforeEach(() => {
 });
 
 describe('GEMINI_SYSTEM_PROMPT', () => {
-  it('is the shared system prompt plus the Sources: instruction', () => {
-    expect(GEMINI_SYSTEM_PROMPT.startsWith(SYSTEM_PROMPT)).toBe(true);
-    expect(GEMINI_SYSTEM_PROMPT).toContain('Sources:');
+  it('is exactly the shared system prompt — no separate Sources: instruction, to avoid listing sources twice', () => {
+    expect(GEMINI_SYSTEM_PROMPT).toBe(SYSTEM_PROMPT);
+    expect(GEMINI_SYSTEM_PROMPT).not.toContain('Sources:');
+    // The shared prompt already requires inline Markdown links to the pages used.
     expect(GEMINI_SYSTEM_PROMPT).toContain('https://www.wssl.org');
   });
 });
@@ -172,6 +174,53 @@ describe('gemini provider — explicit context cache', () => {
     const out = await collectStream(eventsToStream(provider.stream(history, corpus, { kv: fakeKV() })));
     expect(out.at(-1).type).toBe('error');
     expect(client.generateCalls).toHaveLength(2);
+  });
+
+  it('treats a nameless caches.create response as transient, not a reason to stop trying', async () => {
+    const kv = fakeKV();
+    let createCount = 0;
+    const generateCalls: any[] = [];
+    const client = {
+      caches: {
+        create: async () => {
+          createCount += 1;
+          // First attempt: a response with nothing usable in it, no exception thrown.
+          if (createCount === 1) return {};
+          return { name: 'cachedContents/second', expireTime: new Date(Date.now() + 3600_000).toISOString() };
+        },
+      },
+      models: {
+        generateContentStream: async (params: any) => {
+          generateCalls.push(params);
+          return (async function* () { yield { text: 'ok' }; })();
+        },
+      },
+    };
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+
+    const lines: Record<string, unknown>[] = [];
+    await collect(provider.stream(history, corpus, { kv, log: (l) => lines.push(l) }).events);
+    expect(createCount).toBe(1);
+    expect(geminiIsolateState.cacheUnavailable).toBe(false);
+    expect(lines).toContainEqual(expect.objectContaining({ event: 'gemini_cache_unavailable', reason: 'no_name', permanent: false }));
+    expect(generateCalls[0].config.cachedContent).toBeUndefined();
+
+    // Next request in the same isolate: it tries again (no permanent flag was set) and this
+    // time succeeds, so it creates and uses the cache.
+    await collect(provider.stream(history, corpus, { kv, log: () => {} }).events);
+    expect(createCount).toBe(2);
+    expect(generateCalls[1].config.cachedContent).toBe('cachedContents/second');
+  });
+
+  it('classifies a 403 from caches.create as permanent, like the other permanent statuses', async () => {
+    const client = fakeClient({ createThrows: apiError('permission denied', 403) });
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
+    expect(geminiIsolateState.cacheUnavailable).toBe(true);
+
+    // Second request in the same isolate: no second create attempt — the failure stuck.
+    await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
+    expect(client.createCalls).toHaveLength(1);
   });
 });
 
@@ -255,12 +304,15 @@ describe('gemini provider — streaming, citations and logging', () => {
     expect(client.generateCalls[0].contents.map((c: any) => c.role)).toEqual(['user', 'model', 'user']);
   });
 
-  it('retries once without thinkingConfig when the model rejects the field', async () => {
+  it('retries once without thinkingConfig when the model rejects the field, giving the retry the full output budget', async () => {
     const client = fakeClient({ generateThrows: [apiError('Unknown name "thinking_config"', 400)] });
     const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
     const out = await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     expect(client.generateCalls).toHaveLength(2);
     expect(client.generateCalls[1].config.thinkingConfig).toBeUndefined();
+    // Thinking shares maxOutputTokens with the answer; dropping thinkingConfig should give the
+    // retry more room rather than leaving it at the thinking-enabled budget.
+    expect(client.generateCalls[1].config.maxOutputTokens).toBe(GEMINI_MAX_OUTPUT_TOKENS_NO_THINKING);
     expect(out.at(-1)!.type).toBe('done');
   });
 
@@ -329,6 +381,24 @@ describe('gemini provider — errors and cancellation', () => {
     await new Promise((r) => setTimeout(r, 10));
     await rs.cancel();
     expect(signal?.aborted).toBe(true);
+  });
+
+  it('surfaces a synchronous client-constructor throw as an SSE error event, not an unhandled exception', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const throwingFactory = () => {
+      throw new Error('An API Key must be set when running in a browser');
+    };
+    const provider = createGeminiProvider({ GEMINI_API_KEY: '' }, throwingFactory as any);
+
+    // Calling stream() itself must not throw — the client is only constructed once iteration
+    // begins, inside the try/catch eventsToStream wraps around the async generator.
+    let providerStream: ReturnType<typeof provider.stream>;
+    expect(() => { providerStream = provider.stream(history, corpus, { kv: fakeKV() }); }).not.toThrow();
+
+    const out = await collectStream(eventsToStream(providerStream!));
+    expect(out).toHaveLength(1);
+    expect(out[0].type).toBe('error');
+    spy.mockRestore();
   });
 
   it('still answers when KV is unavailable', async () => {
