@@ -41,7 +41,7 @@ describe('buildMessages', () => {
     expect(JSON.stringify(buildMessages(corpus, [{ role: 'user', content: 'x' }])[0])).toBe(JSON.stringify(buildMessages(corpus, [{ role: 'user', content: 'y' }])[0]));
   });
   it('constants', () => {
-    expect(MODEL).toBe('claude-sonnet-4-6');
+    expect(MODEL).toBe('claude-sonnet-5');
     expect(SYSTEM_PROMPT).toContain('wssl.org');
     expect(SYSTEM_PROMPT).not.toMatch(/\d{4}-\d{2}-\d{2}/); // no dates → stable cache
   });
@@ -51,7 +51,7 @@ describe('buildRequest', () => {
   const req = buildRequest(corpus, [{ role: 'user', content: 'hi' }]) as any;
 
   it('pins the model and adaptive thinking at medium effort; fallbacks only on the Opus 5 tier', () => {
-    expect(req.model).toBe('claude-sonnet-4-6');
+    expect(req.model).toBe('claude-sonnet-5');
     expect(req.max_tokens).toBe(8192);
     expect(req).not.toHaveProperty('betas');
     expect(req).not.toHaveProperty('fallbacks');

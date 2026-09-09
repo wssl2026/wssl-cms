@@ -1,7 +1,7 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { CorpusDoc } from './corpus-types';
 
-export const MODEL = 'claude-sonnet-4-6';
+export const MODEL = 'claude-sonnet-5';
 /** Server-side refusal fallbacks exist only on the Opus 5 / Fable tier. */
 export const FALLBACKS_SUPPORTED = /^claude-(opus-5|fable)/.test(MODEL);
 export const MAX_TOKENS = 8192;       // adaptive thinking shares this budget with the answer
