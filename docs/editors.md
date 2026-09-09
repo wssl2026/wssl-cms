@@ -15,6 +15,7 @@ That's it; the editor opens. The sign-in lasts a while, so you will not be asked
 - **Draft**: tick "Draft" and publish to hide a page without deleting it.
 - **New page**: click **New** in a section. "URL path" becomes the address under that section (e.g. `core/waitlists` → /programs/core/waitlists/). Add it to the menu under Site Settings → Navigation menu if it should appear in the nav.
 - **PDFs and images**: use the image/file button in the editor; files are stored in `/uploads/`.
+- **Tables**: the rich-text toolbar has no "insert table" button, so to add or edit a table switch the editor to its **Markdown** view (the "rich text"/"markdown" toggle above the content box) and edit the pipe (`| … | … |`) rows directly.
 
 ## Rainout / closure banner
 Site Settings → Alert banner → tick "Show banner", write the message, Publish. Untick to remove.

@@ -14,4 +14,354 @@ updated: 2025-10-22
 | [G6](/programs/core/divisions/fall-2025/#G6) | [B8](/programs/core/divisions/fall-2025/#B8) | [G9](/programs/core/divisions/fall-2025/#G9) | [B11](/programs/core/divisions/fall-2025/#B11) | [G12](/programs/core/divisions/fall-2025/#G12) | [B19](/programs/core/divisions/fall-2025/#B19) | [EPIC](/programs/core/divisions/fall-2025/#EPIC) |
 | [B7](/programs/core/divisions/fall-2025/#B7) | [G8](/programs/core/divisions/fall-2025/#G8) | [B10](/programs/core/divisions/fall-2025/#B10) | [G11](/programs/core/divisions/fall-2025/#G11) | [B13/B14](/programs/core/divisions/fall-2025/#B13) | [G19](/programs/core/divisions/fall-2025/#G19) | <a id="U5"></a> |
 
-<table><tbody><tr><td colspan="2"><table><tbody><tr><td colspan="2"><table><tbody><tr><td colspan="2"><table><tbody><tr><td colspan="2"><p><strong>Playground Soccer: &nbsp;Boys and Girls, 3 and 4 year olds&nbsp;(2021&nbsp;birth year and January - August&nbsp;2022)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:alan@wssl.org?subject=Playground%20Soccer%20Program">Alan Leverenz</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Frederick Douglass Playground Field (Amsterdam/102nd Street)</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday&nbsp;mornings</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Playground Ball (to be provided to participants)</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td><a href="/programs/playground/">Playground Soccer</a></td><td>&nbsp;</td></tr><tr><td><strong>Time Slot</strong></td><td>60 minutes<a id="B6" name="B6"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B6: Boys Under 6 (2020&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2020@wssl.org?subject=B6%20Division">Holly Greenburg</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:amotzsegal@gmail.com?subject=B6%20Referee%20stuff">Amotz Segal</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td><a href="/fields/riverside-park/">71st&nbsp;Street Field in Riverside Park</a></td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>3 v 3 (no keeper), side-by-side games</td><td>&nbsp;</td></tr><tr><td><strong>Time Slot</strong></td><td>60 minutes for integrated practice and game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>35 minute practice followed by 25 minute game with two 10-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="G6" name="G6"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G6: Girls, Under 6&nbsp;(2020&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:g2020@wssl.org">Natalie Webb</a>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:stan.ince@gmail.com">Looking for a Volunteer!</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td><table><tbody><tr><th><a href="/fields/riverside-park/">71st Street Field in Riverside Park</a></th></tr></tbody></table></td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>3 v 3 (no keeper), side-by-side games</td><td>&nbsp;</td></tr><tr><td><strong>Time Slot</strong></td><td>60 minutes for integrated practice and game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>35 minute practice followed by 25 minute game with two 10-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="B7" name="B7"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B7: Boys, Under 7&nbsp;(2019&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2019@wssl.org">Danielle Beraldo</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:benedict.clouette@gmail.com">Benedict Clouette</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td><a href="/fields/riverside-park/">71st&nbsp;Street Field in Riverside Park</a></td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>4 v 4 (no keeper)</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>30 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>45 minute game with two 20-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="G7" name="G7"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G7: Girls, Under 7&nbsp;(2019&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:g2019@wssl.org">Leah Schiff and Jessica Kopec</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:marionlim@gmail.com?subject=G7%20Referee%20matters">Marion Lim</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td><a href="/fields/riverside-park/">71st Street Field&nbsp;in Riverside Park</a></td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>4 v 4 (no keeper)</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>30 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>45 minute game with two 20-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="B8" name="B8"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B8: Boys, Under 8&nbsp;(2018&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2018@wssl.org">Morgan Resta Flarer and Brook Crowley</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:b2018chiefref@wssl.org">Michelle Gurk</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td><a href="/fields/riverside-park/">74th Street Oval in Riverside Park</a></td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>4 v 4 (no keeper)</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>30 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>45 minute game with two 20-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="G8" name="G8"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G8: Girls, Under 8&nbsp;(2018&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:G2018@wssl.org">Pablo Fernandez-Galiano</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:stan.ince@gmail.com">Looking for a Volunteer!</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Central Park North Meadow</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>20x30 yards, Pugg goals</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 3 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>6-7 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>4 v 4 (no keeper)</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>30 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>45 minute game with two 20-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="B9" name="B9"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B9: Boys, Under 9&nbsp;(2017&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2017@wssl.org">Yasmin Nozari</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:Alvinhoughjr@gmail.com?subject=B9%20Referee%20Question">Alvin Hough</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>103rd/Riverside Park and 101st/Riverside Park</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>50x30 yards, Build Out Line for goal kicks and for judgment of offside</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>9-10 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>7 v 7 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>55 minute game with two 25-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G9" name="G9"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G9: Girls, Under 9&nbsp;(2017&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:G2017@wssl.org">Tanja Buckner and Allison Kohrs</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:monikatess01@gmail.com">Monika Tess</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Central Park North Meadow</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>50x30 yards,&nbsp;Build Out Line for goal kicks and for judgment of offside</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>9-10 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>7 v 7 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>55 minute game with two 25-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes (NO CLEATS)<a id="B10" name="B10"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B10: Boys, Under 10&nbsp;(2016&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2016@wssl.org">Jeff Berton</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:goaskalicelam@gmail.com?subject=B10%20Referee%20matters">Alice Lam</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>103rd/Riverside Park and 101st/Riverside Park</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>50x30 yards,&nbsp;Build Out Line for goal kicks and for judgment of offside</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>9-10 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>7 v 7 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>55 minute game with two 25-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G10" name="G10"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G10: Girls, Under 10&nbsp;(2016&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:G2016@wssl.org">Amy Williams</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:neilkahrim@yahoo.com">Neil Kahrim</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 101st Street Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>50x30 yards,&nbsp;Build Out Line for goal kicks and for judgment of offside</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>9-10 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>7 v 7 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>55 minute game with two 25-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="B11" name="B11"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B11: Boys, Under 11&nbsp;(2015&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:b2015@wssl.org">Michelle Goldstein</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:Laurent.pariente@gmail.com?subject=B11%20referee%20question">Laurent Pariente</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Central Park North Meadow</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>60x50 yards / 65x50 yards, No&nbsp;Build Out Line&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>11-12 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>9 v 9 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>65 minute game with two 30-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G11" name="G11"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G11: Girls, Under 11&nbsp;(2015&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:g2015@wssl.org">Monica Swinney and Robin Landsberg</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:codyzalk@gmail.com">Cody Zalk</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 103rd Street Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>60x50 yards / 65x50 yards, No&nbsp;Build Out Line</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>11-12 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>9 v 9 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>65 minute game with two 30-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="B12" name="B12"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B12: Boys, Under 12&nbsp;(2014&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:commissioner@wssl.org">Vilda Mayuga</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:pdiennet@gmail.com">Pierre Diennet</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 107th Street Field and&nbsp;Riverside Park 103rd Street Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>65x50 yards</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>11-12 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>9 v 9 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>65 minute game with two 30-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G12" name="G12"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G12: Girls, Under 12&nbsp;(2014&nbsp;birth year)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:ttrakht@hotmail.com">Tanya Trakht</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:jylatm@gmail.com?subject=G12%20">John Lee</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 103rd Street Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>65x50 yards</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>11-12 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>9 v 9 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>45 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>65 minute game with two 30-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="B13" name="B13"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B13/B14: Boys, Under 14&nbsp;(2013&nbsp;and 2012&nbsp;birth years)</strong></p><table><tbody><tr><th><strong>Division Head (click to Contact)</strong></th><th><a href="mailto:b2013@wssl.org">Eric Halperin</a></th></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:cecarlon@yahoo.com, peteandrenee@hotmail.com?subject=B14%20referee">Carlo-Edoardo Carlon and Peter Stone</a></td></tr><tr><td><strong>Field</strong></td><td>Central Park North Meadow and Jefferson Field&nbsp;(114th Street &amp; First Avenue)</td></tr><tr><td><strong>Field Size</strong></td><td>Full field</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 5 Ball</td></tr><tr><td><strong>Team Size</strong></td><td>14-18 players</td></tr><tr><td><strong>On-Field Format</strong></td><td>11 v 11 including keeper</td></tr><tr><td><strong>Practice</strong></td><td>60 minutes pre-game</td></tr><tr><td><strong>Game Length</strong> &nbsp;</td><td>75 minute game with two 35-minute halves Two substitution breaks in each half</td></tr><tr><td><strong>Footwear</strong> &nbsp;</td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G13" name="G13"></a></td></tr></tbody></table><p><strong>G13/G14: Girls, Under 14&nbsp;(2013&nbsp;and 2012&nbsp;birth years)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:g2013@wssl.org">Laura Cutler and Clare Norton</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:kuhrtypad@msn.com">Mark Kuhrt</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 107th Street Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>Full field</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 5 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>14-18 players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>11 v 11 including keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>60 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>75 minute game with two 35-minute halves<br>Two substitution breaks in each half</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="B19" name="B19"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>B19: Boys, Under 15 to Under 19 (2011, 2010, 2009, 2008&nbsp;and 2007&nbsp;birth years still in HS - no college players)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:B19@wssl.org">Kerry Dziubek</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:cecarlon@yahoo.com">Carlo-Edoardo Carlon</a>&nbsp;and&nbsp;<a href="mailto:decatur.john@gmail.com">John Decatur</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 107th Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>Full field</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Saturday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 5 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>14-18 Players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>11 v 11, including the keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>60 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>90 minute game with two 40-minute halves<br>Monitored substitutions</td><td>&nbsp;</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="G19" name="G19"></a></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan="2"><p><strong>G19: Girls, Under 15 to Under 19 (2011, 2010, 2009, 2008&nbsp;and 2007&nbsp;birth years still in HS - no college players)</strong></p></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><a href="mailto:alan@wssl.org?subject=G19">Alan Leverenz</a></td><td>&nbsp;</td></tr><tr><td><strong>Chief Ref (click to Contact)</strong></td><td><a href="mailto:hhchin8@gmail.com">Hong Chin</a>&nbsp;and&nbsp;<a href="mailto:iny.alan@bcg.com?subject=G14%20referee">Alan Iny</a></td><td>&nbsp;</td></tr><tr><td><strong>Field</strong></td><td>Riverside Park 107th Field</td><td>&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>Shortened field, goals placed on yellow goal lines, not 'standard' white goal lines.</td><td>&nbsp;</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td><td>&nbsp;</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 5 Ball</td><td>&nbsp;</td></tr><tr><td><strong>Team Size</strong></td><td>14-18 Players</td><td>&nbsp;</td></tr><tr><td><strong>On-Field Format</strong></td><td>11 v 11, including the keeper</td><td>&nbsp;</td></tr><tr><td><strong>Practice</strong></td><td>60 minutes pre-game</td><td>&nbsp;</td></tr><tr><td><strong>Game Length</strong><br>&nbsp;</td><td>85 minute game with two 40-minute halves<br>Monitored substitutions</td><td>&nbsp;</td></tr><tr><td><p><strong>Footwear</strong></p></td><td>Sneakers or turf shoes; plastic/grass cleats allowed<a id="EPIC" name="EPIC"></a></td></tr><tr><td colspan="2"><p><strong>EPIC: Boys &amp; Girls with Special Needs (all ages)</strong></p></td></tr><tr><td><p>&nbsp;</p></td><td>&nbsp;</td></tr><tr><td><strong>Division Head (click to Contact)</strong></td><td><strong><a href="mailto:epic@wssl.org, joshuafnoble@gmail.com?subject=WSSL%20VIP">Serhat Krause</a>&nbsp;</strong>and <a href="mailto:joshuafnoble@gmail.com, jim.karpe@gmail.com">Joshua Noble</a></td></tr><tr><td><strong>Field</strong></td><td>Booker T. Washington field&nbsp;</td></tr><tr><td><strong>Field Size</strong></td><td>Varies depending on age</td></tr><tr><td><strong>Day of Play</strong></td><td>Sunday</td></tr><tr><td><strong>Ball Size</strong></td><td>Size 4 Ball</td></tr><tr><td><strong>Team Size</strong></td><td>Varies depending on age</td></tr><tr><td><strong>On-Field Format</strong></td><td>Varies depending on age</td></tr><tr><td><strong>Practice</strong></td><td>Varies depending on age</td></tr><tr><td><strong>Game Length</strong></td><td>Varies depending on age</td></tr><tr><td><strong>Footwear</strong></td><td>Sneakers or Turf shoes (no Cleats)</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>
+## Playground Soccer: Boys and Girls, 3 and 4 year olds (2021 birth year and January - August 2022)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Alan Leverenz](mailto:alan@wssl.org?subject=Playground%20Soccer%20Program) |
+| Field | Frederick Douglass Playground Field (Amsterdam/102nd Street) |
+| Day of Play | Saturday mornings |
+| Ball Size | Playground Ball (to be provided to participants) |
+| On-Field Format | [Playground Soccer](/programs/playground/) |
+| Time Slot | 60 minutes |
+
+<a id="B6"></a>
+
+## B6: Boys Under 6 (2020 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Holly Greenburg](mailto:b2020@wssl.org?subject=B6%20Division) |
+| Chief Ref (click to Contact) | [Amotz Segal](mailto:amotzsegal@gmail.com?subject=B6%20Referee%20stuff) |
+| Field | [71st Street Field in Riverside Park](/fields/riverside-park/) |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Saturday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 3 v 3 (no keeper), side-by-side games |
+| Time Slot | 60 minutes for integrated practice and game |
+| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="G6"></a>
+
+## G6: Girls, Under 6 (2020 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Natalie Webb](mailto:g2020@wssl.org) |
+| Chief Ref (click to Contact) | [Looking for a Volunteer!](mailto:stan.ince@gmail.com) |
+| Field | [71st Street Field in Riverside Park](/fields/riverside-park/) |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Sunday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 3 v 3 (no keeper), side-by-side games |
+| Time Slot | 60 minutes for integrated practice and game |
+| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="B7"></a>
+
+## B7: Boys, Under 7 (2019 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Danielle Beraldo](mailto:b2019@wssl.org) |
+| Chief Ref (click to Contact) | [Benedict Clouette](mailto:benedict.clouette@gmail.com) |
+| Field | [71st Street Field in Riverside Park](/fields/riverside-park/) |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Saturday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 4 v 4 (no keeper) |
+| Practice | 30 minutes pre-game |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="G7"></a>
+
+## G7: Girls, Under 7 (2019 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Leah Schiff and Jessica Kopec](mailto:g2019@wssl.org) |
+| Chief Ref (click to Contact) | [Marion Lim](mailto:marionlim@gmail.com?subject=G7%20Referee%20matters) |
+| Field | [71st Street Field in Riverside Park](/fields/riverside-park/) |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Sunday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 4 v 4 (no keeper) |
+| Practice | 30 minutes pre-game |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="B8"></a>
+
+## B8: Boys, Under 8 (2018 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Morgan Resta Flarer and Brook Crowley](mailto:b2018@wssl.org) |
+| Chief Ref (click to Contact) | [Michelle Gurk](mailto:b2018chiefref@wssl.org) |
+| Field | [74th Street Oval in Riverside Park](/fields/riverside-park/) |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Saturday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 4 v 4 (no keeper) |
+| Practice | 30 minutes pre-game |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="G8"></a>
+
+## G8: Girls, Under 8 (2018 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Pablo Fernandez-Galiano](mailto:G2018@wssl.org) |
+| Chief Ref (click to Contact) | [Looking for a Volunteer!](mailto:stan.ince@gmail.com) |
+| Field | Central Park North Meadow |
+| Field Size | 20x30 yards, Pugg goals |
+| Day of Play | Sunday |
+| Ball Size | Size 3 Ball |
+| Team Size | 6-7 players |
+| On-Field Format | 4 v 4 (no keeper) |
+| Practice | 30 minutes pre-game |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="B9"></a>
+
+## B9: Boys, Under 9 (2017 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Yasmin Nozari](mailto:b2017@wssl.org) |
+| Chief Ref (click to Contact) | [Alvin Hough](mailto:Alvinhoughjr@gmail.com?subject=B9%20Referee%20Question) |
+| Field | 103rd/Riverside Park and 101st/Riverside Park |
+| Field Size | 50x30 yards, Build Out Line for goal kicks and for judgment of offside |
+| Day of Play | Saturday |
+| Ball Size | Size 4 Ball |
+| Team Size | 9-10 players |
+| On-Field Format | 7 v 7 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G9"></a>
+
+## G9: Girls, Under 9 (2017 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Tanja Buckner and Allison Kohrs](mailto:G2017@wssl.org) |
+| Chief Ref (click to Contact) | [Monika Tess](mailto:monikatess01@gmail.com) |
+| Field | Central Park North Meadow |
+| Field Size | 50x30 yards, Build Out Line for goal kicks and for judgment of offside |
+| Day of Play | Sunday |
+| Ball Size | Size 4 Ball |
+| Team Size | 9-10 players |
+| On-Field Format | 7 v 7 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes (NO CLEATS) |
+
+<a id="B10"></a>
+
+## B10: Boys, Under 10 (2016 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Jeff Berton](mailto:b2016@wssl.org) |
+| Chief Ref (click to Contact) | [Alice Lam](mailto:goaskalicelam@gmail.com?subject=B10%20Referee%20matters) |
+| Field | 103rd/Riverside Park and 101st/Riverside Park |
+| Field Size | 50x30 yards, Build Out Line for goal kicks and for judgment of offside |
+| Day of Play | Saturday |
+| Ball Size | Size 4 Ball |
+| Team Size | 9-10 players |
+| On-Field Format | 7 v 7 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G10"></a>
+
+## G10: Girls, Under 10 (2016 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Amy Williams](mailto:G2016@wssl.org) |
+| Chief Ref (click to Contact) | [Neil Kahrim](mailto:neilkahrim@yahoo.com) |
+| Field | Riverside Park 101st Street Field |
+| Field Size | 50x30 yards, Build Out Line for goal kicks and for judgment of offside |
+| Day of Play | Sunday |
+| Ball Size | Size 4 Ball |
+| Team Size | 9-10 players |
+| On-Field Format | 7 v 7 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="B11"></a>
+
+## B11: Boys, Under 11 (2015 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Michelle Goldstein](mailto:b2015@wssl.org) |
+| Chief Ref (click to Contact) | [Laurent Pariente](mailto:Laurent.pariente@gmail.com?subject=B11%20referee%20question) |
+| Field | Central Park North Meadow |
+| Field Size | 60x50 yards / 65x50 yards, No Build Out Line |
+| Day of Play | Saturday |
+| Ball Size | Size 4 Ball |
+| Team Size | 11-12 players |
+| On-Field Format | 9 v 9 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G11"></a>
+
+## G11: Girls, Under 11 (2015 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Monica Swinney and Robin Landsberg](mailto:g2015@wssl.org) |
+| Chief Ref (click to Contact) | [Cody Zalk](mailto:codyzalk@gmail.com) |
+| Field | Riverside Park 103rd Street Field |
+| Field Size | 60x50 yards / 65x50 yards, No Build Out Line |
+| Day of Play | Sunday |
+| Ball Size | Size 4 Ball |
+| Team Size | 11-12 players |
+| On-Field Format | 9 v 9 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="B12"></a>
+
+## B12: Boys, Under 12 (2014 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Vilda Mayuga](mailto:commissioner@wssl.org) |
+| Chief Ref (click to Contact) | [Pierre Diennet](mailto:pdiennet@gmail.com) |
+| Field | Riverside Park 107th Street Field and Riverside Park 103rd Street Field |
+| Field Size | 65x50 yards |
+| Day of Play | Saturday |
+| Ball Size | Size 4 Ball |
+| Team Size | 11-12 players |
+| On-Field Format | 9 v 9 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G12"></a>
+
+## G12: Girls, Under 12 (2014 birth year)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Tanya Trakht](mailto:ttrakht@hotmail.com) |
+| Chief Ref (click to Contact) | [John Lee](mailto:jylatm@gmail.com?subject=G12%20) |
+| Field | Riverside Park 103rd Street Field |
+| Field Size | 65x50 yards |
+| Day of Play | Sunday |
+| Ball Size | Size 4 Ball |
+| Team Size | 11-12 players |
+| On-Field Format | 9 v 9 including keeper |
+| Practice | 45 minutes pre-game |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="B13"></a>
+
+## B13/B14: Boys, Under 14 (2013 and 2012 birth years)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Eric Halperin](mailto:b2013@wssl.org) |
+| Chief Ref (click to Contact) | [Carlo-Edoardo Carlon and Peter Stone](mailto:cecarlon@yahoo.com,%20peteandrenee@hotmail.com?subject=B14%20referee) |
+| Field | Central Park North Meadow and Jefferson Field (114th Street & First Avenue) |
+| Field Size | Full field |
+| Day of Play | Sunday |
+| Ball Size | Size 5 Ball |
+| Team Size | 14-18 players |
+| On-Field Format | 11 v 11 including keeper |
+| Practice | 60 minutes pre-game |
+| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G13"></a>
+
+## G13/G14: Girls, Under 14 (2013 and 2012 birth years)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Laura Cutler and Clare Norton](mailto:g2013@wssl.org) |
+| Chief Ref (click to Contact) | [Mark Kuhrt](mailto:kuhrtypad@msn.com) |
+| Field | Riverside Park 107th Street Field |
+| Field Size | Full field |
+| Day of Play | Sunday |
+| Ball Size | Size 5 Ball |
+| Team Size | 14-18 players |
+| On-Field Format | 11 v 11 including keeper |
+| Practice | 60 minutes pre-game |
+| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="B19"></a>
+
+## B19: Boys, Under 15 to Under 19 (2011, 2010, 2009, 2008 and 2007 birth years still in HS - no college players)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Kerry Dziubek](mailto:B19@wssl.org) |
+| Chief Ref (click to Contact) | [Carlo-Edoardo Carlon](mailto:cecarlon@yahoo.com) and [John Decatur](mailto:decatur.john@gmail.com) |
+| Field | Riverside Park 107th Field |
+| Field Size | Full field |
+| Day of Play | Saturday |
+| Ball Size | Size 5 Ball |
+| Team Size | 14-18 Players |
+| On-Field Format | 11 v 11, including the keeper |
+| Practice | 60 minutes pre-game |
+| Game Length | 90 minute game with two 40-minute halves. Monitored substitutions. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="G19"></a>
+
+## G19: Girls, Under 15 to Under 19 (2011, 2010, 2009, 2008 and 2007 birth years still in HS - no college players)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Alan Leverenz](mailto:alan@wssl.org?subject=G19) |
+| Chief Ref (click to Contact) | [Hong Chin](mailto:hhchin8@gmail.com) and [Alan Iny](mailto:iny.alan@bcg.com?subject=G14%20referee) |
+| Field | Riverside Park 107th Field |
+| Field Size | Shortened field, goals placed on yellow goal lines, not 'standard' white goal lines. |
+| Day of Play | Sunday |
+| Ball Size | Size 5 Ball |
+| Team Size | 14-18 Players |
+| On-Field Format | 11 v 11, including the keeper |
+| Practice | 60 minutes pre-game |
+| Game Length | 85 minute game with two 40-minute halves. Monitored substitutions. |
+| Footwear | Sneakers or turf shoes; plastic/grass cleats allowed |
+
+<a id="EPIC"></a>
+
+## EPIC: Boys & Girls with Special Needs (all ages)
+
+| Field | Detail |
+| --- | --- |
+| Division Head (click to Contact) | [Serhat Krause](mailto:epic@wssl.org,%20joshuafnoble@gmail.com?subject=WSSL%20VIP) and [Joshua Noble](mailto:joshuafnoble@gmail.com,%20jim.karpe@gmail.com) |
+| Field | Booker T. Washington field |
+| Field Size | Varies depending on age |
+| Day of Play | Sunday |
+| Ball Size | Size 4 Ball |
+| Team Size | Varies depending on age |
+| On-Field Format | Varies depending on age |
+| Practice | Varies depending on age |
+| Game Length | Varies depending on age |
+| Footwear | Sneakers or Turf shoes (no Cleats) |
