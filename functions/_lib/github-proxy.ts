@@ -293,13 +293,22 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
     const fileChanges = isRecord(input.fileChanges) ? input.fileChanges : {};
     const additions = Array.isArray(fileChanges.additions) ? fileChanges.additions : [];
     const deletions = Array.isArray(fileChanges.deletions) ? fileChanges.deletions : [];
+    const changedPaths = new Set<string>();
     for (const change of [...additions, ...deletions]) {
       const changePath = isRecord(change) ? change.path : undefined;
       if (!assertAllowedPath(changePath)) {
         const shown = typeof changePath === 'string' && changePath ? changePath : '(empty path)';
         return deny(`This part of the repository is not available to the editor: ${shown}`);
       }
+      changedPaths.add(changePath);
     }
+
+    // I4: the mutation's *result selection* is a second way to read repository content —
+    // see `scanFileSelections` — so every `file(path: …)` it asks for must be one of the
+    // paths this same commit is changing, the shape Sveltia's own `file_N: file(path: …)
+    // { oid }` selections take.
+    const selectionDenial = scanFileSelections(query, changedPaths);
+    if (selectionDenial) return selectionDenial;
 
     // `createCommitOnBranch` has no author or committer field — GitHub attributes the
     // commit to whoever the token belongs to, which is the bot. The editor is recorded in
@@ -341,9 +350,51 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
         return deny(`This part of the repository is not available to the editor: ${filePath || '(empty path)'}`);
       }
     }
+
+    // I4: see `scanFileSelections` — a read-only query's result selection is scoped the
+    // same way `object(expression: …)` is, just without a changed-files list to check
+    // against.
+    const selectionDenial = scanFileSelections(query, null);
+    if (selectionDenial) return selectionDenial;
   }
 
   return { kind: 'forward', path: '/graphql', body: JSON.stringify({ ...parsed, variables }) };
+}
+
+/**
+ * I4: even once a query's `object(expression: …)` reads and a mutation's `fileChanges` are
+ * scoped, the result *selection* is a second way to reach repository content — GitHub's
+ * `Commit.file(path: "…")` resolves to a `TreeEntry` for any path in the resulting tree,
+ * regardless of what the rest of the query or mutation touched, and `object { ... on Blob {
+ * text } }` under it returns that file's content. So every `file(path: …)` call anywhere in
+ * the query text must be exactly that shape — a literal string argument, nothing else — and
+ * name a path under the content roots. `changedPaths`, when given, additionally restricts it
+ * to paths the same commit is already changing: Sveltia's own mutation only ever selects
+ * `file_N: file(path: "<changed path>") { oid }` for the files it just wrote.
+ */
+function scanFileSelections(query: string, changedPaths: Set<string> | null): ProxyDecision | undefined {
+  const fileCallRe = /\bfile\s*\(\s*([^)]*)\)/g;
+  let call: RegExpExecArray | null;
+  while ((call = fileCallRe.exec(query))) {
+    const arg = call[1].trim();
+    const argMatch = /^path\s*:\s*("(?:[^"\\]|\\.)*")$/.exec(arg);
+    if (!argMatch) {
+      return deny('A file selection must name its path directly, not through a variable');
+    }
+    let filePath: string;
+    try {
+      filePath = JSON.parse(argMatch[1]) as string;
+    } catch {
+      return deny('A file selection must name its path directly, not through a variable');
+    }
+    if (!assertAllowedPath(filePath)) {
+      return deny(`This part of the repository is not available to the editor: ${filePath || '(empty path)'}`);
+    }
+    if (changedPaths && !changedPaths.has(filePath)) {
+      return deny(`A file selection may only name a file this commit is changing: ${filePath}`);
+    }
+  }
+  return undefined;
 }
 
 /**

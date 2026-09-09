@@ -244,8 +244,10 @@ describe('classifyRequest — commit paths are scoped to the content roots (C1)'
   const graphql = (body: unknown, method = 'POST') =>
     ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
 
+  // No file(path:) result selection here — this block is about scoping `fileChanges`
+  // itself; the selection's own scoping (I4) has its own describe block below.
   const COMMIT_MUTATION =
-    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/data/site.json") { oid } } } }';
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate } } }';
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
@@ -375,6 +377,65 @@ describe('classifyRequest — GraphQL file reads are scoped (I3)', () => {
 
   it('refuses an expression with no path after the ref', () => {
     expect(graphql({ query: readQuery('main') }).kind).toBe('deny');
+  });
+});
+
+describe('classifyRequest — GraphQL result selections cannot read arbitrary files (I4)', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const commitInput = (overrides: Record<string, unknown> = {}) => ({
+    branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+    expectedHeadOid: 'deadbeef',
+    fileChanges: {
+      additions: [{ path: 'src/content/pages/about/history.md', contents: 'e30=' }],
+      deletions: [],
+    },
+    message: { headline: 'content: update page "about/history"' },
+    ...overrides,
+  });
+
+  const REAL_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/content/pages/about/history.md") { oid } } } }';
+
+  it("allows Sveltia's own file_N: file(path: …) { oid } selection for a file the commit is changing", () => {
+    expect(graphql({ query: REAL_MUTATION, variables: { input: commitInput() } }).kind).toBe('forward');
+  });
+
+  const LEAK_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/content/pages/about/history.md") { oid } leak: file(path: "wrangler.toml") { object { ... on Blob { text } } } } } }';
+
+  it('refuses a leak: file(path: "wrangler.toml") selection smuggled beside a legitimate change', () => {
+    expect(graphql({ query: LEAK_MUTATION, variables: { input: commitInput() } }).kind).toBe('deny');
+  });
+
+  const VAR_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!, $p: String!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: $p) { oid } } } }';
+
+  it('refuses a file(path: $var) selection that does not name its path directly', () => {
+    const decision = graphql({
+      query: VAR_MUTATION,
+      variables: { input: commitInput(), p: 'src/content/pages/about/history.md' },
+    });
+    expect(decision.kind).toBe('deny');
+  });
+
+  const OTHER_ALLOWED_PATH_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/content/pages/about/history.md") { oid } other: file(path: "src/data/site.json") { oid } } } }';
+
+  it('refuses a file(path:) selection naming an allowed-root path the commit is not changing', () => {
+    expect(graphql({ query: OTHER_ALLOWED_PATH_MUTATION, variables: { input: commitInput() } }).kind).toBe('deny');
+  });
+
+  const readFileQuery = (path: string) =>
+    `query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { file_0: file(path: ${JSON.stringify(path)}) { oid } } }`;
+
+  it('allows a read-only query selecting file(path:) under an allowed content root', () => {
+    expect(graphql({ query: readFileQuery('src/data/site.json') }).kind).toBe('forward');
+  });
+
+  it('refuses a read-only query selecting file(path:) outside the allowed roots', () => {
+    expect(graphql({ query: readFileQuery('functions/api/chat.ts') }).kind).toBe('deny');
   });
 });
 
