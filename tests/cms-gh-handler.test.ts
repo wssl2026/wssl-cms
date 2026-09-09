@@ -343,7 +343,7 @@ describe('/api/cms/gh/* — GraphQL', () => {
   it('records the editor on a commit it forwards', async () => {
     const input = {
       branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-      expectedHeadOid: 'abc',
+      expectedHeadOid: 'c'.repeat(40),
       fileChanges: { additions: [], deletions: [] },
       message: { headline: 'content: update about "index"' },
     };
@@ -365,7 +365,7 @@ describe('/api/cms/gh/* — GraphQL', () => {
   it('refuses a commit that touches a path outside the content roots (403, C1)', async () => {
     const input = {
       branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-      expectedHeadOid: 'abc',
+      expectedHeadOid: 'c'.repeat(40),
       fileChanges: { additions: [{ path: 'functions/api/evil.ts', contents: 'ZXZpbA==' }], deletions: [] },
       message: { headline: 'content: update about "index"' },
     };
@@ -379,7 +379,7 @@ describe('/api/cms/gh/* — GraphQL', () => {
   it('refuses a commit aimed at a branch other than the configured one (403, I2)', async () => {
     const input = {
       branch: { repositoryNameWithOwner: REPO, branchName: 'feature-x' },
-      expectedHeadOid: 'abc',
+      expectedHeadOid: 'c'.repeat(40),
       fileChanges: { additions: [], deletions: [] },
       message: { headline: 'content: update about "index"' },
     };

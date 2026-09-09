@@ -14,6 +14,9 @@ const EMAIL = 'jane.doe@wssl.org';
 /** The shape every test starts from; individual tests override what they are about. */
 const BRANCH = 'main';
 
+/** `expectedHeadOid` is a commit SHA, so every fixture uses a real 40-hex one. */
+const HEAD_OID = 'd'.repeat(40);
+
 function ask(overrides: Partial<Parameters<typeof classifyRequest>[0]> = {}) {
   return classifyRequest({ method: 'GET', path: '/user', repo: REPO, branch: BRANCH, email: EMAIL, ...overrides });
 }
@@ -142,7 +145,7 @@ describe('classifyRequest — GraphQL', () => {
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-    expectedHeadOid: 'deadbeef',
+    expectedHeadOid: HEAD_OID,
     fileChanges: { additions: [{ path: 'src/data/site.json', contents: 'e30=' }], deletions: [] },
     message: { headline: 'content: update settings "site"' },
     ...overrides,
@@ -251,7 +254,7 @@ describe('classifyRequest — commit paths are scoped to the content roots (C1)'
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-    expectedHeadOid: 'deadbeef',
+    expectedHeadOid: HEAD_OID,
     fileChanges: { additions: [{ path: 'src/data/site.json', contents: 'e30=' }], deletions: [] },
     message: { headline: 'content: update settings "site"' },
     ...overrides,
@@ -311,7 +314,7 @@ describe('classifyRequest — a commit may only land on the production branch (I
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-    expectedHeadOid: 'deadbeef',
+    expectedHeadOid: HEAD_OID,
     fileChanges: { additions: [], deletions: [] },
     message: { headline: 'content: update settings "site"' },
     ...overrides,
@@ -386,7 +389,7 @@ describe('classifyRequest — GraphQL result selections cannot read arbitrary fi
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-    expectedHeadOid: 'deadbeef',
+    expectedHeadOid: HEAD_OID,
     fileChanges: {
       additions: [{ path: 'src/content/pages/about/history.md', contents: 'e30=' }],
       deletions: [],
@@ -448,7 +451,7 @@ describe('classifyRequest — a commit trailer cannot be smuggled through the he
 
   const commitInput = (overrides: Record<string, unknown> = {}) => ({
     branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
-    expectedHeadOid: 'deadbeef',
+    expectedHeadOid: HEAD_OID,
     fileChanges: { additions: [], deletions: [] },
     message: { headline: 'content: update settings "site"' },
     ...overrides,
@@ -471,6 +474,173 @@ describe('classifyRequest — a commit trailer cannot be smuggled through the he
     const decision = graphql({ query: COMMIT_MUTATION, variables: { input: commitInput() } });
     const sent = JSON.parse((decision as { body: string }).body);
     expect(sent.variables.input.message.headline).toBe('content: update settings "site"');
+  });
+});
+
+describe('classifyRequest — GraphQL is judged on its parsed AST, not on its text', () => {
+  const graphql = (body: unknown, method = 'POST') =>
+    ask({ method, path: '/api/graphql', body: typeof body === 'string' ? body : JSON.stringify(body) });
+
+  const query = (inner: string) =>
+    `query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { ${inner} } }`;
+
+  // GraphQL lets a comment run from `#` to the end of the line anywhere a space may go,
+  // including between a field name and its argument list — which is exactly where a text
+  // scan for `file(` or `object(` stops seeing the call it was looking for.
+  it('sees through a # comment between `file` and its arguments', () => {
+    expect(graphql({ query: query('f: file #comment\n(path: "wrangler.toml") { oid }') }).kind).toBe('deny');
+    expect(graphql({ query: query('f: file #comment\n(path: "src/data/site.json") { oid }') }).kind).toBe('forward');
+  });
+
+  it('sees through a # comment between `object` and its arguments', () => {
+    const hidden = 'o: object #c\n(expression: "main:wrangler.toml") { ... on Blob { text } }';
+    expect(graphql({ query: query(hidden) }).kind).toBe('deny');
+  });
+
+  it('treats a comma as the insignificant whitespace GraphQL says it is', () => {
+    expect(graphql({ query: query('f: file(path: "src/data/site.json",) { oid }') }).kind).toBe('forward');
+    expect(graphql({ query: query('f: file(path: "wrangler.toml",) { oid }') }).kind).toBe('deny');
+  });
+
+  it('refuses a document that defines a fragment, however innocent the fragment looks', () => {
+    const withFragment =
+      'query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { ...leak } } fragment leak on Repository { object(expression: "main:wrangler.toml") { ... on Blob { text } } }';
+    expect(graphql({ query: withFragment }).kind).toBe('deny');
+  });
+
+  it('refuses an inline fragment standing in for the root field', () => {
+    const inlineRoot =
+      'query($owner: String!, $repo: String!) { ... on Query { repository(owner: $owner, name: $repo) { id } } }';
+    expect(graphql({ query: inlineRoot }).kind).toBe('deny');
+  });
+
+  it('refuses a document carrying two operations', () => {
+    const two =
+      'query A($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { id } } query B { viewer { login } }';
+    expect(graphql({ query: two }).kind).toBe('deny');
+  });
+
+  it('refuses a query that does not parse, and says nothing about why', () => {
+    const decision = graphql({ query: 'query { repository(owner: ' });
+    expect(decision).toEqual({ kind: 'deny', reason: 'GraphQL not accepted' });
+  });
+
+  it('refuses a file selection whose path is a variable, even a legitimate-looking one', () => {
+    const withVar =
+      'query($owner: String!, $repo: String!, $p: String!) { repository(owner: $owner, name: $repo) { f: file(path: $p) { oid } } }';
+    expect(graphql({ query: withVar, variables: { p: 'src/data/site.json' } }).kind).toBe('deny');
+  });
+
+  it('allows object(oid: $sha) once the variable resolves to a 40-hex SHA, and refuses it otherwise', () => {
+    const withVar =
+      'query($owner: String!, $repo: String!, $sha: GitObjectID!) { repository(owner: $owner, name: $repo) { content_0: object(oid: $sha) { ... on Blob { text } } } }';
+    expect(graphql({ query: withVar, variables: { sha: 'a'.repeat(40) } }).kind).toBe('forward');
+    expect(graphql({ query: withVar, variables: { sha: 'main' } }).kind).toBe('deny');
+    expect(graphql({ query: withVar, variables: {} }).kind).toBe('deny');
+  });
+
+  it("allows Sveltia's own literal object(oid:) blob read", () => {
+    const literal = query(`content_0: object(oid: "${'b'.repeat(40)}") { ... on Blob { text isTruncated } }`);
+    expect(graphql({ query: literal }).kind).toBe('forward');
+  });
+
+  it('refuses an argument-less object selection, the way a whole tree would be read', () => {
+    const wholeTree = query(
+      'ref(qualifiedName: "main") { target { ... on Commit { tree { entries { path object { ... on Blob { text } } } } } } }',
+    );
+    expect(graphql({ query: wholeTree }).kind).toBe('deny');
+  });
+
+  it("accepts Sveltia's real file-contents query, aliases and inline fragments and all", () => {
+    // `git/github/files.js` `getFileContentsQuery`, as `fetchGraphQL` normalizes it.
+    const real =
+      'query($owner: String!, $repo: String!, $branch: String!) { repository(owner: $owner, name: $repo) { ' +
+      `content_0: object(oid: "${'a'.repeat(40)}") { ... on Blob { text isTruncated } } ` +
+      'commit_0: ref(qualifiedName: $branch) { target { ... on Commit { history(first: 1, path: "src/content/pages/index.md") { nodes { author { name email user { id: databaseId login } } committedDate } } } } } } }';
+    const decision = graphql({ query: real, variables: { branch: 'main' } });
+    expect(decision.kind).toBe('forward');
+    const sent = JSON.parse((decision as { body: string }).body);
+    expect(sent.query).toBe(real);
+    expect(sent.variables).toMatchObject({ owner: 'wssl2026', repo: 'wssl-cms', branch: 'main' });
+  });
+
+  it("accepts Sveltia's real default-branch and last-commit queries", () => {
+    const defaultBranch =
+      'query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { defaultBranchRef { name } } }';
+    const lastCommit =
+      'query($owner: String!, $repo: String!, $branch: String!) { repository(owner: $owner, name: $repo) { ref(qualifiedName: $branch) { target { ... on Commit { history(first: 1) { nodes { oid message } } } } } } }';
+    expect(graphql({ query: defaultBranch }).kind).toBe('forward');
+    expect(graphql({ query: lastCommit, variables: { branch: 'main' } }).kind).toBe('forward');
+  });
+
+  const REAL_MUTATION =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid committedDate file_0: file(path: "src/data/site.json") { oid } } } }';
+
+  const realInput = (overrides: Record<string, unknown> = {}) => ({
+    branch: { repositoryNameWithOwner: REPO, branchName: 'main' },
+    expectedHeadOid: HEAD_OID,
+    fileChanges: { additions: [{ path: 'src/data/site.json', contents: 'e30=' }], deletions: [] },
+    message: { headline: 'content: update settings "site"' },
+    ...overrides,
+  });
+
+  it("accepts Sveltia's real commit mutation and rewrites the message in the variables", () => {
+    const decision = graphql({ query: REAL_MUTATION, variables: { input: realInput() } });
+    expect(decision.kind).toBe('forward');
+    const sent = JSON.parse((decision as { body: string }).body);
+    // The query text is forwarded byte for byte, so Sveltia's `file_0` alias still resolves.
+    expect(sent.query).toBe(REAL_MUTATION);
+    expect(sent.variables.input.message.headline).toBe('content: update settings "site"');
+    expect(sent.variables.input.message.body).toBe(`Co-authored-by: ${EMAIL} <${EMAIL}>`);
+  });
+
+  it('refuses a commit whose expectedHeadOid is not a full commit SHA', () => {
+    expect(graphql({ query: REAL_MUTATION, variables: { input: realInput({ expectedHeadOid: 'main' }) } }).kind)
+      .toBe('deny');
+  });
+
+  it('refuses a commit that adds a file with no contents', () => {
+    const input = realInput({
+      fileChanges: { additions: [{ path: 'src/data/site.json' }], deletions: [] },
+    });
+    expect(graphql({ query: REAL_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('validates and rewrites a mutation whose input is an inline object literal', () => {
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: { additions: [{ path: "src/data/site.json", contents: "e30=" }], deletions: [] }' +
+      ' message: { headline: "content: update settings \\"site\\"", body: "Co-authored-by: boss@wssl.org <boss@wssl.org>" }' +
+      ' }) { commit { oid committedDate file_0: file(path: "src/data/site.json") { oid } } } }';
+    const decision = graphql({ query: inline });
+    expect(decision.kind).toBe('forward');
+    const sent = JSON.parse((decision as { body: string }).body);
+    expect(sent.query).toContain(`Co-authored-by: ${EMAIL} <${EMAIL}>`);
+    expect(sent.query).not.toContain('boss@wssl.org');
+    expect(sent.query).toContain('file_0: file(path: "src/data/site.json")');
+  });
+
+  it('refuses an inline-input mutation that reaches outside the content roots', () => {
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: { additions: [{ path: "functions/api/evil.ts", contents: "ZXZpbA==" }], deletions: [] }' +
+      ' message: { headline: "x" } }) { commit { oid } } }';
+    expect(graphql({ query: inline }).kind).toBe('deny');
+  });
+
+  it('refuses a commit that reads a file back by expression', () => {
+    const leak =
+      'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid ' +
+      'leak: object(expression: "main:src/data/site.json") { ... on Blob { text } } } } }';
+    expect(graphql({ query: leak, variables: { input: realInput() } }).kind).toBe('deny');
+  });
+
+  it('refuses a subscription outright', () => {
+    expect(graphql({ query: 'subscription { repository { id } }' }).kind).toBe('deny');
   });
 });
 
