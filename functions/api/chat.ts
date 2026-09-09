@@ -1,5 +1,7 @@
 import corpusJson from '../_lib/corpus.json';
+import indexJson from '../_lib/index.json';
 import type { CorpusDoc } from '../_lib/corpus-types';
+import type { IndexEntry } from '../_lib/index-types';
 import { validateHistory } from '../_lib/chat';
 import { eventsToStream } from '../_lib/sse';
 import { checkDailyCap } from '../_lib/usage';
@@ -11,6 +13,8 @@ interface Env {
   ANTHROPIC_API_KEY: string;
   GEMINI_API_KEY: string;
   GEMINI_MODEL?: string;
+  /** `index` (default) or `cache`. See README "How Ask WSSL answers". */
+  GEMINI_RETRIEVAL?: string;
   /** `gemini` (default) or `anthropic`. See README "Ask WSSL". */
   LLM_PROVIDER?: string;
   USAGE: KVNamespace;
@@ -18,6 +22,8 @@ interface Env {
 }
 
 const corpus = corpusJson as CorpusDoc[];
+// The page map for the Gemini provider's index mode; both files are rebuilt by `npm run build`.
+const pageIndex = indexJson as IndexEntry[];
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -36,7 +42,7 @@ function selectProvider(env: Env): ProviderSelection {
   const name = (env.LLM_PROVIDER ?? 'gemini').trim().toLowerCase();
   if (name === 'gemini') {
     if (!env.GEMINI_API_KEY?.trim()) return { ok: false, providerName: name, reason: 'missing_key' };
-    return { ok: true, provider: createGeminiProvider(env) };
+    return { ok: true, provider: createGeminiProvider(env, undefined, pageIndex) };
   }
   if (name === 'anthropic') {
     if (!env.ANTHROPIC_API_KEY?.trim()) return { ok: false, providerName: name, reason: 'missing_key' };

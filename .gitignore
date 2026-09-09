@@ -4,6 +4,7 @@ dist/
 .wrangler/
 .dev.vars
 functions/_lib/corpus.json
+functions/_lib/index.json
 scripts/migration-report.json
 .superpowers/
 .idea/

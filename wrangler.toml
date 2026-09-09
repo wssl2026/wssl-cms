@@ -13,6 +13,12 @@ DAILY_CAP = "200"
 LLM_PROVIDER = "gemini"
 GEMINI_MODEL = "gemini-3.8-flash"
 
+# How the Gemini provider gets the site's content in front of the model. "index" (the default)
+# sends a one-line-per-page map and lets the model fetch the pages it needs with a read_pages
+# tool; "cache" sends the whole corpus once an hour through a Google explicit context cache.
+# See README "How Ask WSSL answers". Any other value is treated as "index".
+GEMINI_RETRIEVAL = "index"
+
 # The content repository the editor at /admin commits to. Placeholders — see README
 # "Before this goes live". The bot token itself is the GITHUB_BOT_TOKEN secret, set in
 # the Cloudflare dashboard (and in .dev.vars locally), never here.

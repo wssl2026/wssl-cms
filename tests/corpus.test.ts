@@ -1,7 +1,7 @@
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildCorpus, homeDoc } from '../scripts/lib/corpus';
+import { buildCorpus, buildCorpusWithMeta, homeDoc } from '../scripts/lib/corpus';
 
 function fixture(): string {
   const root = mkdtempSync(join(tmpdir(), 'corpus-'));
@@ -34,6 +34,21 @@ describe('buildCorpus', () => {
   it('puts the home announcements first when there are any', async () => {
     const docs = await buildCorpus(fixture(), dataDir({ cards: [{ title: 'News', body: 'Hi' }] }, { active: false }));
     expect(docs.map((d) => d.title)).toEqual(['Home page announcements', 'About', 'Refund Policy']);
+  });
+});
+
+describe('buildCorpusWithMeta', () => {
+  it('returns the same documents plus the frontmatter descriptions, keyed by URL', async () => {
+    const root = fixture();
+    writeFileSync(
+      join(root, 'registration/fees.md'),
+      '---\ntitle: Fees\npath: fees\ndescription: What the season costs and what the fee covers.\n---\nFees are $200.\n',
+    );
+    const build = await buildCorpusWithMeta(root, NO_HOME());
+    expect(build.docs).toEqual(await buildCorpus(root, NO_HOME()));
+    expect(build.descriptions).toEqual({
+      'https://www.wssl.org/registration/fees/': 'What the season costs and what the fee covers.',
+    });
   });
 });
 

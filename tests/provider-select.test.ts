@@ -10,6 +10,9 @@ vi.mock('@google/genai/web', () => ({
       }),
     };
     models = {
+      // Index mode's tool turns: this fake never asks for a page, so it goes straight to the
+      // streaming answer below.
+      generateContent: async () => ({ candidates: [{ content: { role: 'model', parts: [{ text: 'no tools needed' }] } }] }),
       generateContentStream: async () =>
         (async function* () {
           yield { text: 'gemini says hello' };
@@ -139,14 +142,40 @@ describe('provider selection', () => {
     spy.mockRestore();
   });
 
+  it('answers from the page map by default, and from the context cache when GEMINI_RETRIEVAL=cache', async () => {
+    // Index mode is the default: the real corpus never goes to the model, so no cache is made.
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await events(await onRequestPost(makeContext({ ...base, USAGE: fakeKV() })));
+    const indexLine = spy.mock.calls.map((c) => JSON.parse(c[0] as string)).find((l) => l.event === 'chat_index_mode');
+    expect(indexLine).toBeTruthy();
+    expect(indexLine.rounds).toBe(0);
+
+    spy.mockClear();
+    await events(await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), GEMINI_RETRIEVAL: 'cache' })));
+    const lines = spy.mock.calls.map((c) => JSON.parse(c[0] as string));
+    expect(lines.find((l) => l.event === 'gemini_cache_created')).toBeTruthy();
+    expect(lines.find((l) => l.event === 'chat_index_mode')).toBeUndefined();
+    spy.mockRestore();
+  });
+
   it('logs one cost line per request that carries no message content', async () => {
     const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
     await events(await onRequestPost(makeContext({ ...base, USAGE: fakeKV() })));
-    const cost = spy.mock.calls.map((c) => JSON.parse(c[0] as string)).find((l) => 'usage' in l);
+    const cost = spy.mock.calls.map((c) => JSON.parse(c[0] as string)).find((l) => l.event === 'chat_index_mode');
     expect(cost).toBeTruthy();
     expect(cost.model).toBe(DEFAULT_GEMINI_MODEL);
     expect(cost.day_count).toBe(1);
     expect(JSON.stringify(cost)).not.toContain('hi');
     spy.mockRestore();
+
+    // The same guarantee in cache mode, where the cost line carries the token usage.
+    const spy2 = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await events(await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), GEMINI_RETRIEVAL: 'cache' })));
+    const cached = spy2.mock.calls.map((c) => JSON.parse(c[0] as string)).find((l) => 'usage' in l);
+    expect(cached).toBeTruthy();
+    expect(cached.model).toBe(DEFAULT_GEMINI_MODEL);
+    expect(cached.day_count).toBe(1);
+    expect(JSON.stringify(cached)).not.toContain('hi');
+    spy2.mockRestore();
   });
 });

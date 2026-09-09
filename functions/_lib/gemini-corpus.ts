@@ -27,11 +27,40 @@ const ABSOLUTE = /https:\/\/(?:www\.)?wssl\.org(\/[^\s)\]}"'<>]*)?/g;
 // Relative links the model may emit, e.g. "[Contact](/about/contact/)" or a bare path.
 const RELATIVE = /(?:^|[\s(\[])(\/[A-Za-z0-9][A-Za-z0-9\-_./]*)/g;
 
-function normalisePath(path: string): string {
+/** One canonical form for a site path: leading and trailing slash, no trailing punctuation. */
+export function normalisePath(path: string): string {
   let p = path.replace(/[.,;:!?"']+$/, '');
   if (!p.startsWith('/')) p = `/${p}`;
   if (!p.endsWith('/')) p = `${p}/`;
   return p;
+}
+
+/** The corpus keyed by normalised path, so a link or a tool argument can be looked up directly. */
+export function corpusByPath(corpus: CorpusDoc[]): Map<string, CorpusDoc> {
+  const byPath = new Map<string, CorpusDoc>();
+  for (const doc of corpus) {
+    try { byPath.set(normalisePath(new URL(doc.url).pathname), doc); } catch { /* skip a malformed doc URL */ }
+  }
+  return byPath;
+}
+
+/**
+ * The page a reference points at, whether it arrived as an absolute wssl.org URL or as a bare
+ * path. Shared by `extractCitations` and the index mode's `read_pages` tool so a model that
+ * writes `/registration/refund-policy` gets the same page either way.
+ */
+export function findDoc(reference: string, byPath: Map<string, CorpusDoc>): CorpusDoc | undefined {
+  const ref = String(reference ?? '').trim();
+  if (!ref) return undefined;
+  let path = ref;
+  if (/^https?:\/\//i.test(ref)) {
+    let url: URL;
+    try { url = new URL(ref); } catch { return undefined; }
+    // Another site's URL is not one of our pages, whatever its path says.
+    if (url.hostname !== 'wssl.org' && !url.hostname.endsWith('.wssl.org')) return undefined;
+    path = url.pathname;
+  }
+  return byPath.get(normalisePath(path));
 }
 
 /**
@@ -40,10 +69,7 @@ function normalisePath(path: string): string {
  * adds one on its own) are matched against the corpus and reported as citation events.
  */
 export function extractCitations(text: string, corpus: CorpusDoc[]): { title: string; url: string }[] {
-  const byPath = new Map<string, CorpusDoc>();
-  for (const doc of corpus) {
-    try { byPath.set(normalisePath(new URL(doc.url).pathname), doc); } catch { /* skip a malformed doc URL */ }
-  }
+  const byPath = corpusByPath(corpus);
 
   const hits: { index: number; path: string }[] = [];
   for (const m of text.matchAll(ABSOLUTE)) hits.push({ index: m.index ?? 0, path: normalisePath(m[1] ?? '/') });

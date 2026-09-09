@@ -11,6 +11,9 @@ import { SYSTEM_PROMPT } from '../functions/_lib/chat';
 import { eventsToStream } from '../functions/_lib/sse';
 import type { ClientEvent } from '../functions/_lib/sse';
 
+// Every test in this file exercises the explicit-context-cache mode, so each provider is
+// created with GEMINI_RETRIEVAL: 'cache'. Index mode (the default) is covered separately in
+// tests/gemini-index-provider.test.ts.
 const corpus = [
   { title: 'Refund Policy', url: 'https://www.wssl.org/registration/refund-policy/', text: 'aaa' },
   { title: 'Contact', url: 'https://www.wssl.org/about/contact/', text: 'bbb' },
@@ -104,7 +107,7 @@ describe('gemini provider — explicit context cache', () => {
   it('creates the cache on a cold isolate and records it in KV', async () => {
     const client = fakeClient();
     const kv = fakeKV();
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv }).events);
 
     expect(client.createCalls).toHaveLength(1);
@@ -129,7 +132,7 @@ describe('gemini provider — explicit context cache', () => {
     });
     const client = fakeClient();
     const lines: Record<string, unknown>[] = [];
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv, log: (l) => lines.push(l) }).events);
 
     expect(client.createCalls).toHaveLength(0);
@@ -143,7 +146,7 @@ describe('gemini provider — explicit context cache', () => {
       [key]: JSON.stringify({ name: 'cachedContents/stale', expiresAt: new Date(Date.now() - 1000).toISOString() }),
     });
     const client = fakeClient();
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv }).events);
 
     expect(client.createCalls).toHaveLength(1);
@@ -156,7 +159,7 @@ describe('gemini provider — explicit context cache', () => {
       [key]: JSON.stringify({ name: 'cachedContents/warm', expiresAt: new Date(Date.now() + 600_000).toISOString() }),
     });
     const client = fakeClient({ generateThrows: [apiError('CachedContent not found (or permission denied)', 403)] });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collect(provider.stream(history, corpus, { kv }).events);
 
     expect(client.createCalls).toHaveLength(1);
@@ -170,7 +173,7 @@ describe('gemini provider — explicit context cache', () => {
     const client = fakeClient({
       generateThrows: [apiError('CachedContent not found', 403), apiError('CachedContent not found', 403)],
     });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collectStream(eventsToStream(provider.stream(history, corpus, { kv: fakeKV() })));
     expect(out.at(-1).type).toBe('error');
     expect(client.generateCalls).toHaveLength(2);
@@ -196,7 +199,7 @@ describe('gemini provider — explicit context cache', () => {
         },
       },
     };
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
 
     const lines: Record<string, unknown>[] = [];
     await collect(provider.stream(history, corpus, { kv, log: (l) => lines.push(l) }).events);
@@ -214,7 +217,7 @@ describe('gemini provider — explicit context cache', () => {
 
   it('classifies a 403 from caches.create as permanent, like the other permanent statuses', async () => {
     const client = fakeClient({ createThrows: apiError('permission denied', 403) });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     expect(geminiIsolateState.cacheUnavailable).toBe(true);
 
@@ -228,7 +231,7 @@ describe('gemini provider — inline fallback', () => {
   it('sends the corpus as the first user turn when caching is rejected, logging once per isolate', async () => {
     const client = fakeClient({ createThrows: apiError('Cached content is too small', 400) });
     const lines: Record<string, unknown>[] = [];
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
 
     const params = client.generateCalls[0];
@@ -248,7 +251,7 @@ describe('gemini provider — inline fallback', () => {
 
   it('keeps trying to cache after a transient failure, so one 5xx does not cost the isolate a cache', async () => {
     const client = fakeClient({ createThrows: apiError('backend error', 503) });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     expect(client.createCalls).toHaveLength(2);
@@ -264,7 +267,7 @@ describe('gemini provider — streaming, citations and logging', () => {
         { text: 'See https://www.wssl.org/registration/refund-policy/ and /about/contact/.' },
       ],
     });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_MODEL: 'gemini-3.8-flash' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_MODEL: 'gemini-3.8-flash', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
 
     expect(out.filter((e) => e.type === 'text').map((e: any) => e.text)).toEqual([
@@ -280,7 +283,7 @@ describe('gemini provider — streaming, citations and logging', () => {
 
   it('asks for the configured model, no thinking budget and a bounded answer', async () => {
     const client = fakeClient();
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     const params = client.generateCalls[0];
     expect(params.model).toBe(DEFAULT_GEMINI_MODEL);
@@ -291,7 +294,7 @@ describe('gemini provider — streaming, citations and logging', () => {
 
   it('maps assistant turns to the model role', async () => {
     const client = fakeClient();
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(
       [
         { role: 'user', content: 'hi' },
@@ -306,7 +309,7 @@ describe('gemini provider — streaming, citations and logging', () => {
 
   it('retries once without thinkingConfig when the model rejects the field, giving the retry the full output budget', async () => {
     const client = fakeClient({ generateThrows: [apiError('Unknown name "thinking_config"', 400)] });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collect(provider.stream(history, corpus, { kv: fakeKV() }).events);
     expect(client.generateCalls).toHaveLength(2);
     expect(client.generateCalls[1].config.thinkingConfig).toBeUndefined();
@@ -327,7 +330,7 @@ describe('gemini provider — streaming, citations and logging', () => {
       ],
     });
     const lines: Record<string, unknown>[] = [];
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     await collect(provider.stream(history, corpus, { kv: fakeKV(), log: (l) => lines.push(l) }).events);
 
     const usage = lines.find((l) => 'usage' in l)!;
@@ -347,7 +350,7 @@ describe('gemini provider — errors and cancellation', () => {
   it('surfaces an upstream 4xx as the shared error event with status and detail', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const client = fakeClient({ generateThrows: [apiError('API key not valid. Please pass a valid API key.', 400)] });
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'bad' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'bad', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collectStream(eventsToStream(provider.stream(history, corpus, { kv: fakeKV() })));
 
     expect(out).toHaveLength(1);
@@ -375,7 +378,7 @@ describe('gemini provider — errors and cancellation', () => {
         },
       },
     };
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const rs = eventsToStream(provider.stream(history, corpus, { kv: fakeKV() }));
     // Let the provider reach the upstream call before cancelling.
     await new Promise((r) => setTimeout(r, 10));
@@ -388,7 +391,7 @@ describe('gemini provider — errors and cancellation', () => {
     const throwingFactory = () => {
       throw new Error('An API Key must be set when running in a browser');
     };
-    const provider = createGeminiProvider({ GEMINI_API_KEY: '' }, throwingFactory as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: '', GEMINI_RETRIEVAL: 'cache' }, throwingFactory as any);
 
     // Calling stream() itself must not throw — the client is only constructed once iteration
     // begins, inside the try/catch eventsToStream wraps around the async generator.
@@ -404,7 +407,7 @@ describe('gemini provider — errors and cancellation', () => {
   it('still answers when KV is unavailable', async () => {
     const client = fakeClient();
     const brokenKv = { get: async () => { throw new Error('kv down'); }, put: async () => { throw new Error('kv down'); } } as any;
-    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k' }, () => client as any);
+    const provider = createGeminiProvider({ GEMINI_API_KEY: 'k', GEMINI_RETRIEVAL: 'cache' }, () => client as any);
     const out = await collect(provider.stream(history, corpus, { kv: brokenKv }).events);
     expect(out.at(-1)!.type).toBe('done');
   });

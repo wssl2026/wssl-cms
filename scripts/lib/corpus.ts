@@ -29,9 +29,21 @@ export async function homeDoc(dataDir = 'src/data'): Promise<CorpusDoc | null> {
   return { title: 'Home page announcements', url: `${SITE}/`, text: parts.join('\n\n') };
 }
 
-export async function buildCorpus(root = 'src/content/pages', dataDir = 'src/data'): Promise<CorpusDoc[]> {
+/**
+ * The corpus plus the frontmatter that does not belong in it. `description` is not sent to
+ * the model as page content, but the index map (`scripts/lib/index-map.ts`) uses it as a
+ * page's one-line summary, so it is returned alongside rather than stuffed into `CorpusDoc`.
+ */
+export interface CorpusBuild {
+  docs: CorpusDoc[];
+  /** Frontmatter `description` by page URL, for pages that have one. */
+  descriptions: Record<string, string>;
+}
+
+export async function buildCorpusWithMeta(root = 'src/content/pages', dataDir = 'src/data'): Promise<CorpusBuild> {
   const files = (await fg('**/*.md', { cwd: root })).sort();
   const docs: CorpusDoc[] = [];
+  const descriptions: Record<string, string> = {};
   const home = await homeDoc(dataDir);
   if (home) docs.push(home);
   for (const file of files) {
@@ -40,7 +52,13 @@ export async function buildCorpus(root = 'src/content/pages', dataDir = 'src/dat
     const text = content.trim();
     if (!text) continue; // section index pages with no body add nothing and the API rejects empty documents
     const id = file.replace(/\.md$/, '');
-    docs.push({ title: String(data.title), url: SITE + urlFor(id, String(data.path ?? '')), text });
+    const url = SITE + urlFor(id, String(data.path ?? ''));
+    docs.push({ title: String(data.title), url, text });
+    if (typeof data.description === 'string' && data.description.trim()) descriptions[url] = data.description.trim();
   }
-  return docs;
+  return { docs, descriptions };
+}
+
+export async function buildCorpus(root = 'src/content/pages', dataDir = 'src/data'): Promise<CorpusDoc[]> {
+  return (await buildCorpusWithMeta(root, dataDir)).docs;
 }
