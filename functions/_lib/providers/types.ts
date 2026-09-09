@@ -1,6 +1,6 @@
 import type { ClientMessage } from '../chat';
 import type { CorpusDoc } from '../corpus-types';
-import type { ClientEvent } from '../sse';
+import type { ProviderEvent } from '../sse';
 
 /**
  * The seam between the /api/chat handler and whichever model answers. The handler
@@ -18,12 +18,14 @@ export interface ProviderDeps {
 }
 
 export interface ProviderStream {
-  events: AsyncIterable<ClientEvent>;
+  events: AsyncIterable<ProviderEvent>;
   /** Called when the visitor closes the panel: stop paying for tokens. */
   cancel?(): void;
 }
 
 export interface Provider {
   readonly name: string;
+  /** `index` | `cache` | `anthropic` — the `retrieval` column of the question log (Task 19). */
+  readonly retrieval: string;
   stream(history: ClientMessage[], corpus: CorpusDoc[], deps: ProviderDeps): ProviderStream;
 }

@@ -195,7 +195,7 @@ describe('gemini provider — index retrieval mode: the tool loop', () => {
     expect(out.filter((e) => e.type === 'citation')).toEqual([
       { type: 'citation', title: 'Refund Policy', url: corpus[0].url, quote: '' },
     ]);
-    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL, usage: { prompt_tokens: 0, candidates_tokens: 0 } });
   });
 
   it('reads the function calls off the candidate parts when the response has no functionCalls accessor', async () => {
@@ -459,7 +459,7 @@ describe('gemini provider — index retrieval mode: logging and errors', () => {
     expect(out.filter((e) => e.type === 'citation')).toEqual([
       { type: 'citation', title: 'Refund Policy', url: corpus[0].url, quote: '' },
     ]);
-    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL, usage: { prompt_tokens: 0, candidates_tokens: 0 } });
   });
 
   it('surfaces an upstream failure on the first turn as the shared SSE error event', async () => {

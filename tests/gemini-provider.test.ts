@@ -165,7 +165,7 @@ describe('gemini provider — explicit context cache', () => {
     expect(client.createCalls).toHaveLength(1);
     expect(client.generateCalls).toHaveLength(2);
     expect(client.generateCalls[1].config.cachedContent).toBe('cachedContents/cache-1');
-    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: DEFAULT_GEMINI_MODEL, usage: { prompt_tokens: 0, candidates_tokens: 0 } });
     expect(JSON.parse(kv.store.get(key)).name).toBe('cachedContents/cache-1');
   });
 
@@ -278,7 +278,7 @@ describe('gemini provider — streaming, citations and logging', () => {
       { type: 'citation', title: 'Refund Policy', url: 'https://www.wssl.org/registration/refund-policy/', quote: '' },
       { type: 'citation', title: 'Contact', url: 'https://www.wssl.org/about/contact/', quote: '' },
     ]);
-    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'gemini-3.8-flash' });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'gemini-3.8-flash', usage: { prompt_tokens: 0, candidates_tokens: 0 } });
   });
 
   it('asks for the configured model, no thinking budget and a bounded answer', async () => {

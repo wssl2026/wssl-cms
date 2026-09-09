@@ -1,7 +1,7 @@
 import type { CorpusDoc } from '../corpus-types';
 import type { ClientMessage } from '../chat';
 import type { IndexEntry } from '../index-types';
-import type { ClientEvent } from '../sse';
+import type { ProviderEvent } from '../sse';
 import type { Provider, ProviderDeps, ProviderStream } from './types';
 import { DEFAULT_GEMINI_MODEL, defaultClientFactory } from './gemini-shared';
 import type { GeminiClientFactory, GeminiEnv } from './gemini-shared';
@@ -47,18 +47,22 @@ export function createGeminiProvider(
 ): Provider {
   const model = env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL;
   const mode = retrievalMode(env);
+  // Known at provider-construction time (`index` is fixed once the module loads), so the
+  // question log's `retrieval` column reflects what actually answers, not just the config —
+  // an empty `index.json` silently falls back to cache mode below.
+  const useIndex = mode === 'index' && index.length > 0;
   return {
     name: 'gemini',
+    retrieval: useIndex ? 'index' : 'cache',
     stream(history: ClientMessage[], corpus: CorpusDoc[], deps: ProviderDeps): ProviderStream {
       const controller = new AbortController();
       const signal = controller.signal;
-      const useIndex = mode === 'index' && index.length > 0;
       if (mode === 'index' && !useIndex) {
         // `functions/_lib/index.json` is regenerated on every build; if it somehow arrived
         // empty, answering from the whole corpus is far better than answering from an empty map.
         deps.log?.({ event: 'gemini_index_missing', model });
       }
-      const events: AsyncIterable<ClientEvent> = useIndex
+      const events: AsyncIterable<ProviderEvent> = useIndex
         ? geminiIndexEvents(makeClient, env.GEMINI_API_KEY, model, history, corpus, index, deps, signal)
         : geminiCacheEvents(makeClient, env.GEMINI_API_KEY, model, history, corpus, deps, signal);
       return { events, cancel: () => controller.abort() };

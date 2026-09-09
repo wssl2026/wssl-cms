@@ -3,7 +3,7 @@ import type { CorpusDoc } from '../corpus-types';
 import type { ClientMessage } from '../chat';
 import { buildRequest } from '../chat';
 import { REFUSAL_TEXT, eventsToStream } from '../sse';
-import type { ClientEvent } from '../sse';
+import type { ProviderEvent } from '../sse';
 import type { Provider, ProviderDeps, ProviderStream } from './types';
 
 type UpstreamStream = AsyncIterable<Anthropic.Beta.BetaRawMessageStreamEvent> & {
@@ -19,7 +19,7 @@ export async function* anthropicEvents(
   stream: UpstreamStream,
   docUrls: string[],
   onFinal?: (m: Anthropic.Beta.BetaMessage) => void,
-): AsyncGenerator<ClientEvent> {
+): AsyncGenerator<ProviderEvent> {
   for await (const event of stream) {
     if (event.type !== 'content_block_delta') continue;
     const delta = event.delta as { type: string; text?: string; citation?: { document_index: number; document_title?: string | null; cited_text: string } };
@@ -32,7 +32,11 @@ export async function* anthropicEvents(
   const final = await stream.finalMessage();
   onFinal?.(final);
   if (final.stop_reason === 'refusal') yield { type: 'text', text: REFUSAL_TEXT };
-  yield { type: 'done', served_by: final.model };
+  yield {
+    type: 'done',
+    served_by: final.model,
+    usage: { prompt_tokens: final.usage?.input_tokens ?? 0, candidates_tokens: final.usage?.output_tokens ?? 0 },
+  };
 }
 
 /** Kept for the direct Anthropic path and its tests: the SSE body for one Claude stream. */
@@ -45,6 +49,7 @@ export interface AnthropicEnv { ANTHROPIC_API_KEY: string }
 export function createAnthropicProvider(env: AnthropicEnv): Provider {
   return {
     name: 'anthropic',
+    retrieval: 'anthropic',
     stream(history: ClientMessage[], corpus: CorpusDoc[], deps: ProviderDeps): ProviderStream {
       const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
       const upstream = client.beta.messages.stream(buildRequest(corpus, history) as never) as unknown as UpstreamStream;

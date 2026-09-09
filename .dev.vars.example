@@ -14,3 +14,8 @@ GITHUB_BOT_TOKEN=github_pat_...
 # /api/cms/v1 accepts unauthenticated requests from localhost only and commits as
 # "Local editor <local@wssl.org>". Setting it makes a valid Access JWT mandatory again.
 # CF_ACCESS_AUD=
+
+# Task 19: shared secret for the question-log Apps Script (QUESTION_LOG_URL is the plain
+# web-app URL, set in wrangler.toml). Leave both unset to keep logging off. See README
+# "Question log (Google Sheet)".
+QUESTION_LOG_SECRET=

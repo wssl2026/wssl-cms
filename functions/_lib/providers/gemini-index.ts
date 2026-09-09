@@ -3,7 +3,7 @@ import type { ClientMessage } from '../chat';
 import { corpusByPath, extractCitations, findDoc } from '../gemini-corpus';
 import type { IndexEntry } from '../index-types';
 import { renderIndex } from '../index-types';
-import type { ClientEvent } from '../sse';
+import type { ProviderEvent } from '../sse';
 import type { LogLine, ProviderDeps } from './types';
 import {
   GEMINI_SYSTEM_PROMPT,
@@ -145,7 +145,7 @@ export async function* geminiIndexEvents(
   index: IndexEntry[],
   deps: ProviderDeps,
   signal: AbortSignal,
-): AsyncGenerator<ClientEvent> {
+): AsyncGenerator<ProviderEvent> {
   // Constructed inside the generator so a constructor throw becomes an SSE `error` event —
   // see the same note in `gemini-cache.ts`.
   const client: GeminiClient = makeClient(apiKey);
@@ -286,5 +286,9 @@ export async function* geminiIndexEvents(
     seen.add(c.url);
     yield { type: 'citation', title: c.title, url: c.url, quote: '' };
   }
-  yield { type: 'done', served_by: served };
+  yield {
+    type: 'done',
+    served_by: served,
+    usage: { prompt_tokens: promptTokens, candidates_tokens: candidatesTokens },
+  };
 }

@@ -8,8 +8,10 @@ import { checkDailyCap } from '../_lib/usage';
 import type { Provider } from '../_lib/providers/types';
 import { createAnthropicProvider } from '../_lib/providers/anthropic';
 import { createGeminiProvider } from '../_lib/providers/gemini';
+import { buildQuestionRecord, questionLogConfigured, sendQuestionRecord } from '../_lib/question-log';
+import type { QuestionLogEnv } from '../_lib/question-log';
 
-interface Env {
+interface Env extends QuestionLogEnv {
   ANTHROPIC_API_KEY: string;
   GEMINI_API_KEY: string;
   GEMINI_MODEL?: string;
@@ -51,7 +53,7 @@ function selectProvider(env: Env): ProviderSelection {
   return { ok: false, providerName: name, reason: 'unknown_provider' };
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
   if (!origin || origin !== url.origin) return json({ error: 'forbidden' }, 403);
@@ -79,8 +81,39 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const log = (line: Record<string, unknown>) => console.log(JSON.stringify({ ...line, day_count: cap.count }));
 
+  // Task 19: log each question to a Google Sheet. `questionLogConfigured` is checked once,
+  // up front, so a deployment without QUESTION_LOG_URL/QUESTION_LOG_SECRET never schedules a
+  // waitUntil task at all — logging is entirely opt-in by config. The record is built and
+  // sent only from `onComplete` (after the SSE stream finishes), so it can carry the full
+  // answer, resolved citations and elapsed time — and, because it runs inside
+  // `eventsToStream`'s own try/catch/finally, a bug here can never delay or break the response
+  // the visitor is reading.
+  const question = history.at(-1)?.content ?? '';
+  const start = Date.now();
+  const shouldLog = questionLogConfigured(env);
+
+  const stream = eventsToStream(provider.stream(history, corpus, { kv: env.USAGE, log }), {
+    onComplete: shouldLog
+      ? (info) => {
+          const record = buildQuestionRecord({
+            question,
+            answer: info.text,
+            citations: info.citations,
+            provider: provider.name,
+            model: info.served_by ?? '',
+            retrieval: provider.retrieval,
+            status: info.status,
+            ms: Date.now() - start,
+            usage: info.usage,
+            secret: env.QUESTION_LOG_SECRET ?? '',
+          });
+          waitUntil(sendQuestionRecord(env, record));
+        }
+      : undefined,
+  });
+
   return new Response(
-    eventsToStream(provider.stream(history, corpus, { kv: env.USAGE, log })),
+    stream,
     { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no' } },
   );
 };

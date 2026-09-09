@@ -29,6 +29,7 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
   - `GITHUB_BOT_TOKEN` — the fine-grained PAT above.
 - **Ask WSSL's model** — `LLM_PROVIDER` in `wrangler.toml` is `gemini` (the alternative is `anthropic`; any other value makes the widget answer "temporarily unavailable" and logs `chat_provider_misconfigured`). `GEMINI_MODEL` is `gemini-3.8-flash` and `GEMINI_RETRIEVAL` is `index` (the alternative is `cache`; see "How Ask WSSL answers" and Cost). Confirm the key can actually call that model **once, before launch**: `GEMINI_API_KEY=... npm run check-gemini-model` lists every model the key may use and exits non-zero if `GEMINI_MODEL` is not among them.
 - **`DAILY_CAP`** (plain var, default `200`) — the number of Ask WSSL questions answered per UTC day before the widget answers "reached its daily limit". Raise or lower it after watching the first week; see Cost below.
+- **Question log** (optional) — set `QUESTION_LOG_URL` in `wrangler.toml` and the `QUESTION_LOG_SECRET` Pages secret to log every Ask WSSL question to a Google Sheet. See "Question log (Google Sheet)" below. Off by default — leave both unset to skip this.
 - **`docs/runbook.md`** — operations runbook, written in Task 12 at deploy time. It does not exist yet.
 
 ## How `/admin` signs editors in
@@ -45,6 +46,53 @@ Locally, `/admin` still expects `npx decap-server` on port 8081 and commits to y
   - **`index`** (the default, `gemini-index.ts`) — the model gets a map of the site instead of the site: one line per page (`- title — url — summary [headings]`), about 6K tokens for all 87 pages, built into `functions/_lib/index.json` (git-ignored, rebuilt by `npm run build` beside `corpus.json`). It then calls a `read_pages` tool with the URLs it wants and answers from those pages. The loop is boxed in — at most **2 tool rounds**, **4 pages per call** and **6 pages per question**, so a question is at most three model calls — and it always ends with a streamed answer, so the visitor sees text arriving even when the model never called the tool. A URL that is not in the corpus comes back as `(no such page)` rather than being dropped, and a tool the provider does not offer is ignored with a `gemini_unknown_tool` log line. Sources are the pages actually read, plus any other corpus page the answer links to. One JSON line per question, `chat_index_mode`, carries `rounds`, `pages_read` and the token counts — never page text, the question or the answer. If `index.json` somehow arrives empty the provider logs `gemini_index_missing` and falls back to cache mode rather than answering from an empty map.
   - **`cache`** (`gemini-cache.ts`) — the whole corpus plus the system prompt goes into a Google **explicit context cache** that lives an hour; its name is recorded in the `USAGE` KV namespace under `gemini-cache:<model>:<sha256 of corpus+prompt>`, so every request in that hour reuses it (log line `gemini_cache_hit`). Change any page and the hash changes, so the next question writes a fresh cache instead of answering from stale content. If the cache turns out to be gone the function rebuilds it and retries once; if the model refuses to cache at all — usually the corpus is under the minimum token count — it logs `gemini_cache_unavailable` and sends the corpus inline instead. A response with no exception but nothing usable in it (no cache name) is treated the same way — inline for that one request — without giving up on caching for the isolate.
 - **`anthropic`** (`functions/_lib/providers/anthropic.ts`) — unchanged: the corpus as citation-enabled documents with a 1-hour prompt cache, and Claude's own citation deltas.
+
+## Question log (Google Sheet)
+
+Every answered Ask WSSL question can be logged to a Google Sheet, so the owner can see what families are asking and where the assistant falls short. It is **off by default** and entirely opt-in by configuration — set both `QUESTION_LOG_URL` and `QUESTION_LOG_SECRET` to turn it on. Logging never touches the visitor's answer: it happens after `functions/api/chat.ts` finishes streaming the SSE response, scheduled with `context.waitUntil` so it cannot delay or fail the request, and every failure (a rejected fetch, a non-2xx response, a timeout) is caught and reduced to a `question_log_error` log line carrying only the HTTP status — never thrown, never the question or answer content.
+
+What is recorded, one row per question: the timestamp, the question (trimmed, at most 2000 characters), the first 500 characters of the answer, the distinct source URLs cited, the provider and model, the retrieval mode (`index` / `cache` / `anthropic`), a status (`ok`, `error`, or `refusal`), how long the answer took, and the prompt/candidate token counts. **Nothing else** — no IP address, no user agent, no conversation history beyond the single question just asked.
+
+### Setting up the sheet (no coding required)
+
+1. Create a new Google Sheet named **"Ask WSSL questions"** (any name works, but this keeps it recognizable).
+2. Open **Extensions → Apps Script**, delete the placeholder code, and paste in exactly this:
+
+   ```javascript
+   const SECRET = PropertiesService.getScriptProperties().getProperty('SECRET');
+   const HEADERS = ['ts', 'question', 'answer_excerpt', 'sources', 'provider', 'model', 'retrieval', 'status', 'ms', 'prompt_tokens', 'candidates_tokens'];
+   function doPost(e) {
+     const body = JSON.parse(e.postData.contents || '{}');
+     if (!SECRET || body.secret !== SECRET) return ContentService.createTextOutput('forbidden').setMimeType(ContentService.MimeType.TEXT);
+     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+     if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+     sheet.appendRow(HEADERS.map((h) => body[h] == null ? '' : String(body[h])));
+     return ContentService.createTextOutput('ok').setMimeType(ContentService.MimeType.TEXT);
+   }
+   ```
+
+3. In the Apps Script editor, go to **Project Settings → Script properties → Add script property**. Name it `SECRET` and set it to a long random string (a password generator's output is fine) — this is the shared secret that stops strangers from writing junk rows into the sheet. Keep this value somewhere safe; the same value goes into `QUESTION_LOG_SECRET` below.
+4. Click **Deploy → New deployment**. For "Select type" choose **Web app**. Set **Execute as** to **Me**, and **Who has access** to **Anyone**. Click **Deploy** and authorize the script when prompted.
+5. Copy the **Web app URL** it gives you (it looks like `https://script.google.com/macros/s/.../exec`).
+6. In `wrangler.toml`, set `QUESTION_LOG_URL` to that URL.
+7. In the Cloudflare Pages dashboard (Settings → Environment variables), add the secret `QUESTION_LOG_SECRET` with the same random string from step 3.
+8. Redeploy the site. Ask a question through the widget on the live site; a row should appear in the sheet within a few seconds.
+
+**Why "Anyone" for access?** The Cloudflare function that posts the row is not signed in with a Google account, so the web app must accept unauthenticated requests — that is what "Anyone" means for an Apps Script web app. It does **not** mean anyone can read your sheet or run arbitrary code: the script only exposes the one `doPost` entry point above, and that checks the `SECRET` on every request before writing anything. Anyone who does not know the secret gets back `forbidden` and nothing is written.
+
+**Retention (optional).** To automatically delete rows older than 12 months, add this function in the same Apps Script project and attach a time-driven trigger to it (in the Apps Script editor, the clock icon on the left → **Add Trigger** → choose `prune`, event source **Time-driven**, a monthly timer):
+
+```javascript
+function prune() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - 12);
+  const values = sheet.getDataRange().getValues();
+  for (let row = values.length; row > 1; row--) {
+    if (new Date(values[row - 1][0]) < cutoff) sheet.deleteRow(row);
+  }
+}
+```
 
 ## Cost
 

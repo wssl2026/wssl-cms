@@ -1,7 +1,7 @@
 import type { CorpusDoc } from '../corpus-types';
 import type { ClientMessage } from '../chat';
 import { corpusHash, extractCitations, renderCorpus } from '../gemini-corpus';
-import type { ClientEvent } from '../sse';
+import type { ProviderEvent } from '../sse';
 import type { LogLine, ProviderDeps } from './types';
 import {
   CORPUS_ACK,
@@ -117,7 +117,7 @@ export async function* geminiCacheEvents(
   corpus: CorpusDoc[],
   deps: ProviderDeps,
   signal: AbortSignal,
-): AsyncGenerator<ClientEvent> {
+): AsyncGenerator<ProviderEvent> {
   // An async generator's body does not run until the first `.next()` call, so constructing
   // the client here (rather than synchronously in `stream()`, before iteration begins) means
   // a constructor throw — e.g. the SDK's "An API Key must be set" — surfaces through the same
@@ -192,5 +192,9 @@ export async function* geminiCacheEvents(
   for (const c of extractCitations(answer, corpus)) {
     yield { type: 'citation', title: c.title, url: c.url, quote: '' };
   }
-  yield { type: 'done', served_by: served };
+  yield {
+    type: 'done',
+    served_by: served,
+    usage: { prompt_tokens: usage.promptTokenCount ?? 0, candidates_tokens: usage.candidatesTokenCount ?? 0 },
+  };
 }
