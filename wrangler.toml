@@ -28,7 +28,7 @@ GITHUB_BRANCH = "main"
 # Cloudflare Access, which is what lets editors sign in by email. The team domain is
 # shown in Zero Trust → Settings → Custom Pages; the AUD tag is on the Access
 # application's Overview tab.
-CF_ACCESS_TEAM_DOMAIN = "dry-tooth-c304.cloudflareaccess.com"
+CF_ACCESS_TEAM_DOMAIN = "wssl.cloudflareaccess.com"
 CF_ACCESS_AUD = "f7ba57c368cdc9b179bd0c6337bc28e16bdd19129676de8b250ba3184e64add6"
 
 [[kv_namespaces]]
