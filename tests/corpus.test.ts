@@ -10,6 +10,7 @@ function fixture(): string {
   writeFileSync(join(root, 'registration/refund-policy.md'), '---\ntitle: Refund Policy\npath: refund-policy\n---\nNo refunds for travel.\n');
   writeFileSync(join(root, 'registration/secret.md'), '---\ntitle: Secret\npath: secret\ndraft: true\n---\nhidden\n');
   writeFileSync(join(root, 'about/index.md'), '---\ntitle: About\npath: ""\n---\nWe are WSSL.\n');
+  writeFileSync(join(root, 'about/empty.md'), '---\ntitle: Empty\npath: empty\n---\n\n');
   return root;
 }
 

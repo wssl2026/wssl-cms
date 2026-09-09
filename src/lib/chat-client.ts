@@ -2,7 +2,7 @@ export type ClientEvent =
   | { type: 'text'; text: string }
   | { type: 'citation'; title: string; url: string; quote: string }
   | { type: 'done'; served_by?: string }
-  | { type: 'error'; message: string; status?: number; code?: string };
+  | { type: 'error'; message: string; status?: number; code?: string; detail?: string };
 
 export interface ChatMessage { role: 'user' | 'assistant'; content: string }
 

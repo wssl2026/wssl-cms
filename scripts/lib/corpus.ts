@@ -37,8 +37,10 @@ export async function buildCorpus(root = 'src/content/pages', dataDir = 'src/dat
   for (const file of files) {
     const { data, content } = matter(await readFile(join(root, file), 'utf8'));
     if (data.draft) continue;
+    const text = content.trim();
+    if (!text) continue; // section index pages with no body add nothing and the API rejects empty documents
     const id = file.replace(/\.md$/, '');
-    docs.push({ title: String(data.title), url: SITE + urlFor(id, String(data.path ?? '')), text: content.trim() });
+    docs.push({ title: String(data.title), url: SITE + urlFor(id, String(data.path ?? '')), text });
   }
   return docs;
 }

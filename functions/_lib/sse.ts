@@ -4,7 +4,7 @@ export type ClientEvent =
   | { type: 'text'; text: string }
   | { type: 'citation'; title: string; url: string; quote: string }
   | { type: 'done'; served_by?: string }
-  | { type: 'error'; message: string; status?: number; code?: string };
+  | { type: 'error'; message: string; status?: number; code?: string; detail?: string };
 
 export const REFUSAL_TEXT = "I can't help with that one. For league questions, try the Contact page: https://www.wssl.org/about/contact/";
 export const ERROR_TEXT = 'The assistant is unavailable right now. Please try again in a minute.';
@@ -48,7 +48,9 @@ export function streamToClient(stream: UpstreamStream, docUrls: string[], onFina
         const status = (err as { status?: number })?.status;
         const name = (err as Error)?.name;
         // Diagnostic metadata only (HTTP status + SDK error class), never the upstream message.
-        send({ type: 'error', message: ERROR_TEXT, ...(status ? { status } : {}), ...(name && name !== 'Error' ? { code: name } : {}) });
+        // 4xx validation messages are safe to surface (they never carry credentials) and are the only way to diagnose a bad request from the client side.
+        const detail = status && status >= 400 && status < 500 && status !== 401 ? String((err as Error)?.message ?? '').slice(0, 300) : undefined;
+        send({ type: 'error', message: ERROR_TEXT, ...(status ? { status } : {}), ...(name && name !== 'Error' ? { code: name } : {}), ...(detail ? { detail } : {}) });
       } finally {
         controller.close();
       }
