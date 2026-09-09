@@ -74,7 +74,8 @@ export function createCmsProxyHandler(overrides: Partial<CmsProxyDeps> = {}): Pa
         author = { name: email, email };
       } catch (e) {
         console.log(JSON.stringify({ cms: 'auth', status: 401, message: errorMessage(e) }));
-        return json({ error: 'Your sign-in has expired. Reload /admin/ and sign in again.' }, 401);
+        // The verification reason (issuer/audience/key/claim) is diagnostic text, never the token.
+        return json({ error: 'Your sign-in has expired. Reload /admin/ and sign in again.', detail: errorMessage(e) }, 401);
       }
     } else if (LOCAL_HOSTS.includes(new URL(request.url).hostname)) {
       // Local development only: `wrangler pages dev` with no Access in front of it.
