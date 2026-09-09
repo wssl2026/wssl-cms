@@ -3,7 +3,7 @@
 # only the declared fallback Decap needs before it detects that proxy.
 backend:
   name: github
-  repo: OWNER/REPO
+  repo: wssl2026/wssl-cms
   branch: main
   commit_messages:
     create: 'content: create {{collection}} "{{slug}}"'

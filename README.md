@@ -22,7 +22,7 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
   - Copy the application's **Application Audience (AUD) tag** into `CF_ACCESS_AUD` in `wrangler.toml`, and the team domain (Zero Trust → Settings → Custom Pages, e.g. `wssl.cloudflareaccess.com`) into `CF_ACCESS_TEAM_DOMAIN`.
 - **GitHub bot token** — create a **fine-grained personal access token** (Repository access: *only* the content repository; Repository permissions: **Contents: read and write**, **Metadata: read-only**) and store it as the `GITHUB_BOT_TOKEN` Pages secret. Every edit is committed by this token, with the signed-in editor recorded as the commit's author.
 - **`wrangler.toml`** — set `GITHUB_REPO` to the real `owner/repo` and `GITHUB_BRANCH` to the branch Pages builds from. The `USAGE` KV namespace `id` and `preview_id` are zeros; create them with `npx wrangler kv namespace create USAGE` (and `--preview`) and paste the ids in.
-- **`public/admin/config.yml`** — `backend.repo: OWNER/REPO` must name the real GitHub repository. It is only the fallback Decap declares before it detects the `/api/cms/v1` proxy, but it must still be right.
+- **`public/admin/config.yml`** — `backend.repo` is `wssl2026/wssl-cms` (the content repository). It is only the fallback Decap declares before it detects the `/api/cms/v1` proxy, but it must still be right.
 - **Cloudflare Pages secrets** (Settings → Environment variables, encrypted):
   - `ANTHROPIC_API_KEY` — the Ask WSSL assistant.
   - `GITHUB_BOT_TOKEN` — the fine-grained PAT above.

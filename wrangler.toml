@@ -10,7 +10,7 @@ DAILY_CAP = "200"
 # The content repository the editor at /admin commits to. Placeholders — see README
 # "Before this goes live". The bot token itself is the GITHUB_BOT_TOKEN secret, set in
 # the Cloudflare dashboard (and in .dev.vars locally), never here.
-GITHUB_REPO = "OWNER/REPO"
+GITHUB_REPO = "wssl2026/wssl-cms"
 GITHUB_BRANCH = "main"
 
 # Cloudflare Access, which is what lets editors sign in by email. The team domain is
