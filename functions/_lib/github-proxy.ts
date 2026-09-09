@@ -39,6 +39,7 @@ import type {
   FieldNode,
   ObjectFieldNode,
   ObjectValueNode,
+  OperationDefinitionNode,
   ValueNode,
 } from 'graphql/language';
 
@@ -461,6 +462,58 @@ function pinRepositoryArgument(
   return deny('A GraphQL query must name the repository through its owner and name arguments');
 }
 
+/**
+ * Denies a document that repeats a name anywhere GraphQL syntax lets a name repeat: two
+ * fields with the same name in one `ObjectValue`, two arguments with the same name on one
+ * field, or two variable definitions with the same name on one operation.
+ *
+ * This is not defense against something GitHub itself would accept ambiguously — the spec
+ * requires a validator to reject all three — but this proxy must not depend on that. For
+ * the inline-`ObjectValue` mutation form specifically, `literalToJS`'s `OBJECT` case keeps
+ * last-duplicate-wins semantics (later `Object.defineProperty` calls for the same name win,
+ * same as plain assignment would), so the semantic checks below see only the *second* of two
+ * same-named fields — but the forwarded query is the caller's own AST re-printed with only
+ * `message` replaced, so a request built as
+ * `input: { branch: { …"someone/else"… } branch: { …the real repo… } … }` would validate
+ * against the second `branch` and forward both, and it is GitHub's validator — not this
+ * proxy — that decides which one wins. Denying any duplicate outright removes that
+ * dependency entirely, for arguments and variable definitions the same way.
+ */
+function findDuplicateNames(document: DocumentNode): ProxyDecision | undefined {
+  let denial: ProxyDecision | undefined;
+  const duplicateNames = (names: string[]): boolean => new Set(names).size !== names.length;
+
+  visit(document, {
+    ObjectValue(node: ObjectValueNode) {
+      if (denial) return false;
+      if (duplicateNames(node.fields.map((field) => field.name.value))) {
+        denial = deny(GRAPHQL_NOT_ACCEPTED);
+        return false;
+      }
+      return undefined;
+    },
+    Field(node: FieldNode) {
+      if (denial) return false;
+      const args = node.arguments ?? [];
+      if (duplicateNames(args.map((argument) => argument.name.value))) {
+        denial = deny(GRAPHQL_NOT_ACCEPTED);
+        return false;
+      }
+      return undefined;
+    },
+    OperationDefinition(node: OperationDefinitionNode) {
+      if (denial) return false;
+      const defs = node.variableDefinitions ?? [];
+      if (duplicateNames(defs.map((def) => def.variable.name.value))) {
+        denial = deny(GRAPHQL_NOT_ACCEPTED);
+        return false;
+      }
+      return undefined;
+    },
+  });
+  return denial;
+}
+
 function classifyGraphQL(rawBody: string | undefined, repo: string, email: string, branch: string): ProxyDecision {
   if (!rawBody) return deny('GraphQL request has no body');
 
@@ -480,6 +533,9 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
   } catch {
     return deny(GRAPHQL_NOT_ACCEPTED);
   }
+
+  const duplicateDenial = findDuplicateNames(document);
+  if (duplicateDenial) return duplicateDenial;
 
   // One operation, no fragment definitions: Sveltia sends neither a second operation nor a
   // named fragment, and a fragment is a way to reach a field the checks below would

@@ -719,6 +719,55 @@ describe('classifyRequest — GraphQL is judged on its parsed AST, not on its te
   it('refuses a subscription outright', () => {
     expect(graphql({ query: 'subscription { repository { id } }' }).kind).toBe('deny');
   });
+
+  // I5: `literalToJS` builds an inline `ObjectValue` field by field with last-duplicate-wins
+  // semantics, but the forwarded document (the inline-input case) is the caller's own AST
+  // re-printed with only `message` replaced — so a literal repeating a field name would
+  // validate against the *second* occurrence while forwarding both, leaving it to GitHub's
+  // validator, not this proxy, to decide which one is authoritative. Denying any duplicate
+  // outright removes that dependency.
+  it('refuses an inline commit input that repeats the branch field, however the second one reads', () => {
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ' branch: { repositoryNameWithOwner: "someone/else", branchName: "main" }' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: { additions: [{ path: "src/data/site.json", contents: "e30=" }], deletions: [] }' +
+      ' message: { headline: "x" } }) { commit { oid } } }';
+    expect(graphql({ query: inline }).kind).toBe('deny');
+  });
+
+  it('refuses an inline commit input that repeats a nested field, fileChanges.additions', () => {
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: {' +
+      ' additions: [{ path: "functions/api/evil.ts", contents: "ZXZpbA==" }]' +
+      ' additions: [{ path: "src/data/site.json", contents: "e30=" }]' +
+      ' deletions: [] }' +
+      ' message: { headline: "x" } }) { commit { oid } } }';
+    expect(graphql({ query: inline }).kind).toBe('deny');
+  });
+
+  it('refuses a field that repeats an argument name', () => {
+    const repeatedArg = query('f: file(path: "src/data/site.json", path: "wrangler.toml") { oid }');
+    expect(graphql({ query: repeatedArg }).kind).toBe('deny');
+  });
+
+  it('refuses a document that declares the same variable twice', () => {
+    const twice =
+      'mutation($input: CreateCommitOnBranchInput!, $input: CreateCommitOnBranchInput!) { ' +
+      'createCommitOnBranch(input: $input) { commit { oid } } }';
+    expect(graphql({ query: twice }).kind).toBe('deny');
+  });
+
+  it("still forwards Sveltia's real mutation and query shapes — no duplicates, nothing new denied", () => {
+    expect(graphql({ query: REAL_MUTATION, variables: { input: realInput() } }).kind).toBe('forward');
+    const lastCommit =
+      'query($owner: String!, $repo: String!, $branch: String!) { repository(owner: $owner, name: $repo) { ref(qualifiedName: $branch) { target { ... on Commit { history(first: 1) { nodes { oid message } } } } } } }';
+    expect(graphql({ query: lastCommit, variables: { branch: 'main' } }).kind).toBe('forward');
+  });
 });
 
 describe('repoRelativePath', () => {
