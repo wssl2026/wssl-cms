@@ -95,10 +95,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
   const start = Date.now();
   const shouldLog = questionLogConfigured(env);
 
+  // The deferred send is registered with waitUntil *before* the Response is returned (the
+  // runtime only reliably honours waitUntil calls made while the handler is still running);
+  // it waits for the stream to finish and then posts the record. If the stream never
+  // completes (client abort that skips the finally), a 2-minute fallback resolves it as null.
+  let resolveRecord: (record: ReturnType<typeof buildQuestionRecord> | null) => void = () => {};
+  if (shouldLog) {
+    const pending = new Promise<ReturnType<typeof buildQuestionRecord> | null>((resolve) => { resolveRecord = resolve; });
+    const fallback = new Promise<null>((resolve) => setTimeout(() => resolve(null), 120_000));
+    waitUntil(Promise.race([pending, fallback]).then((record) => (record ? sendQuestionRecord(env, record) : undefined)));
+  }
+
   const stream = eventsToStream(provider.stream(history, corpus, { kv: env.USAGE, log }), {
     onComplete: shouldLog
       ? (info) => {
-          const record = buildQuestionRecord({
+          resolveRecord(buildQuestionRecord({
             session,
             question,
             answer: info.text,
@@ -110,8 +121,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
             ms: Date.now() - start,
             usage: info.usage,
             secret: env.QUESTION_LOG_SECRET ?? '',
-          });
-          waitUntil(sendQuestionRecord(env, record));
+          }));
         }
       : undefined,
   });
