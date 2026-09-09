@@ -1,0 +1,448 @@
+{
+  "items": [
+    {
+      "label": "Programs",
+      "href": "/programs/",
+      "children": [
+        {
+          "label": "Core U6-U19",
+          "href": "/programs/core/",
+          "children": [
+            {
+              "label": "Divisions - Where / When We Play",
+              "href": "/programs/core/divisions/",
+              "children": []
+            },
+            {
+              "label": "Team Formation",
+              "href": "/programs/core/team-formation/",
+              "children": []
+            },
+            {
+              "label": "Waitlists",
+              "href": "/programs/core/waitlists/",
+              "children": []
+            },
+            {
+              "label": "Free Core Weekday Training Program",
+              "href": "/programs/core/core-weekday-training/",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Travel Teams U8-U19",
+          "href": "/programs/travel-teams/",
+          "children": [
+            {
+              "label": "Travel FAQ",
+              "href": "/programs/travel-teams/travel-faq/",
+              "children": []
+            },
+            {
+              "label": "Travel Kits",
+              "href": "/programs/travel-teams/travel-kits/",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Tournament Teams U9-U12",
+          "href": "/programs/tournament-teams/",
+          "children": []
+        },
+        {
+          "label": "Development Academy U6-U14",
+          "href": "/programs/da/",
+          "children": []
+        },
+        {
+          "label": "Playground U4 and U5",
+          "href": "/programs/playground/",
+          "children": []
+        },
+        {
+          "label": "Program FAQ",
+          "href": "/programs/program-faq/",
+          "children": []
+        },
+        {
+          "label": "Red Bulls Curriculum",
+          "href": "/programs/red-bulls-curriculum/",
+          "children": []
+        },
+        {
+          "label": "Small Sided Play",
+          "href": "/programs/small-sided/",
+          "children": []
+        },
+        {
+          "label": "EPIC",
+          "href": "/programs/epic/",
+          "children": []
+        },
+        {
+          "label": "Winter Training",
+          "href": "/programs/winter-training/",
+          "children": []
+        },
+        {
+          "label": "Holiday/Summer Camps",
+          "href": "/programs/holiday-summer-camps/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Registration",
+      "href": "/registration/",
+      "children": [
+        {
+          "label": "Travel and Tournament Team Tryouts",
+          "href": "/registration/tryouts-for-travel-or-tournament-teams/",
+          "children": []
+        },
+        {
+          "label": "Register for Core / Playground / EPIC",
+          "href": "/registration/register-for-core/",
+          "children": []
+        },
+        {
+          "label": "Register for Development Academy",
+          "href": "/registration/registration-development-academy/",
+          "children": []
+        },
+        {
+          "label": "Refund Policy",
+          "href": "/registration/refund-policy/",
+          "children": []
+        },
+        {
+          "label": "Financial Aid",
+          "href": "/registration/financial-aid/",
+          "children": []
+        },
+        {
+          "label": "Proof of Age",
+          "href": "/registration/proof-of-age/",
+          "children": []
+        },
+        {
+          "label": "Parent Code of Conduct",
+          "href": "/registration/code-of-conduct-parents/",
+          "children": []
+        },
+        {
+          "label": "Player Code of Conduct",
+          "href": "/registration/player-code-of-conduct/",
+          "children": []
+        },
+        {
+          "label": "Registration FAQ",
+          "href": "/registration/registration-faq/",
+          "children": []
+        },
+        {
+          "label": "Policies and Waivers",
+          "href": "/registration/policies-and-waivers/",
+          "children": []
+        },
+        {
+          "label": "Safety",
+          "href": "/registration/safety/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Schedules",
+      "href": "/schedules/",
+      "children": [
+        {
+          "label": "Travel Games",
+          "href": "/schedules/game-schedules/travel-games/",
+          "children": []
+        },
+        {
+          "label": "Core Games",
+          "href": "/schedules/game-schedules/core-games/",
+          "children": []
+        },
+        {
+          "label": "U8-U14 Tryouts",
+          "href": "/schedules/game-schedules/tryout-schedule/",
+          "children": []
+        },
+        {
+          "label": "High School Tryouts",
+          "href": "/schedules/game-schedules/high-school-tryouts/",
+          "children": []
+        },
+        {
+          "label": "Randalls Shuttle Bus",
+          "href": "/schedules/game-schedules/bus-schedule/",
+          "children": []
+        },
+        {
+          "label": "Training Schedules",
+          "href": "/schedules/training-schedules/",
+          "children": [
+            {
+              "label": "Travel Training",
+              "href": "/schedules/training-schedules/travel-training/",
+              "children": []
+            },
+            {
+              "label": "Tournament Training",
+              "href": "/schedules/training-schedules/tournament-team-training/",
+              "children": []
+            },
+            {
+              "label": "Fall/Spring Development Academy Training Schedule",
+              "href": "/schedules/training-schedules/development-academy-schedule-fall-spring/",
+              "children": []
+            },
+            {
+              "label": "Core Weekday Open Training",
+              "href": "/schedules/training-schedules/core-weekday-open-training/",
+              "children": []
+            },
+            {
+              "label": "Winter Training Programs",
+              "href": "/schedules/training-schedules/winter-training/",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Fields",
+      "href": "/fields/",
+      "children": [
+        {
+          "label": "Overview",
+          "href": "/fields/overview/",
+          "children": []
+        },
+        {
+          "label": "Riverside Park",
+          "href": "/fields/riverside-park/",
+          "children": []
+        },
+        {
+          "label": "Randalls Island",
+          "href": "/fields/randalls-island/",
+          "children": []
+        },
+        {
+          "label": "Fredrick Douglass Playground",
+          "href": "/fields/fredrick-douglass-playground/",
+          "children": []
+        },
+        {
+          "label": "Thomas Jefferson",
+          "href": "/fields/thomas-jefferson/",
+          "children": []
+        },
+        {
+          "label": "Central Park North Meadow",
+          "href": "/fields/central-park-north-meadow/",
+          "children": []
+        },
+        {
+          "label": "Riverbank State Park",
+          "href": "/fields/jacob-schiff-playground/",
+          "children": []
+        },
+        {
+          "label": "Marx Playground",
+          "href": "/fields/marx-playground/",
+          "children": []
+        },
+        {
+          "label": "Van Cortlandt Park",
+          "href": "/fields/van-cortlandt-park/",
+          "children": []
+        },
+        {
+          "label": "Riverdale Bertino Field",
+          "href": "/fields/riverdale-bertino-field/",
+          "children": []
+        },
+        {
+          "label": "Indoor Gym Facilities",
+          "href": "/fields/indoor-gym-facilities/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Volunteers",
+      "href": "/volunteers/",
+      "children": [
+        {
+          "label": "Welcome",
+          "href": "/volunteers/coaches/coach-welcome/",
+          "children": []
+        },
+        {
+          "label": "Welcome",
+          "href": "/volunteers/referees/welcome/",
+          "children": []
+        },
+        {
+          "label": "West Side Soccer AYSO SuperCamp",
+          "href": "/volunteers/volunteers/west-side-soccer-ayso-supercamp/",
+          "children": []
+        },
+        {
+          "label": "Become a Coach",
+          "href": "/volunteers/coaches/become-coach/",
+          "children": []
+        },
+        {
+          "label": "Become an Adult Referee",
+          "href": "/volunteers/referees/new-referee/",
+          "children": []
+        },
+        {
+          "label": "SafeSport",
+          "href": "/volunteers/volunteers/safesport/",
+          "children": []
+        },
+        {
+          "label": "Certification",
+          "href": "/volunteers/coaches/certification/",
+          "children": []
+        },
+        {
+          "label": "Become a Teen Referee",
+          "href": "/volunteers/referees/teen-referee/",
+          "children": []
+        },
+        {
+          "label": "Become a Volunteer",
+          "href": "/volunteers/volunteers/become-a-volunteer/",
+          "children": []
+        },
+        {
+          "label": "Class Registration",
+          "href": "/volunteers/coaches/register-class/",
+          "children": []
+        },
+        {
+          "label": "Certification",
+          "href": "/volunteers/referees/certification/",
+          "children": []
+        },
+        {
+          "label": "Field Marshalls",
+          "href": "/volunteers/volunteers/field-marshalls/",
+          "children": []
+        },
+        {
+          "label": "Coach Code of Conduct",
+          "href": "/volunteers/coaches/coach-conduct-code/",
+          "children": []
+        },
+        {
+          "label": "Referee Classes",
+          "href": "/volunteers/referees/register-class-ref/",
+          "children": []
+        },
+        {
+          "label": "League Leadership Opportunities",
+          "href": "/volunteers/volunteers/league-leadership-opportunities/",
+          "children": []
+        },
+        {
+          "label": "Coach Resources",
+          "href": "/volunteers/coaches/coach-resources/",
+          "children": []
+        },
+        {
+          "label": "Referee Scheduler",
+          "href": "/volunteers/referees/referee-scheduler/",
+          "children": []
+        },
+        {
+          "label": "Volunteer Requirements",
+          "href": "/volunteers/volunteers/volunteers/",
+          "children": []
+        },
+        {
+          "label": "Referee FAQ",
+          "href": "/volunteers/referees/referee-faq/",
+          "children": []
+        },
+        {
+          "label": "Referee Resources",
+          "href": "/volunteers/referees/referee-resources/",
+          "children": []
+        },
+        {
+          "label": "Coaches & Referees Working Together",
+          "href": "/volunteers/coaches/coaches-referees/",
+          "children": []
+        },
+        {
+          "label": "Videos",
+          "href": "/volunteers/referees/videos/",
+          "children": []
+        },
+        {
+          "label": "Coach Feedback",
+          "href": "/volunteers/coaches/coach-comment-form/",
+          "children": []
+        },
+        {
+          "label": "Referee Feedback",
+          "href": "/volunteers/referees/referee-feedback/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "About",
+      "href": "/about/",
+      "children": [
+        {
+          "label": "WSSL Calendar",
+          "href": "/about/wssl-calendar/",
+          "children": []
+        },
+        {
+          "label": "Contact Us",
+          "href": "/about/contact/",
+          "children": []
+        },
+        {
+          "label": "Documents",
+          "href": "/about/documents/",
+          "children": []
+        },
+        {
+          "label": "WSSL and AYSO",
+          "href": "/about/wssl-ayso/",
+          "children": []
+        },
+        {
+          "label": "History",
+          "href": "/about/history/",
+          "children": []
+        },
+        {
+          "label": "WSSL Leadership",
+          "href": "/about/wssl-leadership/",
+          "children": []
+        },
+        {
+          "label": "Silent Soccer",
+          "href": "/about/silent-soccer/",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

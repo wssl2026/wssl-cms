@@ -1,0 +1,113 @@
+---
+const suggestions = [
+  'How do I register my child?',
+  'What is the refund policy?',
+  'Where are the fields?',
+  'How do I become a referee?',
+];
+---
+<button id="ask-open" class="fixed bottom-5 right-5 z-40 bg-navy text-white font-bold px-5 py-3 rounded-full shadow-lg hover:bg-gold hover:text-navy" aria-controls="ask-panel" aria-expanded="false">Ask WSSL</button>
+
+<section id="ask-panel" class="fixed bottom-5 right-5 z-50 w-[min(24rem,calc(100vw-2.5rem))] h-[min(36rem,calc(100vh-2.5rem))] bg-white border border-gray-300 rounded-xl shadow-2xl flex flex-col" hidden aria-label="Ask WSSL assistant">
+  <header class="flex items-center justify-between bg-navy text-white px-4 py-3 rounded-t-xl">
+    <span class="font-bold">Ask WSSL</span>
+    <button id="ask-close" class="text-white/80 hover:text-white" aria-label="Close">✕</button>
+  </header>
+  <div id="ask-messages" aria-live="polite" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
+    <div class="text-gray-700">Hi! I answer questions using the pages on wssl.org and link you to them. What would you like to know?</div>
+    <div id="ask-suggestions" class="flex flex-wrap gap-2">
+      {suggestions.map((s) => <button class="ask-suggest border border-navy text-navy rounded-full px-3 py-1 text-xs hover:bg-navy hover:text-white">{s}</button>)}
+    </div>
+  </div>
+  <form id="ask-form" class="border-t border-gray-200 p-3 flex gap-2">
+    <input id="ask-input" aria-label="Your question" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Ask about registration, schedules, fields…" maxlength="2000" autocomplete="off" required />
+    <button id="ask-send" class="bg-navy text-white font-bold px-4 rounded disabled:opacity-50" type="submit">Send</button>
+  </form>
+  <p class="text-[11px] text-gray-500 px-3 pb-2">Answers come from wssl.org pages and may be incomplete — check the linked page. Don't share personal or medical details.</p>
+</section>
+
+<script>
+  import { marked } from 'marked';
+  import DOMPurify from 'dompurify';
+  import { streamChat, type ChatMessage, type ClientEvent } from '../lib/chat-client';
+
+  function $(id: string): HTMLElement {
+    return document.getElementById(id) as HTMLElement;
+  }
+  const panel = $('ask-panel'), openBtn = $('ask-open'), closeBtn = $('ask-close');
+  const list = $('ask-messages'), form = $('ask-form') as HTMLFormElement, input = $('ask-input') as HTMLInputElement, send = $('ask-send') as HTMLButtonElement;
+
+  const STORAGE = 'askwssl:history';
+  let inFlight: AbortController | null = null;
+  let history: ChatMessage[] = [];
+  try { history = JSON.parse(sessionStorage.getItem(STORAGE) ?? '[]'); } catch { history = []; }
+
+  function render(md: string): string {
+    return DOMPurify.sanitize(marked.parse(md, { async: false }) as string, { ADD_ATTR: ['target'] });
+  }
+  function bubble(role: 'user' | 'assistant'): HTMLDivElement {
+    const el = document.createElement('div');
+    el.className = role === 'user' ? 'ml-8 bg-navy text-white rounded-lg px-3 py-2' : 'mr-4 bg-gray-100 rounded-lg px-3 py-2 prose prose-sm max-w-none prose-a:text-navy';
+    list.appendChild(el);
+    return el;
+  }
+  function sourcesEl(): HTMLDivElement {
+    const el = document.createElement('div');
+    el.className = 'mr-4 text-xs text-gray-600';
+    list.appendChild(el);
+    return el;
+  }
+  function scroll() { list.scrollTop = list.scrollHeight; }
+
+  for (const m of history) { bubble(m.role).innerHTML = m.role === 'user' ? DOMPurify.sanitize(m.content) : render(m.content); }
+  if (history.length) $('ask-suggestions')?.remove();
+
+  async function ask(question: string) {
+    $('ask-suggestions')?.remove();
+    history.push({ role: 'user', content: question });
+    bubble('user').textContent = question;
+    const out = bubble('assistant');
+    out.textContent = '…';
+    send.disabled = true; input.disabled = true;
+    let text = '';
+    const sources = new Map<string, string>();
+    const onEvent = (e: ClientEvent) => {
+      if (e.type === 'text') { text += e.text; out.innerHTML = render(text); }
+      else if (e.type === 'citation' && e.url) sources.set(e.url, e.title || e.url);
+      else if (e.type === 'error') { text = text || e.message; out.innerHTML = render(text); }
+      scroll();
+    };
+    inFlight?.abort();
+    const controller = new AbortController();
+    inFlight = controller;
+    try { await streamChat(history, onEvent, controller.signal); }
+    finally {
+      if (inFlight === controller) inFlight = null;
+      if (sources.size) {
+        const s = sourcesEl();
+        s.append('Sources: ');
+        const entries = [...sources].filter(([url]) => url.startsWith('https://www.wssl.org/'));
+        for (let i = 0; i < entries.length; i++) {
+          const [url, title] = entries[i];
+          const a = document.createElement('a');
+          a.href = url;
+          a.textContent = title || url;
+          a.className = 'underline';
+          s.appendChild(a);
+          if (i < entries.length - 1) s.append(' · ');
+        }
+      }
+      // An empty assistant turn would be rejected by the API on the next
+      // question, so only remember a turn that actually said something.
+      if (text.trim()) history.push({ role: 'assistant', content: text });
+      history = history.slice(-20);
+      try { sessionStorage.setItem(STORAGE, JSON.stringify(history)); } catch { /* storage unavailable */ }
+      send.disabled = false; input.disabled = false; input.focus(); scroll();
+    }
+  }
+
+  openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); });
+  closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
+  form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
+  list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
+</script>

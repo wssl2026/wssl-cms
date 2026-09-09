@@ -1,0 +1,13 @@
+---
+import { marked } from 'marked';
+interface Props { title: string; icon: string; body: string }
+const { title, icon, body } = Astro.props;
+const html = marked.parse(body, { async: false }) as string;
+---
+<div class="card rounded-md border-2 border-gold shadow-md mb-4 overflow-hidden">
+  <h5 class="card-header m-0 w-full bg-navy text-gold font-bold uppercase text-center p-2">{title}</h5>
+  <div class="card-body bg-white p-4">
+    <img src={icon} alt="" class="float-left w-9 h-9 mr-2" />
+    <div class="prose prose-sm max-w-none" set:html={html} />
+  </div>
+</div>

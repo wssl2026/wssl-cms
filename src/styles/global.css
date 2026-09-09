@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-navy: #002664;
+  --color-gold: #ffbd41;
+  --font-sans: "PT Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* PDF links get a small badge so "document download boxes" need no component */
+.prose a[href$=".pdf"]::after { content: " (PDF)"; font-size: 0.8em; color: var(--color-navy); }

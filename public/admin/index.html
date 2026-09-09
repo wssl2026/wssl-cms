@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>WSSL Site Editor</title>
+</head>
+<body>
+  <script>window.CMS_MANUAL_INIT = true;</script>
+  <!-- Pinned: a floating range would let the CDN ship new editor code into /admin unreviewed. -->
+  <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
+  <script>
+    // Editors sign in by email through Cloudflare Access, which sits in front of /admin
+    // and /api/cms and injects the Access JWT that /api/cms/v1 verifies. Decap reaches
+    // that function through its proxy backend, so `local_backend` is what points at it.
+    var isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    window.CMS.init({
+      config: isLocal
+        // Developing against `npx decap-server` on the local checkout.
+        ? { local_backend: true }
+        : {
+            local_backend: {
+              url: window.location.origin + '/api/cms/v1',
+              allowed_hosts: [window.location.hostname],
+            },
+          },
+    });
+  </script>
+</body>
+</html>

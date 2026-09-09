@@ -116,7 +116,7 @@ export default defineConfig({
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": ["@cloudflare/workers-types", "vitest/globals"],
+    "types": ["vitest/globals"],
     "resolveJsonModule": true,
     "strictNullChecks": true
   },
@@ -143,6 +143,7 @@ dist/
 .dev.vars
 functions/_lib/corpus.json
 scripts/migration-report.json
+.superpowers/
 .idea/
 .DS_Store
 ```
@@ -2625,3 +2626,77 @@ Send the board `docs/editors.md`, the `/admin/` URL, and the runbook location. A
 - **Spec coverage**: extraction (Task 3–4), layouts/nav/alerts/footer/docs styling (Task 5–6), transactional links preserved (external links untouched in Task 3, Register CTAs in Task 5–6), CMS schema + validation + auth (Task 7), deployment + AI in root layout + DNS (Tasks 9–13), permissions delta = all editors equal (Task 7 config, Task 12 collaborators), custom assistant with latest model/features (Task 9), cost table respected (Task 12 runbook), forms → Google Forms (Task 11 QA list). Blog, PDF-text corpus, role zones are declared non-goals in the spec.
 - **Type consistency**: `urlFor(id, path)` used identically in Tasks 2, 5, 8; `CorpusDoc {title,url,text}` shared by Tasks 8–9; `ClientEvent` union identical in `functions/_lib/sse.ts` and `src/lib/chat-client.ts`; `PAGE_FIELD_NAMES` order matches the Decap field order in Task 7; `validateHistory` returns exactly `ClientMessage[] | {error}` as the handler checks with `'error' in history`.
 - **Known judgment calls for the executor**: exact `yaml.stringify` quoting in Task 4 Step 4; SDK type names for `context`/`ttl`/`fallbacks` in Task 9 — adjust annotations, never the request payload.
+
+---
+
+### Task 14: Home page and header parity with the legacy site
+
+Added 2026-09-08 after the owner compared the new home page with the live one and asked to "keep the same layout and styles". Reference captures of the live site are in the SDD workspace: `legacy-home-template.html` (the home body), `legacy-custom.css` and `legacy-site.css` (the theme), `legacy-home.html` (full page).
+
+**Files:**
+- Create: `src/data/home.json`, `src/components/Carousel.astro`, `src/components/HomeCard.astro`, `tests/home.test.ts`
+- Modify: `src/pages/index.astro`, `src/components/Header.astro`, `src/components/Footer.astro`, `src/data/site.json`, `public/admin/config.yml`, `scripts/migrate.ts` (`THEME_IMAGES`), `tests/cms-config.test.ts`, `tests/nav.test.ts` (site.json shape)
+- Download once (and add to `THEME_IMAGES` so re-runs keep them): `https://www.wssl.org/sites/wssl/assets/Carousel/carousel-5.png` → `public/images/carousel-5.png`, `https://www.wssl.org/sites/wssl/assets/Image/soccerball-icon.png` → `public/images/soccerball-icon.png`, `https://www.wssl.org/sites/wssl/assets/Image/referee-icon.png` → `public/images/referee-icon.png`
+
+**Interfaces:**
+- `site.json` gains `loginUrl: "https://inleague.wssl.org"`, `searchCx: "012165111916761362607:zaoi28ltsvu"`, `footerNote` (the AYSO 501(c)(3)/donations paragraph from the legacy footer, plain text, two sentences allowed as one string with `\n\n`).
+- `home.json` shape:
+```json
+{
+  "fieldStatus": "",
+  "carousel": ["/images/carousel-1.png", "/images/carousel-2.png", "/images/carousel-3.png", "/images/carousel-4.png", "/images/carousel-5.png"],
+  "programButtons": [
+    { "label": "Core League U6-U19", "href": "/programs/core/" },
+    { "label": "Development Academy U6-U14", "href": "/programs/da/" },
+    { "label": "Travel Teams U8-U19", "href": "/programs/travel-teams/" },
+    { "label": "Tournament Teams U9-U14", "href": "/programs/tournament-teams/" },
+    { "label": "VIP Program (Special Needs)", "href": "/programs/epic/" },
+    { "label": "Playground (3 and 4 year olds)", "href": "/programs/playground/" }
+  ],
+  "cards": [
+    { "title": "Registration and Tryouts", "icon": "/images/soccerball-icon.png", "body": "<markdown of the legacy card 0 text, links preserved>" },
+    { "title": "Volunteer Training", "icon": "/images/referee-icon.png", "body": "<markdown of the legacy card 1 text, links preserved>" }
+  ]
+}
+```
+- Card `body` is Markdown rendered at build time with `marked` (editors are trusted; no DOMPurify on the server).
+
+**Layout to reproduce (from `legacy-home-template.html`):**
+1. Header: the banner image `/images/wssl-header-lg.png` centered above the nav (max width ~1200px, white/light background), then the navy nav bar: uppercase bold links in PT Sans, `Home` first, the six sections with dropdowns, then `Login` → `site.loginUrl`. Mobile keeps the Menu toggle.
+2. Home body, in a `max-w-6xl` container: (a) a full-width row with the Google Programmable Search box: `<div class="gcse-searchbox-only"></div>` plus `<script async src={`https://cse.google.com/cse.js?cx=${site.searchCx}`}></script>` (home page only); (b) a two-column row at `md+`: left = `Carousel` (the five images, auto-rotating every 5s with a tiny inline script, first image visible without JS) followed by the program buttons as a stacked `list-group` (navy background, white text, centered, gold on hover); right = `**FIELD STATUS:**` line with `home.fieldStatus` (rendered even when empty, like the legacy site), then the two `HomeCard`s (navy header bar with gold uppercase title, white body, icon before the first line).
+3. Footer: `site.footerNote` paragraph, a divider, then the social links, then the copyright line. Keep the existing quick links.
+4. Colors/typography come from `legacy-custom.css` (`.card-header`, `.list-group-item`, `.navbar` rules) — reproduce them with Tailwind utilities or a few rules in `src/styles/global.css`; do not import the legacy CSS files.
+5. Delete the four cards + "Have a question?" section from the current `index.astro`; the Ask WSSL button remains (it is in `BaseLayout`).
+
+**Decap:** add a `home` file to the `settings` collection editing `src/data/home.json` with fields: `fieldStatus` (string, optional), `carousel` (list of `image` widgets with `media_folder: public/images`, `public_folder: /images`), `programButtons` (list of `{label: string, href: string}`), `cards` (list of `{title: string, icon: string, body: markdown}`). Add `loginUrl`, `searchCx`, `footerNote` to the `site` file's fields.
+
+**Tests** (`tests/home.test.ts`): `home.json` has exactly the keys above; every `programButtons[].href` and every internal link inside `cards[].body` resolves to a published content page (reuse the `contentUrls()` approach from `tests/nav.test.ts`, extracted into `tests/helpers/content-urls.ts` and imported by both tests); every `carousel[]` and `cards[].icon` path exists under `public/`; `site.json` has `loginUrl`, `searchCx`, `footerNote`. Update `tests/cms-config.test.ts` so the settings files list includes `src/data/home.json` and the `home` file's field names equal `['fieldStatus','carousel','programButtons','cards']`.
+
+**Build checks:** after `npm run build`: `dist/index.html` contains `gcse-searchbox-only`, `cse.js?cx=012165111916761362607`, `Registration and Tryouts`, `Volunteer Training`, `Core League U6-U19`, `FIELD STATUS`, `wssl-header-lg.png`, `href="https://inleague.wssl.org"` (Login), and the footer note's "95-6205398"; `dist/registration/refund-policy/index.html` contains `wssl-header-lg.png` (banner on every page) and `>Login<`. `npm run check-links` stays clean. Take a screenshot of `http://localhost:8788/` in the in-app browser at desktop width and compare against the legacy structure: banner, navy nav, search row, carousel+buttons left, field status+cards right.
+
+**Commit:** `feat: home page and header layout matching the legacy site`
+
+---
+
+### Task 15: CMS login by email (Cloudflare Access) with a shared GitHub bot token
+
+Added 2026-09-08 at the owner's request: editors must not need GitHub accounts. Replaces the per-editor GitHub OAuth flow from Task 7.
+
+**Architecture:** Cloudflare Access (Zero Trust, "self-hosted" application, One-time PIN login, policy = allowed emails or `@wssl.org`) protects `/admin/*` and `/api/cms/*` on the zone. Decap runs with its **proxy backend** (the protocol `decap-server` speaks: `POST <proxy_url>` with a JSON `{ action, params }` body) pointed at a Pages Function `functions/api/cms/v1.ts`, which implements that protocol against the GitHub REST API using one fine-grained personal access token (Contents: read/write on the content repo only). Every request must carry a valid Access JWT (`Cf-Access-Jwt-Assertion` header, RS256, verified against `https://<team>.cloudflareaccess.com/cdn-cgi/access/certs`, `aud` = the Access application's AUD tag); the editor's `email` claim becomes the git **author** of each commit (the bot is the committer), preserving per-person history. No editorial workflow (`publish_modes: ['simple']`).
+
+**Files:**
+- Create: `functions/_lib/access-jwt.ts` (`verifyAccessJwt(token, { teamDomain, aud, fetchImpl?, now? }): Promise<{ email: string }>` using `jose`'s `createRemoteJWKSet`/`jwtVerify`; add `jose` as a dependency), `functions/_lib/github-content.ts` (thin typed client over the GitHub Contents/Trees API: `listTree(prefix)`, `getFile(path)`, `putFile(path, contentBase64, message, { author, sha? })`, `deleteFile(path, message, { author, sha })`, `getRawFile(path)`), `functions/_lib/decap-proxy.ts` (pure handler `handleProxyAction(action, params, deps): Promise<unknown>` implementing `info`, `entriesByFolder`, `entriesByFiles`, `getEntry`, `unpublishedEntries` (→ `[]`), `persistEntry`, `getMedia`, `getMediaFile`, `persistMedia`, `deleteFiles`/`deleteFile`, `getDeployPreview` (→ `null`)), `functions/api/cms/v1.ts` (POST handler: CORS none, method check, JWT verification, JSON parse, dispatch, error → JSON `{ error }` with 4xx/5xx), `tests/access-jwt.test.ts`, `tests/decap-proxy.test.ts`, `tests/cms-proxy-handler.test.ts`
+- Modify: `public/admin/index.html` (manual init: on `localhost`/`127.0.0.1` use `http://localhost:8081/api/v1` (decap-server, unchanged); otherwise `local_backend: { url: location.origin + '/api/cms/v1', allowed_hosts: [location.hostname] }`), `public/admin/config.yml` (`backend` stays `name: github` as the declared fallback with `repo: OWNER/REPO`, but remove `base_url`/`auth_endpoint`; add `publish_mode: simple`), `wrangler.toml` (`[vars] GITHUB_REPO = "OWNER/REPO"`, `GITHUB_BRANCH = "main"`, `CF_ACCESS_TEAM_DOMAIN = "<team>.cloudflareaccess.com"`, `CF_ACCESS_AUD = "<aud tag>"` as documented placeholders; the secret `GITHUB_BOT_TOKEN` is set in the dashboard / `.dev.vars`), `.dev.vars.example`, `README.md` ("Before this goes live": Access application + policy, AUD tag, team domain, bot token; remove the GitHub OAuth App items), `docs/editors.md` (email one-time-code login; no GitHub account), `tests/cms-config.test.ts`
+- Delete: `functions/api/auth.ts`, `functions/api/callback.ts`, `functions/_lib/oauth.ts`, `tests/oauth.test.ts`; drop the `/api/callback` block from `public/_headers`; drop `GITHUB_OAUTH_*` from `.dev.vars.example`.
+
+**Protocol source of truth:** install `decap-server` as a devDependency and read `node_modules/decap-server/dist/middlewares/localFs/index.js` (action handlers and response shapes) and `node_modules/decap-server/dist/middlewares/joi/index.js` (request schemas). Mirror those shapes exactly; Decap's browser client is unforgiving about them. Entries are `{ file: { path, id? }, data: <file text> }`; media files are `{ id, name, path, url|content, encoding }` (match localFs); `persistEntry` params carry `entry: { path, raw, newPath? }` (Decap ≥3 sends `dataFiles: [{ path, raw, newPath? }]` — support both), `assets: [{ path, content, encoding: 'base64' }]`, `options: { commitMessage }`. `info` returns `{ repo: <owner/repo>, publish_modes: ['simple'], type: 'github' }`.
+
+**Security requirements:** reject when the JWT header is missing/invalid (401), when `aud` or issuer mismatch, when expired; never accept a JWT in dev unless `env.CF_ACCESS_AUD` is unset **and** the request host is `localhost`/`127.0.0.1` (then use `author = { name: 'Local editor', email: 'local@wssl.org' }`); reject any `path` that is not under `src/content/pages/`, `src/data/`, or `public/uploads/` or that contains `..` (400); size-limit request bodies to 8 MB; commit messages come from Decap's `commit_messages` with the editor email appended as `Author: <email>` only in the git author field, never in the message; never log token values.
+
+**Tests:** `access-jwt.test.ts` generates an RSA key pair with `jose`, signs a JWT, serves a fake JWKS through the injected `fetchImpl`, and asserts: valid → email; wrong aud → rejects; expired → rejects; missing `email` → rejects. `decap-proxy.test.ts` drives every action against an in-memory fake of the github-content client (a `Map<path, {content, sha}>`) and asserts request/response shapes, path validation (400), author attribution on writes, `newPath` renames (delete old + put new), and that `unpublishedEntries` returns `[]`. `cms-proxy-handler.test.ts` calls `onRequestPost` with a fake context: no JWT → 401; bad JSON → 400; `info` with a valid JWT (stubbed verifier via injectable `deps`) → 200 JSON; GET → 405.
+
+**Manual check (needs a bot token; do what is possible without one):** with `GITHUB_BOT_TOKEN` in `.dev.vars` and `CF_ACCESS_AUD` unset, `npm run build && npx wrangler pages dev dist --kv USAGE --port 8790`, open `http://localhost:8790/admin/`, log in (no GitHub prompt), open a page, edit, Publish → a commit authored by `Local editor <local@wssl.org>` appears on the configured branch. Without a token, verify `POST /api/cms/v1` `{ action: 'info' }` returns the `info` shape and that a `persistEntry` fails with a clear 502 JSON error.
+
+**Docs:** `docs/editors.md` becomes: go to `https://www.wssl.org/admin/`, enter your email, enter the code from the email, edit, Publish. `README.md` "Before this goes live" lists the Access setup: Zero Trust → Access → Applications → Add (Self-hosted) → domain `www.wssl.org`, paths `/admin` and `/api/cms` (two applications or one with both paths), policy Allow → Emails / Emails ending in `@wssl.org`, identity provider One-time PIN; copy the **Application Audience (AUD) tag** into `CF_ACCESS_AUD` and the team domain into `CF_ACCESS_TEAM_DOMAIN`; create a fine-grained GitHub PAT (repository access: only the content repo; permissions: Contents read/write, Metadata read) as the `GITHUB_BOT_TOKEN` secret; set `GITHUB_REPO`.
+
+**Commit:** `feat: email login via Cloudflare Access with a GitHub bot-token CMS backend` (plus a separate `chore:` commit for the removal of the OAuth flow if you prefer two commits).

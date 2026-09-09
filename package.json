@@ -1,0 +1,46 @@
+{
+  "name": "wssl-cms",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "astro dev",
+    "build": "tsx scripts/build-corpus.ts && astro build",
+    "preview": "wrangler pages dev dist",
+    "migrate": "tsx scripts/migrate.ts",
+    "corpus": "tsx scripts/build-corpus.ts",
+    "check-links": "tsx scripts/check-links.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.124.0",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.1",
+    "dompurify": "^3.4.15",
+    "jose": "^6.2.12",
+    "marked": "^18.0.12",
+    "tailwindcss": "^4.3.3",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260908.1",
+    "@mixmark-io/domino": "^2.2.0",
+    "@types/turndown": "^5.0.6",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "tsx": "^4.23.13",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0",
+    "wrangler": "^4.129.1"
+  }
+}

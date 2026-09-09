@@ -1,0 +1,13 @@
+---
+import alerts from '../data/alerts.json';
+const colors: Record<string, string> = {
+  info: 'bg-blue-100 text-blue-900',
+  warning: 'bg-gold text-navy',
+  danger: 'bg-red-600 text-white',
+};
+---
+{alerts.active && (
+  <div class={`text-center px-4 py-2 font-semibold ${colors[alerts.level] ?? colors.info}`} role="status">
+    {alerts.href ? <a href={alerts.href} class="underline">{alerts.message}</a> : alerts.message}
+  </div>
+)}
