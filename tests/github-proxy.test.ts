@@ -303,6 +303,58 @@ describe('classifyRequest — commit paths are scoped to the content roots (C1)'
     const input = commitInput({ fileChanges: { additions: [{ contents: 'e30=' }], deletions: [] } });
     expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
   });
+
+  it('refuses fileChanges.additions sent as a bare object instead of an array', () => {
+    // GraphQL input coercion turns a bare object into a one-element list at GitHub, so
+    // this is not "no additions" — it is one unvalidated addition.
+    const input = commitInput({
+      fileChanges: { additions: { path: 'functions/api/evil.ts', contents: 'x' }, deletions: [] },
+    });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses fileChanges.deletions sent as a bare object instead of an array', () => {
+    const input = commitInput({
+      fileChanges: { additions: [], deletions: { path: 'wrangler.toml' } },
+    });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses an addition carrying a key beyond path and contents', () => {
+    const input = commitInput({
+      fileChanges: { additions: [{ path: 'src/data/site.json', contents: 'e30=', mode: '100644' }], deletions: [] },
+    });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses an addition whose contents is not a string', () => {
+    const input = commitInput({
+      fileChanges: { additions: [{ path: 'src/data/site.json', contents: 123 }], deletions: [] },
+    });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses branch carrying an id alongside repositoryNameWithOwner/branchName', () => {
+    const input = commitInput({ branch: { repositoryNameWithOwner: REPO, branchName: 'main', id: 'MDEwOlJlcG9zaXRvcnkx' } });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses an input carrying an unknown top-level key', () => {
+    for (const key of ['author', 'committer', '__proto__']) {
+      const input = { ...commitInput(), [key]: { name: 'x', email: 'x@x.com' } };
+      expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+    }
+  });
+
+  it('refuses a message missing headline', () => {
+    const input = commitInput({ message: { body: 'no headline here' } });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
+
+  it('refuses a message carrying an extra key', () => {
+    const input = commitInput({ message: { headline: 'h', body: 'b', trailer: 'sneaky' } });
+    expect(graphql({ query: COMMIT_MUTATION, variables: { input } }).kind).toBe('deny');
+  });
 });
 
 describe('classifyRequest — a commit may only land on the production branch (I2)', () => {
@@ -629,6 +681,31 @@ describe('classifyRequest — GraphQL is judged on its parsed AST, not on its te
       ` expectedHeadOid: "${HEAD_OID}"` +
       ' fileChanges: { additions: [{ path: "functions/api/evil.ts", contents: "ZXZpbA==" }], deletions: [] }' +
       ' message: { headline: "x" } }) { commit { oid } } }';
+    expect(graphql({ query: inline }).kind).toBe('deny');
+  });
+
+  it('refuses an inline-input mutation whose additions is a bare object, not a list', () => {
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: { additions: { path: "functions/api/evil.ts", contents: "ZXZpbA==" }, deletions: [] }' +
+      ' message: { headline: "x" } }) { commit { oid } } }';
+    expect(graphql({ query: inline }).kind).toBe('deny');
+  });
+
+  it('refuses an inline-input mutation smuggling __proto__ in as a top-level key', () => {
+    // `literalToJS` builds the input object field by field; a naive `out[name] = value`
+    // would let a field named `__proto__` reassign the object's prototype instead of
+    // becoming an own, checkable property, hiding it from the key allow-list entirely.
+    const inline =
+      'mutation { createCommitOnBranch(input: {' +
+      ` branch: { repositoryNameWithOwner: "${REPO}", branchName: "main" }` +
+      ` expectedHeadOid: "${HEAD_OID}"` +
+      ' fileChanges: { additions: [{ path: "src/data/site.json", contents: "e30=" }], deletions: [] }' +
+      ' message: { headline: "x" }' +
+      ' __proto__: { polluted: true }' +
+      ' }) { commit { oid } } }';
     expect(graphql({ query: inline }).kind).toBe('deny');
   });
 

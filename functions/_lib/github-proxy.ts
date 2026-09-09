@@ -50,6 +50,12 @@ export const GITHUB_API_ORIGIN = 'https://api.github.com';
  * Everything else — `functions/`, `wrangler.toml`, `package.json`, the build config — is
  * off limits: this Worker runs whatever `functions/` contains, so a commit there is a
  * deploy of arbitrary code with every secret this site holds.
+ *
+ * `ALLOWED_ROOTS` is a *write* boundary only. Reads by blob SHA (`git/blobs/<sha>`,
+ * GraphQL `object(oid:)`) are intentionally left unscoped by it — this repository holds no
+ * secrets, so an editor reading any file's content by its content-addressed hash is not a
+ * risk worth restricting. What a SHA read can never do is *choose* a path, which is why
+ * `object(expression:)` (ref + path) and `file(path:)` are scoped to these roots instead.
  */
 export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/uploads', 'public/images'];
 
@@ -167,6 +173,11 @@ const deny = (reason: string): ProxyDecision => ({ kind: 'deny', reason });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+
+/** True when every own key of `record` is one this shape allows — the mutation `input`'s
+ * defense against a field GitHub's schema accepts but this proxy never validates. */
+const hasOnlyKeys = (record: Record<string, unknown>, allowed: readonly string[]): boolean =>
+  Object.keys(record).every((key) => allowed.includes(key));
 
 /** `owner/name` → an escaped regex fragment, so a repository named `a.b` matches literally. */
 const escapeRe = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -296,7 +307,19 @@ function literalToJS(value: ValueNode): unknown {
       return value.values.map(literalToJS);
     case Kind.OBJECT: {
       const out: Record<string, unknown> = {};
-      for (const field of value.fields) out[field.name.value] = literalToJS(field.value);
+      // `out[name] = …` is not safe here: a field literally named `__proto__` would be
+      // read by the accessor on `Object.prototype` and reassign `out`'s prototype instead
+      // of becoming an own, enumerable property — which would both hide it from every
+      // `Object.keys`-based check below and mutate the object in a way nothing here
+      // intends. `defineProperty` always creates a real own property, whatever the name.
+      for (const field of value.fields) {
+        Object.defineProperty(out, field.name.value, {
+          value: literalToJS(field.value),
+          enumerable: true,
+          writable: true,
+          configurable: true,
+        });
+      }
       return out;
     }
     default:
@@ -517,8 +540,23 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
     return deny('A commit must name its input');
   }
 
-  const commitBranch = input && isRecord(input.branch) ? input.branch : undefined;
-  if (!input || !commitBranch) return deny('The commit names no branch');
+  // Every key `createCommitOnBranch`'s `input` (and each object nested in it) is allowed to
+  // carry. GitHub's own schema accepts more than this — `input.branch.id`, an `author`, a
+  // `committer` — and every one of those is a way to say something this proxy never checks;
+  // rather than deny-listing what a browser *shouldn't* send, only the shape it legitimately
+  // does send is let through. A key outside the list denies the whole request.
+  const INPUT_KEYS = ['branch', 'expectedHeadOid', 'fileChanges', 'message', 'clientMutationId'];
+  const BRANCH_KEYS = ['repositoryNameWithOwner', 'branchName'];
+  const FILE_CHANGES_KEYS = ['additions', 'deletions'];
+  const ADDITION_KEYS = ['path', 'contents'];
+  const DELETION_KEYS = ['path'];
+  const MESSAGE_KEYS = ['headline', 'body'];
+  const SHAPE_DENIED = deny(GRAPHQL_NOT_ACCEPTED);
+
+  if (!isRecord(input) || !hasOnlyKeys(input, INPUT_KEYS)) return SHAPE_DENIED;
+
+  const commitBranch = isRecord(input.branch) ? input.branch : undefined;
+  if (!commitBranch || !hasOnlyKeys(commitBranch, BRANCH_KEYS)) return deny('The commit names no branch');
   if (commitBranch.repositoryNameWithOwner !== repo) return deny('The commit is aimed at another repository');
   // I2: a commit may only land on the branch this site actually builds and deploys —
   // never another branch, however plausible-looking.
@@ -533,22 +571,39 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
   // C1: every file this commit touches must fall inside the editable content roots.
   // `createCommitOnBranch` takes the paths straight from the browser, so without this a
   // commit into `functions/` or `wrangler.toml` would be a deploy of arbitrary code.
+  //
+  // `fileChanges.additions`/`.deletions` must be arrays when present. GitHub's GraphQL input
+  // coercion turns a bare object into a one-element list before it ever reaches the schema
+  // (https://spec.graphql.org/... "single value as a list"), so a caller sending a bare
+  // object here is not "no changes" the way `Array.isArray(...) ? … : []` used to treat it —
+  // it is one change, unvalidated. A non-array is refused outright instead.
+  if (input.fileChanges !== undefined && !isRecord(input.fileChanges)) return SHAPE_DENIED;
   const fileChanges = isRecord(input.fileChanges) ? input.fileChanges : {};
-  const additions = Array.isArray(fileChanges.additions) ? fileChanges.additions : [];
-  const deletions = Array.isArray(fileChanges.deletions) ? fileChanges.deletions : [];
+  if (!hasOnlyKeys(fileChanges, FILE_CHANGES_KEYS)) return SHAPE_DENIED;
+  if (fileChanges.additions !== undefined && !Array.isArray(fileChanges.additions)) return SHAPE_DENIED;
+  if (fileChanges.deletions !== undefined && !Array.isArray(fileChanges.deletions)) return SHAPE_DENIED;
+  const additions: unknown[] = Array.isArray(fileChanges.additions) ? fileChanges.additions : [];
+  const deletions: unknown[] = Array.isArray(fileChanges.deletions) ? fileChanges.deletions : [];
+
   const changedPaths = new Set<string>();
-  for (const change of [...additions, ...deletions]) {
-    const changePath = isRecord(change) ? change.path : undefined;
+  for (const change of additions) {
+    if (!isRecord(change) || !hasOnlyKeys(change, ADDITION_KEYS)) return SHAPE_DENIED;
+    if (typeof change.contents !== 'string') return deny('A commit must carry the contents of every file it adds');
+    const changePath = change.path;
     if (!assertAllowedPath(changePath)) {
       const shown = typeof changePath === 'string' && changePath ? changePath : '(empty path)';
       return deny(`This part of the repository is not available to the editor: ${shown}`);
     }
     changedPaths.add(changePath);
   }
-  for (const change of additions) {
-    if (!isRecord(change) || typeof change.contents !== 'string') {
-      return deny('A commit must carry the contents of every file it adds');
+  for (const change of deletions) {
+    if (!isRecord(change) || !hasOnlyKeys(change, DELETION_KEYS)) return SHAPE_DENIED;
+    const changePath = change.path;
+    if (!assertAllowedPath(changePath)) {
+      const shown = typeof changePath === 'string' && changePath ? changePath : '(empty path)';
+      return deny(`This part of the repository is not available to the editor: ${shown}`);
     }
+    changedPaths.add(changePath);
   }
 
   // I4: the mutation's *result selection* is a second way to read repository content — see
@@ -562,10 +617,19 @@ function classifyGraphQL(rawBody: string | undefined, repo: string, email: strin
   // commit to whoever the token belongs to, which is the bot. The editor is recorded in
   // a trailer instead, so `git log` still answers "who changed this". Any trailer the
   // browser sent is dropped first: only Access decides whose name goes on a commit.
-  const suppliedMessage = isRecord(input.message) ? input.message : {};
-  const headline =
-    typeof suppliedMessage.headline === 'string' ? sanitizeHeadline(suppliedMessage.headline) : '';
-  const suppliedBody = typeof suppliedMessage.body === 'string' ? stripCoAuthors(suppliedMessage.body) : '';
+  //
+  // `message` must be present, a plain object, carry a string `headline` (GitHub requires
+  // one; this rewrites it rather than trusts it, but it still has to exist to rewrite), an
+  // optional string `body`, and nothing else.
+  const messageValue = input.message;
+  if (!isRecord(messageValue) || !hasOnlyKeys(messageValue, MESSAGE_KEYS)) return SHAPE_DENIED;
+  const suppliedHeadline = messageValue.headline;
+  const suppliedBodyValue = messageValue.body;
+  if (typeof suppliedHeadline !== 'string') return SHAPE_DENIED;
+  if (suppliedBodyValue !== undefined && typeof suppliedBodyValue !== 'string') return SHAPE_DENIED;
+  const suppliedMessage = messageValue;
+  const headline = sanitizeHeadline(suppliedHeadline);
+  const suppliedBody = typeof suppliedBodyValue === 'string' ? stripCoAuthors(suppliedBodyValue) : '';
   const trailer = `Co-authored-by: ${email} <${email}>`;
   const body = suppliedBody ? `${suppliedBody}\n\n${trailer}` : trailer;
 
