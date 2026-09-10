@@ -3,6 +3,12 @@ title: Divisions - Where / When We Play
 path: core/divisions
 legacyUrl: /programs/core/divisions/
 updated: 2025-12-20
+sidebar: |-
+  ![](/assets/legacy/Image/Core/wssl-core-47.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-9.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-42.jpeg)
 ---
 
 Children are separated into divisions based on gender and age. Boys teams bear a B and Girls teams bear a G. Each division also has the distinction of U6, U8, U10, etc. meaning Under 6, Under 8 and Under 10 corresponding to the age of the child. Girls may register to play in the Boys divisions. However, these are not co-ed divisions and mostly consist of boys. **We are bound by USSF age cut-offs and we do not allow children to play up or down a division.**

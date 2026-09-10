@@ -3,16 +3,21 @@ title: WSSL Leadership
 path: wssl-leadership
 legacyUrl: /about/wssl-leadership/
 updated: 2026-08-18
+sidebar: "![](/assets/legacy/Image/Logos/WSSL-logo-sq.png)"
 ---
 
-[WSSL Board of Directors](#board)
-[Divisional Leadership](#division)
-[Referee Leadership](#refs)
-[Program Leadership](#travel)
-[Other Key Volunteers](#other)
+<div class="alert">
+
+[WSSL Board of Directors](#board)\
+[Divisional Leadership](#division)\
+[Referee Leadership](#refs)\
+[Program Leadership](#travel)\
+[Other Key Volunteers](#other)\
 [Commissioners Emeritus](#emeritus)**<a id="board"></a>**
 
-**WSSL Board of Directors**
+</div>
+
+### WSSL Board of Directors
 
 [Pedro Rafael](mailto:commissioner@wssl.org), Regional Commissioner
 
@@ -32,7 +37,7 @@ Wei Tang, Secretary
 
 [Kerry Dziubek](mailto:kerry_dziubek@earthlink.net), Safety Committee Chair
 
-**WSSL Board of Advisors**
+### WSSL Board of Advisors
 
 WSSL Board of Directors, ex officio
 
@@ -48,27 +53,27 @@ Ryan Oliveri
 
 [Michael Titowsky](mailto:michael.titowsky@mdafny.com)
 
-**Committees**
+### Committees
 
-**Operations and Compliance**
+**Operations and Compliance**\
 Greg Manabat, Chair
 
-**Finance, Fundraising & Treasury**
+**Finance, Fundraising & Treasury**\
 Martha Escobar, Chair
 
-**Player Development & Programming**
+**Player Development & Programming**\
 Meredith Berkowitz & CP DeVera, Co-Chairs
 
-**Safety**
+**Safety**\
 Kerry Dziubek, Ryan Oliveri & Francesca Weindling, Co-Chairs
 
-**Community Outreach**
+**Community Outreach**\
 Michael Titowsky & Federico Squeri, Co-Chairs
 
-**Technology**
+**Technology**\
 Vacant, Chair
 
-**Program Leadership**
+### Program Leadership
 
 [Vivian Mougios](mailto:traveldirector@wssl.org), Travel Program Director
 
@@ -78,72 +83,80 @@ Vacant, Core Program Director
 
 [Serhat Krause](mailto:epic@wssl.org), EPIC Program Director
 
-> [Sooyun Hong,](mailto:scholarship@wssl.org) Financial Aid Director
+[Sooyun Hong,](mailto:scholarship@wssl.org) Financial Aid Director
 
-**Divisional Leadership**
+### Divisional Leadership
 
 [Division Heads](/programs/core/divisions/)
 
 [Chief Referees](/programs/core/divisions/)**<a id="refs"></a>**
 
-> **Referee Leadership**
->
-> > [Michelle Gurk](mailto:RRA@wssl.org), Regional Referee Administrator
-> >
-> > [John Drayton](mailto:drayts@aol.com), Youth Referees
-> >
-> > Vacant, Women's Referee & Mentorship Program
-> >
-> > [Michael Titowsky,](mailto:michael.titowsky@mdafny.com) Referee Instruction
-> >
-> > [Paul Samarel](mailto:apiguy@agesoftware.com), Referee Assessment
-> >
-> > **Coach Leadership**
-> >
-> > [Alan Leverenz](mailto:alan@wssl.org), Regional Coach Administrator & Trainer
-> >
-> > Vacant, Women's Coaching & Mentorship Program
-> >
-> > Vacant, Coach Instruction
-> >
-> > Vacant, Coach Assessment
-> >
-> > **Other Key Volunteers**
-> >
-> > [Paola Sanchez](mailto:uniforms@wssl.org), Uniform Managers
-> >
-> > Vacant, Fundraising, Capital Projects & Sponsorships
-> >
-> > Vacant, Equipment Director
-> >
-> > Vacant, Marketing
-> >
-> > Emma Johnson, Social Media
-> >
-> > [Eric Halperin](mailto:communications@wssl.org), Newsletter
-> >
-> > Vacant, AED Coordinator
-> >
-> > Vacant, Events & Awards
-> >
-> > [Jamie Hamilton (Gotham)](mailto:gothamfc@wssl.org) & [Pedro Rafael (Red Bulls)](mailto:tickets@wssl.org), WSSL Season Ticket Management
-> >
-> > [Gwen Kilvert](mailto:equipmentexchange@wssl.org), Equipment Exchange
-> >
-> > Vacant, Parent Games
+### Referee Leadership
 
-**Commissioners Emeritus**
+[Michelle Gurk](mailto:RRA@wssl.org), Regional Referee Administrator
 
-Vilda Vera Mayuga
-Meredith Berkowitz
-Dana DiPrima
-Eddy Collyns
-Marc Freedman
+[John Drayton](mailto:drayts@aol.com), Youth Referees
+
+Vacant, Women's Referee & Mentorship Program
+
+[Michael Titowsky,](mailto:michael.titowsky@mdafny.com) Referee Instruction
+
+[Paul Samarel](mailto:apiguy@agesoftware.com), Referee Assessment
+
+### Coach Leadership
+
+[Alan Leverenz](mailto:alan@wssl.org), Regional Coach Administrator & Trainer
+
+Vacant, Women's Coaching & Mentorship Program
+
+Vacant, Coach Instruction
+
+Vacant, Coach Assessment
+
+### Other Key Volunteers
+
+[Paola Sanchez](mailto:uniforms@wssl.org), Uniform Managers
+
+Vacant, Fundraising, Capital Projects & Sponsorships
+
+Vacant, Equipment Director
+
+Vacant, Marketing
+
+Emma Johnson, Social Media
+
+[Eric Halperin](mailto:communications@wssl.org), Newsletter
+
+Vacant, AED Coordinator
+
+Vacant, Events & Awards
+
+[Jamie Hamilton (Gotham)](mailto:gothamfc@wssl.org) & [Pedro Rafael (Red Bulls)](mailto:tickets@wssl.org), WSSL Season Ticket Management
+
+[Gwen Kilvert](mailto:equipmentexchange@wssl.org), Equipment Exchange
+
+Vacant, Parent Games
+
+### Commissioners Emeritus
+
+<div class="alert">
+
+Vilda Vera Mayuga\
+Meredith Berkowitz\
+Dana DiPrima\
+Eddy Collyns\
+Marc Freedman\
 Neville Coleman
 
-**Area/Section Contacts**
+</div>
 
-[Ainslie Binder](mailto:ainslie@brooklynayso.org), Area 3/A Director
-Richard Safran, Area 3/A Referee Administrator
-Mark Schmaltz, Section 3 Director
+### Area/Section Contacts
+
+<div class="alert">
+
+[Ainslie Binder](mailto:ainslie@brooklynayso.org), Area 3/A Director\
+Richard Safran, Area 3/A Referee Administrator\
+Mark Schmaltz, Section 3 Director\
 Michael Titowsky, Section 3 Director of Referee Instruction
+
+</div>

@@ -3,9 +3,19 @@ title: Become a Coach
 path: coaches/become-coach
 legacyUrl: /volunteers/coaches/become-coach/
 updated: 2026-02-14
+sidebar: |-
+  ![](/assets/legacy/Image/referees/wssl-core-12.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-36.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-21.jpeg)![](/assets/legacy/Image/referees/wssl-core-14.jpeg)
+
+  ![](/assets/legacy/Image/WSSL/g11-core-1.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-core-6.jpeg)
 ---
 
-How to become a WSSL Coach - step by step
+### How to become a WSSL Coach - step by step
 
 **1\. Register as a Volunteer.** Log into your wssl in-league account and make sure that your profile is up to date. Make sure that the box for Head Coach or Assistant Coach is checked off.
 

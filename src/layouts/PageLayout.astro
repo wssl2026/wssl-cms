@@ -1,11 +1,51 @@
 ---
+import { marked } from 'marked';
 import BaseLayout from './BaseLayout.astro';
-interface Props { title: string; description?: string }
-const { title, description } = Astro.props;
+import nav from '../data/nav.json';
+import { breadcrumbFor } from '../lib/breadcrumb';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Site-relative URL of this page, e.g. /programs/travel-teams/travel-faq/ — drives the breadcrumb. */
+  url: string;
+  /** Optional Markdown for the side column (photos, link lists), from the page's `sidebar` field. */
+  sidebar?: string;
+}
+const { title, description, url, sidebar } = Astro.props;
+const crumbs = breadcrumbFor(nav.items, url, title);
+// Sidebar Markdown comes from the CMS, the same trusted source as the page body.
+const sidebarHtml = sidebar?.trim() ? (marked.parse(sidebar, { async: false }) as string) : '';
+const prose = 'prose prose-lg max-w-none prose-a:text-navy prose-headings:text-navy';
 ---
 <BaseLayout title={title} description={description}>
-  <article class="mx-auto max-w-4xl px-4 py-8">
-    <h1 class="text-3xl font-bold text-navy mb-6">{title}</h1>
-    <div class="prose prose-lg max-w-none prose-a:text-navy prose-headings:text-navy"><slot /></div>
-  </article>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <nav aria-label="Breadcrumb" class="mb-6 text-sm">
+      <ol class="flex flex-wrap items-center gap-x-2 text-gray-600">
+        {crumbs.map((crumb, i) => (
+          <li class="flex items-center gap-x-2">
+            {i > 0 && <span aria-hidden="true" class="text-gray-400">/</span>}
+            {i < crumbs.length - 1
+              ? <a href={crumb.href} class="text-navy hover:underline">{crumb.label}</a>
+              : <span aria-current="page">{crumb.label}</span>}
+          </li>
+        ))}
+      </ol>
+    </nav>
+    {sidebarHtml ? (
+      <div class="flex flex-col gap-8 lg:grid lg:grid-cols-12">
+        {/* The legacy theme put this column first; on a phone the page text comes first and the photos follow. */}
+        <aside class={`page-sidebar order-2 lg:order-1 lg:col-span-4 xl:col-span-3 ${prose} prose-base`} set:html={sidebarHtml} />
+        <article class="order-1 lg:order-2 lg:col-span-8 xl:col-span-9">
+          <h1 class="text-3xl font-bold text-navy mb-6">{title}</h1>
+          <div class={prose}><slot /></div>
+        </article>
+      </div>
+    ) : (
+      <article class="mx-auto max-w-4xl">
+        <h1 class="text-3xl font-bold text-navy mb-6">{title}</h1>
+        <div class={prose}><slot /></div>
+      </article>
+    )}
+  </div>
 </BaseLayout>

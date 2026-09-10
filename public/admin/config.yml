@@ -64,6 +64,11 @@ collections:
       - { label: Draft (hide from the site), name: draft, widget: boolean, default: false, required: false, preview: false }
       - { label: Last updated, name: updated, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false, preview: false }
       - { label: Old site URL (reference only), name: legacyUrl, widget: string, required: false, preview: false }
+      - label: Side column (photos and links shown to the left of the page on wide screens)
+        name: sidebar
+        widget: markdown
+        required: false
+        hint: 'Optional. Photos here display 250px wide, stacked. A "Heading 3" line makes a blue banner, e.g. above a list of links.'
       - { label: Body, name: body, widget: markdown }
   - name: registration
     label: Registration

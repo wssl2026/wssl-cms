@@ -15,7 +15,7 @@ updated: 2026-04-18
 - **PHASE II: April 18th: All current tournament players up through U12 and those invited back from Phase I**
 - **PHASE III: April 25th: All current travel players, current U13+ TT players and those invited from Phase I & II**
 
-Tournament Team eligibility applies only to Core players U9 - U12.
+Tournament Team eligibility applies only to Core players U9 - U12.\
 Players U13 and above may only try out for the Travel Program (no Tournament Teams for U8 or U13–U19).
 
 * * *

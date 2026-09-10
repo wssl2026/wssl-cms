@@ -11,11 +11,15 @@ Registration for Fall 2026 will open on May 25, 2026, at 8:00am.
 
 If you do not have access to the internet, or do not have a credit card or debit card with which to make payment online, please email commissioner@wssl.org for assistance.
 
-**[REGISTER ONLINE FOR Fall 2026](https://inleague.wssl.org/Registration/regStatus)**
+### [REGISTER ONLINE FOR Fall 2026](https://inleague.wssl.org/Registration/regStatus)
+
+<div class="alert alert-danger">
 
 **IN-PERSON REGISTRATION IS NOT SCHEDULED AT THIS TIME**
 
-[**SUBMIT PROOF OF AGE (CLICK HERE)**](/registration/proof-of-age/)
+</div>
+
+### [SUBMIT PROOF OF AGE (CLICK HERE)](/registration/proof-of-age/)
 
 Fee is $200 for Fall 2026 Registration until June 30, 2026 (and $300 starting July 1, 2026). Financial assistance is available. Please complete scholarship application in [English](https://docs.google.com/forms/d/e/1FAIpQLSffKEcUoIjsTstFMBYeJAqvJ6iC82ZN0HAuRrPnbRNDIiTTmQ/viewform?usp=sf_link) or [Spanish](https://docs.google.com/forms/d/e/1FAIpQLSdFMT3RfDdtHBwaVFX5QiBZ0_RkHZn-ydPz_paD62NNTw9duw/viewform?usp=sf_link).
 

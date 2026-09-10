@@ -3,9 +3,17 @@ title: Welcome
 path: referees/welcome
 legacyUrl: /volunteers/referees/welcome/
 updated: 2023-04-27
+sidebar: |-
+  ![](/assets/legacy/Image/referees/IMG_2379.jpg)
+
+  ![](/assets/legacy/Image/referees/refGreen-Pickles-13.jpg)
+
+  ![](/assets/legacy/Image/referees/wssl-ref-1.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-ref-2.jpeg)
 ---
 
-Welcome to the West Side Soccer League Referee Program - A note from the Referee Administrator
+### Welcome to the West Side Soccer League Referee Program - A note from the Referee Administrator
 
 We hope that you enjoy your time on the pitch this season and we thank you for your dedication. Whether you are refereeing in U6 or U19, as center referee or running the lines, you are performing a vital role for the league and for the children, allowing them to develop and play soccer in a manner that is **Safe**, **Fair** and **Fun**. Remember that **you** are also allowed to have fun as a referee. We try to create a friendly and supportive environment to allow you to learn and thrive in this capacity.
 
@@ -15,15 +23,15 @@ We have several resources that are meant to support you as you participate as a 
 
 We have compiled a list of frequently asked questions (FAQs). You can find them [here](/volunteers/referees/referee-faq/).
 
-There are three members of the AYSO "Team" - Coaches, Referees and Parents. We have assembled some guidelines on how Coaches and Referees can cooperate to improve the experience for our players. You can see them [here](/volunteers/referees/referee-resources/). Parents who aren't Coaches or Referees may find it interesting as well.
+There are three members of the AYSO "Team" - Coaches, Referees and Parents. We have assembled some guidelines on how Coaches and Referees can cooperate to improve the experience for our players. You can see them [here](/volunteers/referees/working-with-coaches/). Parents who aren't Coaches or Referees may find it interesting as well.
 
 See you on the pitch!
 
-Best regards,
-Stan Ince
+Best regards,\
+Stan Ince\
 WSSL Regional Referee Administrator
 
-Training
+### Training
 
 For information about our upcoming Referee classes and how to register, go [here](/volunteers/referees/register-class-ref/).
 
@@ -31,13 +39,13 @@ We need more referees in our league, in order to give more kids the opportunity 
 
 Please note: It is **NOT** possible to get certified via online classes only.
 
-Teen Referees
+### Teen Referees
 
 Young people aged 10 years and over, including Core and Travel soccer players and their siblings, and are very welcome to attend referee classes, and can gain community service credit for their time in class and refereeing on the field. The Teen Referee program welcomes new members and will make sure that you have fun as well as serving the league!
 
 Volunteer registration for young people is a little different from that for parent volunteers. Go [here](/volunteers/referees/teen-referee/) for Teen Referee instructions.
 
-Division Chief Referees
+### Division Chief Referees
 
 The Chief Referees in each division should be your first point of contact about rules and the practical aspects of refereeing. Please use this website to look for information but if you cannot find what you need, please contact your chief referee if you have questions about:
 
@@ -52,7 +60,7 @@ If you are not sure which Division your child is in, or if you are trying to rea
 
 We have a manual for the division Chief Referees. To view it, please click here: [Chief Referee Manual](/assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf).<a id="refleader"></a>
 
-Referee Leadership Team
+### Referee Leadership Team
 
 Stan Ince is the Regional Referee Administrator and makes sure that we have a chief referee for each division and that the chief referees have the resources they need.
 
@@ -62,6 +70,6 @@ Paul Samarel is the Regional Director of Referee Assessment and is responsible f
 
 John Drayton is our Regional Director of Youth Referees. Please contact John for any questions or concerns about the Youth Referee program.
 
-Heading the Ball
+### Heading the Ball
 
-For information about heading the ball, please go to **[Heading the Ball](/volunteers/referees/referee-resources/).**
+For information about heading the ball, please go to **[Heading the Ball](/volunteers/referees/heading-the-ball/).**

@@ -22,6 +22,23 @@ Ignore **Work with Local Repository**: that button only appears to developers ru
 - **PDFs and images**: drag the file straight onto the image or file field, or click the field and pick **Upload** in the asset library that opens. The library also lets you re-use a file you uploaded earlier instead of uploading it twice. Files are stored under `/assets/`; the pictures and PDFs carried over from the old site are already in the library under `legacy`, so you can reuse them instead of uploading again.
 - **Tables**: the editor understands Markdown tables and shows them as real tables, but this version has no toolbar button for inserting one. To add a table, or to add a row or a column to one, switch the content box to its **Markdown** view with the toggle above it and edit the pipe (`| … | … |`) rows directly; switch back to rich text to check the result. Editing the *text inside* an existing table's cells works in either view.
 
+## Page styles carried over from the old site
+- **Blue banner headings**: the navy bar with white text that heads most sections is **Heading 3**. Put the cursor on the line, open the heading menu in the toolbar and pick Heading 3. Heading 2 is a plain large heading, as before.
+- **Bold text**: the whole site is set in bold, as the old site was, so ordinary text and "bold" text look the same. Use a banner or a bullet list to make something stand out.
+- **Indent**: the quote button indents a paragraph; it does not put it in italics or draw a bar beside it.
+- **Coloured callout boxes** (the green or red notices): these are small HTML blocks. To add one, switch the content box to its **Markdown** view and paste, on its own lines with a blank line above and below:
+
+  ```
+  <div class="alert alert-danger">
+
+  Your notice here. Links and **bold** work.
+
+  </div>
+  ```
+
+  Use `alert-success` for green, `alert-danger` for red, `alert-warning` for yellow. Editing the text inside an existing box works in either view.
+- **Side column**: photos and link lists that appeared to the left of a page on the old site live in the page's **Side column** field, above the Body. Add photos with the image button; a Heading 3 line there makes a blue banner over a list of links. Leave it empty for a page without a side column. On phones the side column shows after the page text.
+
 ## Preview while editing
 Every page and Site Settings screen has a preview pane next to the editing form that updates as you type. Once a page has been saved at least once, a **View on site** link also appears above the form; it opens the live page in a new tab. That link always shows the last *saved* version of the page — it will not show edits you have made since the last **Save**, and after the rebuild finishes (about 1–2 minutes) it reflects what is now live. The preview pane shows just the page content — title and body — styled roughly like the site; for the exact look, use the **View on site** link after saving.
 

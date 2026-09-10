@@ -5,13 +5,13 @@ legacyUrl: /registration/player-code-of-conduct/
 updated: 2019-12-05
 ---
 
-Be A Good Sport
+### Be A Good Sport
 
-WSSL has always encouraged good sportsmanship in its programs. In fact, "Good Sportsmanship" is one of the six philosophies listed in the AYSO National Bylaws. Good sportsmanship is defined through the conduct of players, coaches, referees and parents, all working together, and is based on the fundamentals of good behavior, which is simply showing courtesy and respect for all involved in the game.
-
+WSSL has always encouraged good sportsmanship in its programs. In fact, "Good Sportsmanship" is one of the six philosophies listed in the AYSO National Bylaws. Good sportsmanship is defined through the conduct of players, coaches, referees and parents, all working together, and is based on the fundamentals of good behavior, which is simply showing courtesy and respect for all involved in the game. \
+\
 If players, volunteers and parents understand what is expected of them when it comes to good sportsmanship, that's probably how they will act. WSSL is proud of its many good sports, but understands that good sportsmanship doesn't just happen. It needs to be taught, encouraged and demonstrated.
 
-Player's Code of Conduct
+### Player's Code of Conduct
 
 - Play for the fun of it, not just to please your parents or coach.
 - Learn and play by the Laws of the Game.

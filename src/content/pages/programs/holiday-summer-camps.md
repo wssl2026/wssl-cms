@@ -25,8 +25,8 @@ For up to date information with the latest announcements, registration deadlines
 
 Other Non-WSSL Soccer Camps
 
-> Please contact the camp directly if you decide to enroll your child. Although these camps are not affiliated with WSSL, please let them know you are a West Side Soccer League family - the camps value their relationships with our league and the referrals.
->
-> Riverside Park Conservancy
->
-> > > The Riverside Park Conservancy runs a [Multi-Sport Summer Camp](https://riversideparknyc.org/sports-camp/) in Riverside Park. They also have their own scholarship program that ensures that every camper, regardless of their family's financial situation, can attend. Please contact [sports@riversideparknyc.org](mailto:sports@riversideparknyc.org) with any questions about programs, pricing, or need-based scholarship opportunities.
+Please contact the camp directly if you decide to enroll your child. Although these camps are not affiliated with WSSL, please let them know you are a West Side Soccer League family - the camps value their relationships with our league and the referrals.
+
+Riverside Park Conservancy
+
+The Riverside Park Conservancy runs a [Multi-Sport Summer Camp](https://riversideparknyc.org/sports-camp/) in Riverside Park. They also have their own scholarship program that ensures that every camper, regardless of their family's financial situation, can attend. Please contact [sports@riversideparknyc.org](mailto:sports@riversideparknyc.org) with any questions about programs, pricing, or need-based scholarship opportunities.

@@ -91,13 +91,14 @@ export function isoDate(s: string | undefined): string | undefined {
   return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
 }
 
-export function frontmatter(item: MuraItem, path: string): string {
+export function frontmatter(item: MuraItem, path: string, extra: { sidebar?: string } = {}): string {
   const data: Record<string, unknown> = { title: item.title, path };
   const description = stripTags(item.summary ?? '');
   if (description) data.description = description;
   data.legacyUrl = `/${item.filename.replace(/\/+$/, '')}/`;
   const updated = isoDate(item.lastupdate);
   if (updated) data.updated = updated;
+  if (extra.sidebar?.trim()) data.sidebar = extra.sidebar.trim();
   return `---\n${stringify(data)}---\n`;
 }
 

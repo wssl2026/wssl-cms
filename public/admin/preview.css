@@ -167,3 +167,35 @@ section[data-key-path='body'] pre code {
   background: none;
   padding: 0;
 }
+
+/* ---- Legacy page styling, mirrored from src/styles/global.css ------------------------- */
+body { font-weight: 700; }
+
+/* Heading 3 = the navy banner used as a section heading on most pages. */
+h3 {
+  background: #002664;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.25rem;
+  margin: 1.5rem 0 1rem;
+}
+h3 a { color: inherit; }
+
+/* Callout boxes kept as HTML in the Markdown. */
+.alert { padding: 0.75rem 1.25rem; margin: 0 0 1rem; border: 1px solid transparent; border-radius: 0.25rem; }
+.alert-success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
+.alert-danger { color: #721c24; background: #f8d7da; border-color: #f5c6cb; }
+.alert-warning { color: #856404; background: #fff3cd; border-color: #ffeeba; }
+.alert > :first-child { margin-top: 0; }
+.alert > :last-child { margin-bottom: 0; }
+.alert a { color: inherit; }
+
+/* Indent, not quotation. */
+blockquote { font-style: normal; border-left: 0; margin: 0 0 1rem; padding-left: 1.5rem; }
+
+/* The side column shows to the left of the body, as on the site. */
+section[data-key-path='sidebar'] { float: left; width: 250px; margin: 0 1.5rem 1rem 0; font-size: 1rem; }
+section[data-key-path='sidebar'] img { width: 250px; max-width: 100%; height: auto; margin: 0 0 1rem; }
+section[data-key-path='body'] { overflow: hidden; }

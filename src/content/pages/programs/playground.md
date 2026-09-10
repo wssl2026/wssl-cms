@@ -3,6 +3,10 @@ title: Playground Soccer Program
 path: playground
 legacyUrl: /programs/playground/
 updated: 2026-01-12
+sidebar: |-
+  ![](/assets/legacy/Image/Logos/ayso-playground-logo-020516-color-6x6-hires-final-1.jpg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-37.jpeg)
 ---
 
 Our AYSO Playground program is for 3 and 4 year olds. The Playground soccer program is part of our Core recreational soccer league.

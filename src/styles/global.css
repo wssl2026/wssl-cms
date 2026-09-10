@@ -9,3 +9,52 @@
 
 /* PDF links get a small badge so "document download boxes" need no component */
 .prose a[href$=".pdf"]::after { content: " (PDF)"; font-size: 0.8em; color: var(--color-navy); }
+
+/* ---- Legacy page styling, kept on purpose ------------------------------------------------
+   The old theme (custom.css) set the whole site in bold and every page was written for that
+   look; the same file turned Bootstrap's .alert-info into the navy banner that serves as the
+   section heading on almost every page. The migration maps those banners to Heading 3 and
+   keeps the coloured callout boxes as small HTML blocks; these rules give them their look. */
+body { font-weight: 700; }
+
+/* Heading 3 = the navy banner. Editors reach it from the ordinary heading menu. */
+.prose h3 {
+  background: var(--color-navy);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.25rem;
+  margin: 1.5rem 0 1rem;
+}
+.prose h3 a { color: inherit; }
+
+/* Callout boxes (Bootstrap 4's .alert family, as the legacy pages used them). */
+.prose .alert {
+  padding: 0.75rem 1.25rem;
+  margin: 0 0 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+.prose .alert-success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
+.prose .alert-danger { color: #721c24; background: #f8d7da; border-color: #f5c6cb; }
+.prose .alert-warning { color: #856404; background: #fff3cd; border-color: #ffeeba; }
+.prose .alert > :first-child { margin-top: 0; }
+.prose .alert > :last-child { margin-bottom: 0; }
+.prose .alert a { color: inherit; }
+
+/* A blockquote is the editor's "indent", not a quotation: no italics, no bar, no quote marks. */
+.prose blockquote {
+  font-style: normal;
+  font-weight: inherit;
+  color: inherit;
+  border-left: 0;
+  padding-left: 1.5rem;
+  quotes: none;
+}
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after { content: none; }
+
+/* Side column: photos stack at the width the legacy pages sized them to. */
+.page-sidebar img { width: 250px; max-width: 100%; height: auto; margin: 0 0 1rem; }
+.page-sidebar p { margin: 0 0 0.75rem; }

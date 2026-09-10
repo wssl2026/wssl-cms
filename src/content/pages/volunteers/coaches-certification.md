@@ -3,9 +3,15 @@ title: Certification
 path: coaches/certification
 legacyUrl: /volunteers/coaches/certification/
 updated: 2026-09-07
+sidebar: |-
+  ![](/assets/legacy/Image/Coach/G8-Halloween-Soccer-2.jpg)
+
+  ![](/assets/legacy/Image/Coach/IMG_7604.jpg)
+
+  ![](/assets/legacy/Image/referees/g11-core-4.jpeg)
 ---
 
-WSSL Certification Courses for Coaches & Assistant Coaches
+### WSSL Certification Courses for Coaches & Assistant Coaches
 
 Prior to every season and often in between seasons, WSSL offers a series of certification courses for parents who wish to become coaches and assistant coaches. This is the beginning of your training, not the end. Participating in and completing the certification process is a requirement in order to coach. **All coaches and assistant coaches must take Safe Haven, Concussion Awareness, and Sudden Cardiac Arrest courses online, and take the age appropriate level of certification training for the age group they are coaching in person.**
 
@@ -26,7 +32,7 @@ The in-person coach certification courses are broken into a lecture session and 
 
 **All coaches MUST enroll in an in-person course at eTrainU to receive credit. eTrainU calls an in-person course an "event." For instructions on how to enroll in an event, click [HERE](/volunteers/coaches/register-class/).**
 
-**FALL 2026 COACH CERTIFICATION COURSES**
+### FALL 2026 COACH CERTIFICATION COURSES
 
 To enroll in an in-person class, go to the eTrainU login page on the WSSL website after logging in (click on the Graduation Cap icon at the top). Click on the green "Login to AYSOU (eTrainU)" button which will load your eTrainU Dashboard. Click on "Training Event" in the left sidebar to bring up the calendar. Click on the course/date you wish to enroll.
 
@@ -156,7 +162,7 @@ Friday, Sept 18. 7 PM - 9 PM
 
 Unity Center, 213 W 58th Street
 
-Background Check, SafeSport, Safe Haven, Concussion Awareness, and Sudden Cardiac Arrest
+### Background Check, SafeSport, Safe Haven, Concussion Awareness, and Sudden Cardiac Arrest
 
 To ensure the safety of both children and volunteers, each coach is required to take two short online training sessions called **Safe Haven** and **CDC Concussion Awareness**. Safe Haven focuses on safety and appropriate behavior with children as well as first aid and other on-field issues. Safe Haven also gives volunteers the highest degree of protection available under the law. A background check is also required of all coach and assistant coach volunteers.
 
@@ -183,7 +189,7 @@ If you haven't taken the online Safe Haven or Concussion Awareness since 2011, l
 
 We ask that every volunteer take the in person Safe Haven, Concussion Awareness, and Sudden Cardiac Arrest courses at least once during their WSSL volunteer career. Coaches and assistant coaches **should renew their familiarity with the Safe Haven, Concussion Awareness, and Sudden Cardiac Arrest materials each year.**
 
-All Coaches & Assistant Coaches Must Be Registered
+### All Coaches & Assistant Coaches Must Be Registered
 
 All coaches must be registered with AYSO national. This is done by updating your adult profile on your WSSL in-league account. After logging in, click on Player and Volunteer Registration from the top menus. That will take you to your family profile page. Update the adult profile for the volunteer and check the volunteer box for Coach or Assistant Coach.
 
@@ -191,13 +197,13 @@ Backgrounds are checked by Sterling Volunteers, a vendor hired by AYSO national,
 
 If you are having trouble with your volunteer registration, please contact our Child and Volunteer Protection Advocate at [cvpa@wssl.org](mailto:cvpa@wssl.org).
 
-Ongoing Coach Education
+### Ongoing Coach Education
 
 We ask that every coach take at least two coach education clinics each season. Coaches who attend four or more each season will be rewarded with a jacket or other awesome coaching related material.
 
 WSSL is committed to providing coaches with "feet on" training sessions with professional coaches. Sessions take place in an indoor gym on weekday evenings. Clinics for coaches are offered by professional coaches in partnership with the New York Red Bulls.
 
-Advance Your Studies or Become a Coach Instructor!
+### Advance Your Studies or Become a Coach Instructor!
 
 Coaches who are gifted and passionate about the job are encouraged to share their gifts with others. WSSL needs more Coach Instructors who are willing to be certified, trained and to train others in pre-season courses or in more informal coaching clinics.
 

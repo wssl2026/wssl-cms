@@ -13,9 +13,9 @@ The West Side Soccer **AYSO** Super Camp is an opportunity for any and all **AYS
 
 ##### Location:
 
-Trevor Day School West Side
-1 West 88th Street
-New York, NY
+Trevor Day School West Side\
+1 West 88th Street\
+New York, NY\
 [Click Here For Map](https://goo.gl/maps/iAkWV1yiDEB8DGxM6)
 
 ### How to Register
@@ -40,48 +40,48 @@ If you have any questions, please contact: [michael.titowsky@mdafny.com](mailto:
 
 * * *
 
-**Intro to Instruction**
-Friday June 25th: 6PM-8:30PM
-Prerequisites: Regional Referee certification.
-No fee.
+**Intro to Instruction**\
+Friday June 25th: 6PM-8:30PM\
+Prerequisites: Regional Referee certification.\
+No fee.\
 This is a required first course for all Referee, Coach and Management Instructors. This is Part 2 (in-person). Part 1 is the prerequisite for the in-person part and is available online at eTrainU.
 
 * * *
 
 **REFEREE CLASSES**
 
-**8U Official**
-Sunday June 26th: 9am - noon
-Prerequisites: None
+**8U Official**\
+Sunday June 26th: 9am - noon\
+Prerequisites: None\
 No fee. Lunch NOT included
 
-**Regional Referee**
-Sunday June 26th: 1pm - 5pm
-Prerequisites: 8U Official certification or completion of Regional Referee Online
+**Regional Referee**\
+Sunday June 26th: 1pm - 5pm\
+Prerequisites: 8U Official certification or completion of Regional Referee Online\
 No fee. Lunch NOT included (unless you're also taking the 8U class)
 
-**Intermediate Referee**
-Sunday June 26th: 9am - 5pm
-Prerequisites: Regional Referee certification
+**Intermediate Referee**\
+Sunday June 26th: 9am - 5pm\
+Prerequisites: Regional Referee certification\
 No fee. Lunch included
 
-**Advanced Referee**
-Sunday June 26th: 9am - 5pm
-Prerequisites: Intermediate Referee Certification
+**Advanced Referee**\
+Sunday June 26th: 9am - 5pm\
+Prerequisites: Intermediate Referee Certification\
 No fee. Lunch included
 
 * * *
 
 **REFEREE INSTRUCTOR CLASSES**
 
-**Referee Instructor**
-Saturday June 26th: 9am - 5pm
-Prerequisites: Intro to Instruction; Intermediate Referee certification
+**Referee Instructor**\
+Saturday June 26th: 9am - 5pm\
+Prerequisites: Intro to Instruction; Intermediate Referee certification\
 No fee. Lunch included.
 
-**Advanced Referee Instructor**
-Saturday June 26th: 9am - 5pm
-Prerequisites: Advanced Referee and Intermediate Referee Instructor certification
+**Advanced Referee Instructor**\
+Saturday June 26th: 9am - 5pm\
+Prerequisites: Advanced Referee and Intermediate Referee Instructor certification\
 No fee. Lunch included.
 
 * * *

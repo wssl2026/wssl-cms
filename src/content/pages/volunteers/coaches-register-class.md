@@ -3,11 +3,21 @@ title: Register for a Coach Course
 path: coaches/register-class
 legacyUrl: /volunteers/coaches/register-class/
 updated: 2023-08-27
+sidebar: |-
+  ![](/assets/legacy/Image/WSSL/g11-core-2-3-.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-16.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-29.jpeg)
 ---
+
+<div class="alert alert-danger">
 
 CLASS REGISTRATION
 
-Register with WSSL and Complete a Background Check
+</div>
+
+### Register with WSSL and Complete a Background Check
 
 All coaches and assistant coaches must be registered with AYSO national. This is done by updating your adult profile on your WSSL in-league account. After logging in, click on Player and Volunteer Registration from the top menus. That will take you to your family profile page. Update the adult profile for the volunteer and check the volunteer box for Coach or Assistant Coach.
 
@@ -15,7 +25,7 @@ Backgrounds are checked by Sterling Volunteers, a vendor hired by AYSO national,
 
 If you are having trouble with your volunteer registration, please contact our Child and Volunteer Protection Advocate at [cvpa@wssl.org](mailto:cvpa@wssl.org).
 
-Register for an in-person Coach Certification Course
+### Register for an in-person Coach Certification Course
 
 **All coaches MUST register online at AYSOU to receive credit for the course.** If you don't register, there is no way to credit your certifications. To register for a coaching class:
 
@@ -25,7 +35,7 @@ Register for an in-person Coach Certification Course
 
 3. Scroll to the course you wish and click **Enroll**. Read the details of the course, indicating when and where its sessions will occur.
 
-Online compliance courses required of all volunteers.
+### Online compliance courses required of all volunteers.
 
 These are found in the **Training Library** on eTrainU.
 
@@ -34,7 +44,7 @@ These are found in the **Training Library** on eTrainU.
 3. **Sudden Cardiac Arrest Training** – understanding the signs and required actions for sudden cardiac arrest. For coach and referee volunteers.
 4. If you haven't taken the online Safe Haven or Concussion Awareness since 2011, login to eTrainU and complete these online. You can find them by clicking on the “Training Library” link and browsing the courses in the Safe Haven category.
 
-Taking online compliance and coach courses in eTrainU
+### Taking online compliance and coach courses in eTrainU
 
 The Safe Haven, CDC concussion, and Sudden Cardiac Arrest courses are offered only online.
 

@@ -3,17 +3,29 @@ title: Coaches and Referees - Working Together
 path: coaches/coaches-referees
 legacyUrl: /volunteers/coaches/coaches-referees/
 updated: 2019-12-03
+sidebar: |-
+  ### Coach Resources
+
+  [Division Rules](/volunteers/coaches/division-rules/)
+
+  [Small-Sided Play](/volunteers/coaches/small-sided-play/)
+
+  [Coaches and Referees](/volunteers/coaches/coaches-referees/)
+
+  ![](/assets/legacy/Image/referees/wssl-ref-13.jpeg)
+
+  ![](/assets/legacy/Image/referees/g11-core-4.jpeg)
 ---
 
-HOW CAN WE WORK TOGETHER BEST?
+### HOW CAN WE WORK TOGETHER BEST?
 
-Goals:
+### Goals:
 
 1. To increase the level of understanding and cooperation between referees and coaches.
 2. To let coaches know what is expected of them during the match, from WSSL referees.
 3. To get feedback from coaches as to how we coaches and referees can better work together to improve the players' soccer experience.
 
-We Are All On The Same Team:
+### We Are All On The Same Team:
 
 Coaches and referees all want the same thing- a fair, safe and fun game for the kids. So:
 
@@ -24,14 +36,14 @@ Coaches and referees all want the same thing- a fair, safe and fun game for the 
 
 ![](/assets/legacy/Image/referees/refGreen-Pickles-13.jpg)
 
-Reminder about our Philosophies:
+### Reminder about our Philosophies:
 
 Two in Particular - Positive Coaching and Good Sportsmanship.
 
 1. Yelling at or being disrespectful to referees, coaches or players is not consistent with who we are.
 2. Volunteers (coaches, referees and parents) are role models. Referees and coaches set the tone for the teams and players. Both players and parents will follow your lead, so please make it a positive one.
 
-Discussions About Calls or "No-Calls":
+### Discussions About Calls or "No-Calls":
 
 1. Discussions should never be public.
 2. As a general rule, they should never be during the game; wait until half time or after the match is over.
@@ -40,18 +52,18 @@ Discussions About Calls or "No-Calls":
 5. Remember that people see things from different angles and in different ways. Be open to the other point of view.
 6. If you feel there is a real problem with the referee (obvious bias, total lack of understanding of the rules, inappropriate attitude), please provide [referee feedback here](/volunteers/referees/referee-feedback/) or bring this to the attention of your division head and chief referee.
 
-Specific Situations:
+### Specific Situations:
 
 1. Players' equipment: please do not ask the referees to ignore the rules, i.e. - our no jewelry policy. Important safety issues cannot be overlooked.
 2. Unbalanced teams - if you are supposed to be playing 6 v 6, and your team shows up with 7, and the other team shows up with 5, use the "Everyone Plays" and "Balanced Teams" philosophy to find a way to play 6 v 6 that is simple and fair.
 3. **Note:** Under no circumstances may a player sit out just to make the teams even.
 
-During the game:
+### During the game:
 
 1. Timing of substitutions is determined by the rules for each division.
 2. Don't interfere with re-starts. Micromanaging corners, throw-ins, goal kicks etc does not help our kids learn the game.  Let them make the decisions and learn from the game.
 
-Feedback: What Do Coaches and Referees Want/Expect From Each Other?
+### Feedback: What Do Coaches and Referees Want/Expect From Each Other?
 
 If you have any thoughts on this, please email someone on the coach or referee leadership team:
 

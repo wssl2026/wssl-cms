@@ -3,9 +3,27 @@ title: Referee Resources
 path: referees/referee-resources
 legacyUrl: /volunteers/referees/referee-resources/
 updated: 2025-03-10
+sidebar: |-
+  ### OTHER RESOURCES
+
+  [Laws of the game](/volunteers/referees/laws-of-the-game/)
+
+  [Heading the ball](/volunteers/referees/heading-the-ball/)
+
+  [Pre-Game](/volunteers/referees/pre-game/)
+
+  [Working With Coaches](/volunteers/referees/working-with-coaches/)
+
+  [Referee Events](/volunteers/referees/referee-events/)
+
+  [Study Guides](/volunteers/referees/study-guides/)
+
+  [Division Cheat Sheets](/volunteers/referees/division-cheat-sheets/)
+
+  [Videos](/volunteers/referees/videos/)
 ---
 
-West Side Soccer League - Guides for Referees
+### West Side Soccer League - Guides for Referees
 
 - [Glossary of Soccer Terms](http://www.playgroundequipment.com/soccer-glossary-of-terms/)
 - [Referee Survival Kit](/assets/legacy/File/WSSL_Referee_Survival_Kit_2024_v01_Clean.pdf) *(updated June 2024)*
@@ -19,7 +37,7 @@ West Side Soccer League - Guides for Referees
 
 ![](/assets/legacy/Image/referees/wssl-ref-3.jpeg)
 
-Incident Report Form
+### Incident Report Form
 
 For any incident or accident on the field during a West Side Soccer League game or practice, related parties need to fill out an [Incident Form](https://www.aysovolunteers.org/incident-report-form/). The form should be filled out by a Referee, Coach or other WSSL volunteer (like the Safety Director or Division Head) for any of the following:
 
@@ -29,7 +47,7 @@ For any incident or accident on the field during a West Side Soccer League game 
 4. Property damage
 5. Law enforcement summoned
 
-The Laws of the Game
+### The Laws of the Game
 
 Periodically the Laws of the Game are updated by the International Football Association Board. A summary of the changes may be viewed [here](https://www.theifab.com/law-changes/latest/).
 
@@ -38,7 +56,7 @@ The complete Laws may be found at:
 - FIFA [Laws of the Game](https://theifab.com/laws) (in English)
 - FIFA [Laws of the Game](https://theifab.com/es/laws) (en Español)
 
-AYSO Publications
+### AYSO Publications
 
 - Official referee information on the [AYSO wiki](https://wiki.ayso.org/wiki/Category:Referee), including:
     - AYSO Referee Guideline
@@ -47,19 +65,19 @@ AYSO Publications
     - Annual Referee Update
     - Subscribe to Whistle Stop: A fun weekly email with Referee tips and quizzes
 
-US Soccer Federation Publications
+### US Soccer Federation Publications
 
 - [US Soccer Federation Guide to Procedures For Referees, Assistant Referees and Fourth Officials](/assets/legacy/Image/referees/USSFguidetoprocedures2012.pdf) *Updated 2012*
 - [USSF Information for New Referees](https://ussoccer.app.box.com/s/ruqcsf0671k1bcf6dzwf/1/348010025/14809733210/1)  *Updated 2016*
 - [USSF Advice to Referees on the Laws of the Game](/assets/legacy/Image/referees/ATR2014.pdf) *Updated 2014*
 
-Other Useful Websites
+### Other Useful Websites
 
 - [American Youth Soccer Organization](https://www.ayso.org/) (AYSO)
 - [FIFA](https://www.fifa.com/) the governing body of world soccer
 - [USSF](https://www.ussoccer.com/) United States Soccer Federation
 - [US Club Soccer](https://www.usclubsoccer.org/)
 
-For Division Chief Referees
+### For Division Chief Referees
 
 - [Chief Referee Manual Updated August 2022](/assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf)

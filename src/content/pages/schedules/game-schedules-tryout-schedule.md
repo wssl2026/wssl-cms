@@ -5,7 +5,7 @@ legacyUrl: /schedules/game-schedules/tryout-schedule/
 updated: 2024-04-20
 ---
 
-prospectiveTryouts for Travel & Tournament Teams for 2023-2024
+### prospectiveTryouts for Travel & Tournament Teams for 2023-2024
 
 We conduct open tryouts for prospective U8-U14 players each Spring - there is no fee. Older players should look at our high school tryouts, linked below. All U8-U14 open tryouts for the 2024-25 soccer year have concluded. Information regarding next year's tryouts will be posted sometime in the early spring of 2025.
 

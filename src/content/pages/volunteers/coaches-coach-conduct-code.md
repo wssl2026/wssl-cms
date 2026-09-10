@@ -47,9 +47,19 @@ description: "It is important that our coaches and assistant coaches serve as
   practice because of low turnout or weather."
 legacyUrl: /volunteers/coaches/coach-conduct-code/
 updated: 2021-09-23
+sidebar: |-
+  ![](/assets/legacy/Image/Coach/Teal-Tornadoes-9-25-2016-209-of-254.jpg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-40.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-5.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-core-21.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-core-5.jpeg)
 ---
 
-Coach Oath & Code of Conduct
+### Coach Oath & Code of Conduct
 
 It is important that our coaches and assistant coaches serve as models not only for our children but for parents on the sidelines as well. This is a tall order. It requires you to think before you act, whether dealing with a player, a referee or a parent. The following oath and code of conduct is a guideline for all coaches and assistant coaches. Expectations are high for coaches and assistant coaches. Tolerance for behavior incongruous with this oath or its spirit is very, very low. Please join us in taking seriously one of the most demanding and serious (also seriously fun) jobs in the League.  Most of all just be a good sport - which is simply showing courtesy and respect for all involved in the game. Good sportsmanship doesn't just happen. It needs to be taught, encouraged and demonstrated.
 
@@ -68,7 +78,7 @@ If you have signed up to be a coach or assistant coach in WSSL, you agree to uph
 - **Participate** in ongoing coach education clinics offered by WSSL (at least two each season).
 - **Read and understand the misconduct suspension policy.** This policy applies to all players and coaches and can be found [here](/assets/legacy/Documents/MisconductSuspensions.pdf).
 
-Coach Privileges & Responsibilities
+### Coach Privileges & Responsibilities
 
 Coaches have some tremendous privileges in WSSL that are not shared with other volunteers. With those privileges, come big responsibilities. If you are going to coach, please take all of these seriously. We do.
 

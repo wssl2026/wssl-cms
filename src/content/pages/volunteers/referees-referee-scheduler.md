@@ -3,9 +3,24 @@ title: Using The Referee Scheduler
 path: referees/referee-scheduler
 legacyUrl: /volunteers/referees/referee-scheduler/
 updated: 2022-05-10
+sidebar: >-
+  [Download The Referee Scheduling
+  Guide](/assets/legacy/File/Referee-Scheduling-Guide-September-2015-v02.pdf)
+
+
+  ![](/assets/legacy/Image/referees/Blue-Tornadoes-9-17-17-21.jpg)
+
+
+  ![](/assets/legacy/Image/referees/refG6-Pink-Dragons-Game-3-63.jpg)
+
+
+  ![](/assets/legacy/Image/referees/wssl-ref-12.jpeg)
+
+
+  ![](/assets/legacy/Image/referees/wssl-ref-4.jpeg)
 ---
 
-How to Self Schedule
+### How to Self Schedule
 
 It is crucial to the success of our Referee program that Referees use this system to self-schedule games. Without this system the Referee Schedulers" job becomes very difficult. Help them avoid making last minute phone calls to schedule referees for the fast approaching weekend games. It's also important that we know how many matches you have officiated in which divisions.
 
@@ -53,7 +68,7 @@ You should see that your request is pending (next to your name). Your Chief Refe
 
 You can check the status of your assignment on the Assignments/Status page of the website.
 
-To cancel or change an assignment
+### To cancel or change an assignment
 
 The Scheduler will not allow you to remove yourself from an approved assignment. If you need to cancel or change an assignment, please contact the Chief Referee or Scheduler for that division. They will make the change for you. This ensures that the schedulers are aware of changes and unfilled slots.
 

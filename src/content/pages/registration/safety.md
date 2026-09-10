@@ -13,7 +13,7 @@ Four key league level volunteers -- the Regional Commissioner, the Child and Vol
 
 Any safety issue should be reported immediately to the appropriate division head and/or one or all of the officials listed above. Our Safety Director ([safety@wssl.org](mailto:safety@wssl.org)) and CVPA ([cvpa@wssl.org](mailto:cvpa@wssl.org)) are dedicated to helping you resolve any issues. Please contact them with any questions.
 
-Safety at the Field
+### Safety at the Field
 
 All players must wear the proper equipment. Referees will not permit a game to start on a field where there is any hazard to the players. Players must wear shin guards, and the shin guards must be completely covered by socks; no player may wear jewelry (including watches, rings, bracelets, and earrings of any kind), plaster casts or baseball/football cleats. Only goalkeepers may wear hats. No helmets of any kind may be worn by any player. A player who is bleeding must leave the field and is considered injured; the bleeding must be stopped and the wound/cut bandaged before the player may return.
 
@@ -21,7 +21,7 @@ We also invest in new goals and nets for each field periodically to ensure that 
 
 All WSSL volunteers - board members, division heads, chief referees, coaches, referees, team managers, and other administrators - must be registered with AYSO national and undergo safe haven training and certification classes. Background checks on coaches, referees and other volunteers that have supervision over the players are conducted through AYSO to ensure the safety of our children.
 
-Concussion Protocol
+### Concussion Protocol
 
 AYSO has partnered with the Centers for Disease Control and Prevention (CDC) to use the “Heads Up” Concussion training tools in support of the following guidelines to ensure the safety of all our participants:
 
@@ -31,7 +31,7 @@ AYSO has partnered with the Centers for Disease Control and Prevention (CDC) to 
 4. Any player suspected by the coach, referee or parent to have a concussion must be removed from further participation for at least the remainder of the day, and parents should be encouraged to seek professional medical treatment at the time of injury and secure medical clearance before being allowed to return to play.
 5. **For any player suspected of having a concussion, an [AYSO Participation Release Form](https://aysovolunteers.org/ayso-participation-return-to-play-release-form/),** signed by a parent/guardian, acknowledging that the player has been given clearance before the player can return to play.
 
-Incident Reports
+### Incident Reports
 
 For any incident or accident on the field during a West Side Soccer League game or practice, related parties need to fill out an [Incident Form](https://aysovolunteers.org/incident-report-form/). The form should be filled out by a Coach, Referee or other WSSL volunteer (like the Safety Director or Division Head) for any of the following:
 
@@ -43,10 +43,18 @@ For any incident or accident on the field during a West Side Soccer League game 
 
 Upon completion, the form should be emailed to the [WSSL Safety Director](mailto:safety@wssl.org).
 
-Insurance
+### Insurance
+
+<div class="alert">
 
 Through AYSO, we also provide insurance support. All registered players are covered through the registration process. Medical release forms are electronically signed and each coach will have access to your player's medical release form in the event of an emergency. WSSL has supplemental insurance for accidents that take place during WSSL practices, games, meetings, etc. Please contact the [WSSL Safety Director](mailto:safety@wssl.org) for more information.
 
-Resources
+</div>
+
+### Resources
+
+<div class="alert">
 
 Resource Guides for parents, coaches and referees coming soon!
+
+</div>

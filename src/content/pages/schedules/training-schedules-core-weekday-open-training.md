@@ -7,11 +7,23 @@ updated: 2026-04-22
 
 ## **Spring 2026 (April through May)**
 
+<div class="alert alert-danger">
+
 Must sign up in advance [HERE](https://docs.google.com/forms/d/e/1FAIpQLScntLY8auLV796v0ShlkWFYzyL9POLMeCuHuRjS3CFToIRorg/viewform?usp=header).
+
+</div>
+
+<div class="alert alert-danger">
 
 Please note that ALL sessions will take place at the [Frederick Douglass field](/fields/fredrick-douglass-playground/).
 
+</div>
+
+<div class="alert alert-danger">
+
 All age groups (U6 through U19) may attend each session.
+
+</div>
 
 Sessions will take place from 3:45-5:00pm on:
 

@@ -3,11 +3,23 @@ title: Coach Resources
 path: coaches/coach-resources
 legacyUrl: /volunteers/coaches/coach-resources/
 updated: 2026-02-12
+sidebar: |-
+  ### Coach Resources
+
+  [Division Rules](/volunteers/coaches/division-rules/)
+
+  [Small-Sided Play](/volunteers/coaches/small-sided-play/)
+
+  [Working with Referees](/volunteers/coaches/coaches-referees/)
+
+  [Lopsided Game Management Guide](https://inleague.wssl.org/documents/files/611/Lopsided%20Game%20Management.pdf)
+
+  [Borrowing Players Guidelines](https://docs.google.com/document/d/1qJKfJ3GiW70cRDf7p7L7hsC9xanXOBY77lLdEmwUFEs/edit?usp=sharing)
 ---
 
 Here are fantastic resources for every coach to use for developing their players. These are designed to improve the skill level of players and teams and facilitate a love of the game in an age appropriate way.
 
-AYSO Coaching Manual Portal
+### AYSO Coaching Manual Portal
 
 AYSO coaches can access the free AYSO Coaching Manual web portal to view AYSO player development content for all age groups.
 
@@ -15,7 +27,7 @@ AYSO coaches can access the free AYSO Coaching Manual web portal to view AYSO pl
 
 Coaches can opt to subscribe to a Premium version that provides access to the complete TheCoachingManual library, drawing tools for designing training activities and sessions that can be shared with team families, and generate a season training plan.
 
-Mojo App
+### Mojo App
 
 Mojo Sport has a rich library of training videos especially designed for recreational coaches. These can be viewed on YouTube by Googling "Mojo soccer" or you can download the free, full-featured Mojo app that can generate session plans and share schedules and messages with team parents.
 
@@ -23,7 +35,7 @@ Mojo Sport has a rich library of training videos especially designed for recreat
 
 If you are a WSSL coach, when you download the Mojo app, select "AYSO Region 611 - WSSL" as the organization you are associated with. Users can opt to subscribe to Mojo+ which is designed for developing individual skills.
 
-New York Red Bulls Resources
+### New York Red Bulls Resources
 
 The Red Bulls Training Programs follow a researched and proven approach to player development. They operate a building block approach to Player Development. At a young age mastery of the ball is vital for a child's future development. Players follow a path focused on technique and skill development, as competency increases, tactical elements are introduced. Within each building block, an extensive curriculum is offered.
 
@@ -31,24 +43,24 @@ The Red Bulls Training Programs follow a researched and proven approach to playe
 - [Technical Videos](http://www.redbullsacademy.com/training/player-tools/technical-videos/)
 - [Skills Challenge Videos](http://www.redbullsacademy.com/training/player-tools/skills-challenge/)
 
-Coach Education Clinics
+### Coach Education Clinics
 
 Each season, WSSL is committed to providing coaches with "feet on" training sessions with professional coaches. Sessions take place in an indoor gym on weekday evenings. See WSSL's Calendar for details. Clinics for coaches are offered by professional coaches in partnership with The New York Red Bulls.
 
-Reading Materials
+### Reading Materials
 
 WSSL's Head Coach Trainer recommends the following books for all WSSL coaches:
 
-> *Developing Youth Soccer Players* by Horst Wein (buy it on [Amazon](https://www.amazon.com/Developing-Youth-Soccer-Players-Horst/dp/0736003541)). A classic book on using simplified games to develop young soccer players. The author applies basic principles in education for creating a progressive coaching program that is both fun and entertaining. Wein writes that the coach's role is to stimulate players to think, rather than think for them.
->
-> *How We Learn To Move* by Rob Gray, PhD. A new and revolutionary approach to becoming skillful, moving away from boring repetitive drills toward giving athletes opportunities to explore and support their own individuality and creativity.
->
-> [The Perception Action Podcast](https://perceptionaction.com/pap/) - A series of Podcasts by Rob Gray PhD, professor at Arizona State University, on perception-action studies exploring how sport-specific skills are developed and the science behind it.
->
-> *The Dynamics of Skill Acquisition* *\- A Constraints-Led Approach* by Keith Davids, et al. A comprehensive analysis of the evolution of the constraints-led perspective, a recognized theory in motor learning and control. This book covers both the theoretical origins and applications of the CLA.
->
-> *Player Development - The Holistic Method* by John Cone and Gareth Smith. This is the first holistic, evidence-based performance development method in sport. It weaves together the interconnected layers that drive player performance development.
->
-> *Catch Them Being Good* by Tony DiCicco and Colleen Hacker, Ph.D. Written by the coach of the USWNT that won world championships in 1996 and 1999, it reflects what he learned coaching women, how to foster teamwork and develop essential skills. His coaching philosophy and methods had a major impact on US soccer.
->
-> *Take Back the Game - How Money and Mania Are Ruining Kids' Sports and Why It Matters* by Linda Flanagan. A critical look at the commercialization of youth sports. Flanagan recommends placing the long-term health and performance of kids above the short-term goals of coaches, parents, and the youth sports industrial complex, and how it can be done.
+*Developing Youth Soccer Players* by Horst Wein (buy it on [Amazon](https://www.amazon.com/Developing-Youth-Soccer-Players-Horst/dp/0736003541)). A classic book on using simplified games to develop young soccer players. The author applies basic principles in education for creating a progressive coaching program that is both fun and entertaining. Wein writes that the coach's role is to stimulate players to think, rather than think for them.
+
+*How We Learn To Move* by Rob Gray, PhD. A new and revolutionary approach to becoming skillful, moving away from boring repetitive drills toward giving athletes opportunities to explore and support their own individuality and creativity.
+
+[The Perception Action Podcast](https://perceptionaction.com/pap/) - A series of Podcasts by Rob Gray PhD, professor at Arizona State University, on perception-action studies exploring how sport-specific skills are developed and the science behind it.
+
+*The Dynamics of Skill Acquisition* *\- A Constraints-Led Approach* by Keith Davids, et al. A comprehensive analysis of the evolution of the constraints-led perspective, a recognized theory in motor learning and control. This book covers both the theoretical origins and applications of the CLA.
+
+*Player Development - The Holistic Method* by John Cone and Gareth Smith. This is the first holistic, evidence-based performance development method in sport. It weaves together the interconnected layers that drive player performance development.
+
+*Catch Them Being Good* by Tony DiCicco and Colleen Hacker, Ph.D. Written by the coach of the USWNT that won world championships in 1996 and 1999, it reflects what he learned coaching women, how to foster teamwork and develop essential skills. His coaching philosophy and methods had a major impact on US soccer.
+
+*Take Back the Game - How Money and Mania Are Ruining Kids' Sports and Why It Matters* by Linda Flanagan. A critical look at the commercialization of youth sports. Flanagan recommends placing the long-term health and performance of kids above the short-term goals of coaches, parents, and the youth sports industrial complex, and how it can be done.

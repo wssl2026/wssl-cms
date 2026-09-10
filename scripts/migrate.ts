@@ -4,6 +4,7 @@ import { fetchAllContent, targetFor, frontmatter, buildNav, type MuraItem } from
 import { htmlToMarkdown, localAssetPath } from './lib/convert';
 import { planAssetDownloads } from './lib/assets';
 import { buildRedirectsFile } from './lib/redirects';
+import { extractSidebarHtml } from './lib/sidebar';
 
 const THEME_IMAGES: Record<string, string> = {
   'https://www.wssl.org/sites/wssl/themes/wssl-theme/images/wssl-header-lg.png': 'public/images/wssl-header-lg.png',
@@ -25,6 +26,16 @@ async function download(url: string, dest: string): Promise<boolean> {
   return true;
 }
 
+/** The rendered legacy page, for the sidebar region the JSON API does not expose ('' if it cannot be fetched). */
+async function legacyPageHtml(legacyPath: string): Promise<string> {
+  try {
+    const res = await fetch(`https://www.wssl.org${legacyPath}`);
+    return res.ok ? await res.text() : '';
+  } catch {
+    return '';
+  }
+}
+
 async function downloadLegacyAsset(assetPath: string): Promise<'ok' | 'missing'> {
   const dest = join('public', localAssetPath(assetPath));
   for (const host of ['https://www.wssl.org', 'https://cms.wssl.org']) {
@@ -42,6 +53,7 @@ async function main() {
     assetsMissing: [] as string[],
     collisions: [] as string[],
     pageCollisions: [] as string[],
+    sidebars: [] as string[],
   };
   const allAssets = new Set<string>();
   const writtenTargets = new Map<string, string>();
@@ -62,9 +74,14 @@ async function main() {
     writtenTargets.set(target.file, item.filename);
     const { markdown, assets } = htmlToMarkdown(item.body ?? '');
     assets.forEach((a) => allAssets.add(a));
+    const legacyPath = `/${item.filename.replace(/\/+$/, '')}/`;
+    const sidebarHtml = extractSidebarHtml(await legacyPageHtml(legacyPath));
+    const sidebar = sidebarHtml ? htmlToMarkdown(sidebarHtml) : null;
+    sidebar?.assets.forEach((a) => allAssets.add(a));
+    if (sidebar) report.sidebars.push(legacyPath);
     const out = join('src/content/pages', target.file);
     await mkdir(dirname(out), { recursive: true });
-    await writeFile(out, frontmatter(item as MuraItem, target.path) + '\n' + markdown + '\n');
+    await writeFile(out, frontmatter(item as MuraItem, target.path, { sidebar: sidebar?.markdown }) + '\n' + markdown + '\n');
     report.written.push(out);
   }
 
@@ -83,7 +100,7 @@ async function main() {
   await mkdir('src/data', { recursive: true });
   await writeFile('src/data/nav.json', JSON.stringify({ items: buildNav(items) }, null, 2) + '\n');
   await writeFile('scripts/migration-report.json', JSON.stringify(report, null, 2) + '\n');
-  console.log(`written=${report.written.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} collisions=${report.collisions.length} pageCollisions=${report.pageCollisions.length}`);
+  console.log(`written=${report.written.length} sidebars=${report.sidebars.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} collisions=${report.collisions.length} pageCollisions=${report.pageCollisions.length}`);
   console.log('skipped:', report.skipped.join(', '));
   console.log('missing assets:', report.assetsMissing.join(', '));
   console.log('collisions:', report.collisions.join(', '));

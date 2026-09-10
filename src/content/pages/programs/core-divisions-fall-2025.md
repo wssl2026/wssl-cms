@@ -3,6 +3,14 @@ title: Fall 2025
 path: core/divisions/fall-2025
 legacyUrl: /programs/core/divisions/fall-2025/
 updated: 2025-10-22
+sidebar: |-
+  ![](/assets/legacy/Image/Core/wssl-core-11.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-22.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-27.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-28.jpeg)
 ---
 
 **PLEASE NOTE:  The below information is ONLY APPLICABLE to FALL 2025 SEASON**

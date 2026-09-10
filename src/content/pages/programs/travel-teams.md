@@ -3,6 +3,16 @@ title: Travel Teams
 path: travel-teams
 legacyUrl: /programs/travel-teams/
 updated: 2026-04-18
+sidebar: |-
+  ![](/assets/legacy/Image/Logos/WSSL-Red-Bulls.jpg)
+
+  ![](/assets/legacy/Image/Travel/wssl-travel-1-6-.jpeg)
+
+  ![](/assets/legacy/Image/Travel/wssl-travel-3-2-.jpeg)
+
+  ![](/assets/legacy/Image/Travel/wssl-travel-1-8-.jpeg)
+
+  ![](/assets/legacy/Image/Travel/wssl-travel-2.jpeg)
 ---
 
 West Side Soccer League (WSSL) has partnered with the New York Red Bulls to offer a competitive, merit-based **Travel and Tournament Program** for boys and girls from **U8 through U19 (high school)**. Our mission is to develop technically skilled, confident, and thoughtful players who enjoy the game and grow through it.
@@ -15,7 +25,7 @@ Our younger Travel teams (U8–U10) typically compete in the **Westchester Youth
 
 The WSSL Travel Program is built for players who are not only eager to grow on the field, but who also bring a positive attitude, a strong work ethic, and a commitment to their teammates.
 
-The Commitment
+### The Commitment
 
 Travel is a year-long commitment. Tryouts are held in the Spring for teams in Fall and Spring of the following year. Generally, the Fall season runs from Labor Day - Thanksgiving and the Spring season from April - June.
 
@@ -23,20 +33,20 @@ Travel is a year-long commitment. Tryouts are held in the Spring for teams in Fa
 
 **Game schedules are set by WYSL or NY Club/EDP, depending on the team, and we make those available to parents as soon as they are available to us.**
 
-[Travel game schedule](/schedules/game-schedules/travel-games/)
+[Travel game schedule](/schedules/game-schedules/travel-games/)\
 [Travel practice schedule](/schedules/training-schedules/travel-training/)
 
-**Coaching**
+### Coaching
 
 Our Travel teams are coached by professional Red Bulls trainers who are themselves educated in the Red Bulls Program and who have backgrounds in playing and coaching soccer. In addition, trained parent coaches work with the Red Bulls trainers on each team. All Red Bulls trainers and parent coaches have certifications in education programs by the National Soccer Coaches Association of America and the U.S. Soccer Federation.  Training sessions follow a detailed plan and curriculum designed to improve individual and team skills. For more information about the curriculum and trainers, see [RED BULLS CURRICULUM](/programs/red-bulls-curriculum/) in the Program submenus.
 
-**Teams Seeded at Their "Right" Level**
+### Teams Seeded at Their "Right" Level
 
  It is the goal of WSSL to ensure that each team is seeded in a division where they face competition against whom they are evenly matched. WSSL believes that competition is an extension of training and learning the game of soccer. It is fun and it is also a learning tool. The best matches are the ones where the kids are playing their hardest and are having opportunities to attack and defend during the same match. While beating an opponent by a margin of several can be very exciting, we prefer matches where a 1-0 win was the result of a great battle of skill on the field.
 
 Our Premier and some of our high school teams play with NY Club. Whether we have a premier team in a particular age group depends on a particular team's readiness and commitment to play at the higher level.
 
-**High School Program**
+### High School Program
 
 The WSSL High School Travel Program is both a continuation of the travel program and also the chance to compete at a higher level, with mixed age teams and a year-long commitment. We do anticipate that many of our soccer players will join their high school scholastic soccer teams as well, and we support that decision by implementing a flexible practice attendance policy during the fall. However, consistent with the WSSL Travel Team commitment policy in general, we epect our high school players to commit for the fall, winter and spring seasons.
 
@@ -44,12 +54,12 @@ We expect a high level of commitment, maturity, and focus from our high school p
 
 The high school travel division is led by Pedro Rafael, a long-time coach and parent of WSSL soccer.
 
-**Fees/Refund Policy**
+### Fees/Refund Policy
 
 **The fees for WSSL Travel Teams in 2025-26 are:**
 
-Standard Travel - $2250 per year - includes mandatory fall and spring training; winter training optional and not included (additional fees apply)
-Premier Travel - $2850 per year - includes mandatory fall, winter and spring training; league fees; and NY League Cup fees
+Standard Travel - $2250 per year - includes mandatory fall and spring training; winter training optional and not included (additional fees apply)\
+Premier Travel - $2850 per year - includes mandatory fall, winter and spring training; league fees; and NY League Cup fees\
 Girls HS Travel - $3100 per year - includes mandatory fall, winter and spring training (and buses); league fees; and NY League Cup fees
 
 Boys HS Travel - $3100 per year - includes mandatory fall, winter and spring training (and buses); league fees; and NY League Cup fees
@@ -64,4 +74,4 @@ Fees for optional winter training are expected to be approx. $450 per player. Gy
 
 **Travel program fees are NOT refundable, no exceptions.**
 
-[**Register for a Tryout**](/registration/tryouts-for-travel-or-tournament-teams/)
+### [Register for a Tryout](/registration/tryouts-for-travel-or-tournament-teams/)

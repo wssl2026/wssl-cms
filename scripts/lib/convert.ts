@@ -119,6 +119,63 @@ function flattenLineBreaks(cell: any, doc: any): void {
   });
 }
 
+const ALERT_KINDS = ['alert-success', 'alert-danger', 'alert-warning'];
+
+function classesOf(el: any): string[] {
+  return String(el.getAttribute('class') ?? '').split(/\s+/).filter(Boolean);
+}
+
+function replaceWith(el: any, tag: string, doc: any): any {
+  const next = doc.createElement(tag);
+  while (el.firstChild) next.appendChild(el.firstChild);
+  el.parentNode.replaceChild(next, el);
+  return next;
+}
+
+/**
+ * The legacy theme gave editors two visual building blocks, and both are lost the moment
+ * turndown drops class attributes:
+ *
+ *  - Bootstrap's `.alert-info`, restyled in the theme's custom.css as a navy banner with
+ *    white text, is how every section heading on the site was made (212 uses across 48
+ *    pages, on `<p>`, `<h3>`, `<h4>` and `<h5>` alike). Nothing else used `<h3>`, so a
+ *    Markdown `###` heading becomes the banner here (global.css styles `.prose h3` the
+ *    same way) and editors get it from the ordinary heading menu.
+ *  - `.alert-success` / `.alert-danger` (and a plain `.alert`) are callout boxes around a
+ *    sentence or two. Those keep their class as a small raw-HTML block — the only thing
+ *    in the Markdown that has to stay HTML — which global.css styles like Bootstrap did.
+ *
+ * `<blockquote>` was never a quotation: it is what the editor's "indent" button emits, and
+ * the theme gave it no visible style at all. Unwrapped, so Tailwind's italic, bar-on-the-
+ * left quote treatment never touches it.
+ */
+function restyleLegacyBlocks(root: any): void {
+  const doc = root.ownerDocument;
+  let quote: any;
+  while ((quote = root.querySelector('blockquote'))) unwrap(quote);
+
+  for (const el of Array.from(root.querySelectorAll('.alert')) as any[]) {
+    const classes = classesOf(el);
+    const text = String(el.textContent ?? '').replace(/\u00a0/g, ' ').trim();
+    if (!text && !el.querySelector('img, a[id], a[name]')) {
+      el.parentNode?.removeChild(el);
+      continue;
+    }
+    if (classes.includes('alert-info')) {
+      const h3 = replaceWith(el, 'h3', doc);
+      Array.from(h3.querySelectorAll('strong, b')).forEach((s: any) => unwrap(s));
+      continue;
+    }
+    if (/^H[1-6]$/.test(el.tagName)) {
+      el.removeAttribute('class'); // a heading in a plain padded box: the heading is what matters
+      continue;
+    }
+    const kind = ALERT_KINDS.find((k) => classes.includes(k));
+    const div = replaceWith(el, 'div', doc);
+    div.setAttribute('class', kind ? `alert ${kind}` : 'alert');
+  }
+}
+
 /**
  * Legacy Mura content pastes tables straight from Google Sheets: raw inline
  * styles, colgroup/col width hints, &nbsp; padding and data-sheets-* paste
@@ -196,7 +253,10 @@ function cleanTables(root: any, assets: Set<string>): void {
 export function htmlToMarkdown(html: string): ConvertResult {
   html = stripEmptyTables(html);
   const assets = new Set<string>();
-  const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', codeBlockStyle: 'fenced', emDelimiter: '*' });
+  // `br: '\\'` writes a `<br>` as a backslash hard break: turndown's default two trailing
+  // spaces would be stripped by the whitespace cleanup below, silently joining the lines
+  // the legacy pages broke on purpose (each question of a FAQ index on its own line).
+  const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', codeBlockStyle: 'fenced', emDelimiter: '*', br: '\\' });
   td.use(gfm);
   td.remove(['script', 'style', 'noscript']);
   td.keep(['iframe']);
@@ -247,8 +307,17 @@ export function htmlToMarkdown(html: string): ConvertResult {
     },
   });
 
+  // Callout boxes survive as the one raw-HTML block in the Markdown: a blank line on each
+  // side of the content keeps CommonMark parsing the inside as Markdown (links, bold).
+  td.addRule('legacyAlert', {
+    filter: (node) => node.nodeName === 'DIV' && /(^|\s)alert(\s|$)/.test(node.getAttribute('class') ?? ''),
+    replacement: (content, node) =>
+      `\n\n<div class="${(node as HTMLElement).getAttribute('class')}">\n\n${content.trim()}\n\n</div>\n\n`,
+  });
+
   const doc = (domino as any).createDocument(`<x-turndown id="turndown-root">${html}</x-turndown>`);
   const root = doc.getElementById('turndown-root');
+  restyleLegacyBlocks(root);
   cleanTables(root, assets);
 
   let markdown = td.turndown(root);

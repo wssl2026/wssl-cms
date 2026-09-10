@@ -4,13 +4,19 @@ path: volunteers/become-a-volunteer
 description: xyz
 legacyUrl: /volunteers/volunteers/become-a-volunteer/
 updated: 2022-07-10
+sidebar: |-
+  ![](/assets/legacy/Image/referees/wssl-core-35.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-37.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-35.jpeg)
 ---
 
 WSSL is a 100% volunteer organization and we depend on everyone to do their part! Every family is required to have at least one ACTIVE volunteer -- more are welcome! That may be a team role (like a coach, assistant coach or team manager), a divisional role (like a referee, assistant referee, equipment manager or awards day manager) or a league-wide role (like commissioner, coach trainer, referee instructor, safety director or registrar). Volunteer roles vary from minimal to significant time commitment.
 
 In addition to many obvious roles in WSSL, there are many more opportunities to lend your skills to the league -- either on the field or from behind a desk. If you have not found a role that is right for you, please contact your division head or the commissioner directly.
 
-**Become a Coach!**
+### Become a Coach!
 
 The Coach is the focal point for teaching soccer and team skills with the purpose of playing safe and fun games. Coaches are responsible for their teams, both at games and at practices. **Please do not sign up as a ref or coach volunteer if you do not intend to follow through -** it clutters our system and prevents us from focusing on those who really want to volunteer in those roles.  The commitment:
 
@@ -21,7 +27,7 @@ The Coach is the focal point for teaching soccer and team skills with the purpos
 
 More info on becoming a coach or assistant coach can be found on our Coach pages. Our [welcome page](/volunteers/coaches/coach-welcome/) is a good place to start.
 
-**Become a Referee!**
+### Become a Referee!
 
 The Referee is the ultimate authority during the game. The Referee’s primary responsibilities are to ensure the safety of the players and to enforce the Laws of Soccer. You do not need prior knowledge of soccer to become a referee! We can teach you everything you need to know.
 
@@ -32,7 +38,7 @@ The Referee is the ultimate authority during the game. The Referee’s primary r
 
 More info on becoming a referee can be found on our Referee pages. Our [welcome page](/volunteers/referees/welcome/) is a good place to start.
 
-**Volunteer in Another Role!**
+### Volunteer in Another Role!
 
 Please note some volunteer roles require a background check and a U.S. social security number:
 

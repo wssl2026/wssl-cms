@@ -7,7 +7,7 @@ updated: 2019-12-01
 
 <iframe allowfullscreen="" frameborder="0" height="600" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d729.9728975362967!2d-73.89930511179823!3d40.89936293220039!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f3ad3e2a1bd3%3A0xd6833a076cdbbc77!2sBertino%20Memorial%20Field!5e1!3m2!1sen!2sus!4v1570251068765!5m2!1sen!2sus" style="border:0;" width="800"></iframe>
 
-**Location/Directions**
+### Location/Directions
 
  **Bertino is a turf field and is on the Riverdale Country School campus, located at 5250 Fieldston Road in the Bronx.  This field is used for full-sided travel games.**
 
@@ -15,11 +15,11 @@ All visitors must park on Fieldston Road outside the main gates.  Enter through 
 
 The groundskeeper’s house is near the corner of the field.  It is a private residence.  Please respect its privacy and don’t go onto the porch.
 
-**Bathrooms**
+### Bathrooms
 
 Because of construction, there are currently no bathroom facilities at the field.  There is no building access under any circumstances, this includes to use the bathrooms. The campus is closed on weekends. If you find an open door, please do not enter any building looking for bathrooms. The school will consider this a trespass.
 
-Rules Specific to RCDS Fields
+### Rules Specific to RCDS Fields
 
 1. All spectators should use the bleacher area to watch games and/or practices. No Spectators should be on the turfed level.
 2. No food is allowed on the turf, under any circumstances.

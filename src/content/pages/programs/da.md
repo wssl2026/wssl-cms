@@ -3,9 +3,17 @@ title: Development Academy
 path: da
 legacyUrl: /programs/da/
 updated: 2024-01-28
+sidebar: |-
+  ![](/assets/legacy/Image/WSSL/g11-core-1-1-.jpeg)
+
+  ![](/assets/legacy/Image/WSSL/Blue-Stripes_Oct16_045.jpg)
 ---
 
+<div class="alert alert-danger">
+
 The Development Academy is currently on pause. We will update this page when we have an update.
+
+</div>
 
 The Development Academy (DA) curriculum follows the same [RED BULLS CURRICULUM](/programs/red-bulls-curriculum/) used by the Red Bulls to train our Travel teams.
 
@@ -18,11 +26,11 @@ WSSL's Development Academy is offered for players in U6 to U14. The structure of
 - DA is open to all WSSL core, tournament and travel players. DA is available to non-WSSL players on a space available basis subject to payment of an AYSO membership fee in addition to the DA fees.
 - The cost of DA is $275 per player per session for fall and spring and $400-$500 per session for winter.
 
-**SCHEDULES:**
+### SCHEDULES:
 
 The Development Academy is currently on pause. We will update this page when we have an update.
 
-**LOCATIONS:**
+### LOCATIONS:
 
 Dwight School Westside Gym, 18 West 89th Street @ CPW
 
@@ -40,10 +48,10 @@ Trevor Day School West, 1 West 88th Street @ CPW, stairs to gym are on left befo
 
 Trevor Day School East, 312 East 95th Street (between 2nd and 3rd), 3rd floor gymnasium
 
-**BLACKOUT DATES:**
+### BLACKOUT DATES:
 
 Each facility that we use has some black out dates relating to school activities and holidays. We have done our best to give each group a contiguous schedule, but there are exceptions. They are noted on the event sign up page and below in the schedule in red. Please make a note of these dates. Some changes may involve substitute locations or they may involve a time change. Players should try to make it but can also attend another session for their age group that week.
 
-**MAKE-UP POLICY:**
+### MAKE-UP POLICY:
 
 Players that miss a session may, with permission by emailing commissioner@wssl.org, take a make-up at any other time during the same week in a similar age session. We ask that you first email so that no session becomes overcrowded. This includes make-ups for sessions held on religious holidays and Halloween. Players are limited to two make-ups during each season.

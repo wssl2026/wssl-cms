@@ -33,9 +33,25 @@ describe('htmlToMarkdown', () => {
     const { markdown } = htmlToMarkdown('<h2>Fees</h2><p>Core is <strong>$250</strong>.</p><ul><li>One</li><li>Two</li></ul>');
     expect(markdown).toBe('## Fees\n\nCore is **$250**.\n\n- One\n- Two');
   });
-  it('flattens bootstrap alert divs to paragraphs and removes nbsp', () => {
-    const { markdown } = htmlToMarkdown('<p class="alert alert-danger"><span style="color:#e74c3c">There are NO REFUNDS&nbsp;for travel.</span></p>');
-    expect(markdown).toBe('There are NO REFUNDS for travel.');
+  it('keeps a bootstrap callout as a raw-HTML block with Markdown inside, and removes nbsp', () => {
+    const { markdown } = htmlToMarkdown('<p class="alert alert-danger"><span style="color:#e74c3c">There are <strong>NO REFUNDS</strong>&nbsp;for travel.</span></p><p>After.</p>');
+    expect(markdown).toBe('<div class="alert alert-danger">\n\nThere are **NO REFUNDS** for travel.\n\n</div>\n\nAfter.');
+  });
+  it('turns the legacy .alert-info banner into a Heading 3 whatever tag carried it', () => {
+    const { markdown } = htmlToMarkdown(
+      '<p class="alert alert-info"><strong>What are the fees?</strong></p><p>Body.</p><h5 class="alert alert-info">Season Dates:</h5><h2 class="alert">Spring 2026</h2>',
+    );
+    expect(markdown).toBe('### What are the fees?\n\nBody.\n\n### Season Dates:\n\n## Spring 2026');
+  });
+  it('drops an empty alert but keeps one that only holds an anchor or image', () => {
+    const { markdown } = htmlToMarkdown('<p class="alert alert-danger">&nbsp;</p><p class="alert alert-info"><a id="fees" name="fees"></a></p><p>Text.</p>');
+    expect(markdown).toBe('### <a id="fees"></a>\n\nText.');
+  });
+  it('unwraps blockquotes, which the legacy editor used as indent, even nested and around banners', () => {
+    const { markdown } = htmlToMarkdown(
+      '<blockquote><p>Intro.</p><blockquote><p class="alert alert-info">Question?</p><p>Answer with <a href="/fields/">a link</a>.</p></blockquote></blockquote>',
+    );
+    expect(markdown).toBe('Intro.\n\n### Question?\n\nAnswer with [a link](/fields/).');
   });
   it('keeps tables as GFM tables', () => {
     const { markdown } = htmlToMarkdown('<table><thead><tr><th>Div</th><th>Day</th></tr></thead><tbody><tr><td>U8</td><td>Sat</td></tr></tbody></table>');

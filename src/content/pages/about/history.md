@@ -3,6 +3,7 @@ title: History
 path: history
 legacyUrl: /about/history/
 updated: 2021-04-17
+sidebar: "![](/assets/legacy/Image/Logos/WSSL-logo-sq.png)"
 ---
 
 West Side Soccer League was founded by a group of parents in 1987. Upon its founding, it was associated with the American Youth Soccer Organization (AYSO) as Region 611. Burton Haimes, then President of AYSO, played a critical role in the League's beginning. With the goals of balanced teams and everybody plays, the first games were held on October 4th of that year with 10 teams and 118 players.

@@ -3,13 +3,21 @@ title: Become an Adult Referee!
 path: referees/new-referee
 legacyUrl: /volunteers/referees/new-referee/
 updated: 2024-09-06
+sidebar: |-
+  ![](/assets/legacy/Image/referees/wssl-ref-6.jpeg)
+
+  ![](/assets/legacy/Image/WSSL/g11-core-4-1-.jpeg)
+
+  ![](/assets/legacy/Image/referees/BlueStripes10_24-39000.jpg)
+
+  ![](/assets/legacy/Image/referees/ref1.jpg)
 ---
 
 ### Referee classes are offered at the start of each season and mid-season when there is sufficient demand.
 
 ### **[Click here](/volunteers/referees/register-class-ref/)** for details of upcoming classes.
 
-Top 5 Reasons to Become a WSSL Referee!
+### Top 5 Reasons to Become a WSSL Referee!
 
 1. It's the one time in the week when you get to tell people what to do and they do it.
 2. It's a fun way to clear your head of day-to-day clutter.
@@ -19,7 +27,7 @@ Top 5 Reasons to Become a WSSL Referee!
 
 Whatever reasons motivate you to take the field as a Referee, we provide support and encouragement to make this a rewarding experience for you and the players!
 
-How to Get Certified as an **Adult** WSSL Referee (**Teen** Referees please go [here](/volunteers/referees/teen-referee/))
+### How to Get Certified as an Adult WSSL Referee (Teen Referees please go [here](/volunteers/referees/teen-referee/))
 
 There are several steps to become a referee, some of which are mandated by US law or by WSSL's insurance requirements. The process may look daunting but we will help you achieve your certification. This process will take usually at least two weeks so start NOW.
 
@@ -46,7 +54,11 @@ If you haven't taken the online Safe Haven or Concussion Awareness since 2011, l
 
 **Register for a Referee Class**
 
+<div class="alert alert-danger">
+
 Information on upcoming referee training classes is available [here](/volunteers/referees/register-class-ref/).
+
+</div>
 
 If you have children in the 6U, 7U, or 8U age groups or wish to officiate in these age groups, you need to become certified as a **8U Official**. Please follow these steps:
 

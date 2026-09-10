@@ -3,9 +3,19 @@ title: Welcome
 path: coaches/coach-welcome
 legacyUrl: /volunteers/coaches/coach-welcome/
 updated: 2021-08-22
+sidebar: |-
+  ![](/assets/legacy/Image/Core/wssl-core-12.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-14.jpeg)![](/assets/legacy/Image/referees/wssl-core-14.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-5.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-core-29.jpeg)
+
+  ![](/assets/legacy/Image/referees/wssl-core-40.jpeg)
 ---
 
-Welcome to the West Side Soccer League Coaching Program - Wisdom from WSSL's Coach Administrator & Trainer
+### Welcome to the West Side Soccer League Coaching Program - Wisdom from WSSL's Coach Administrator & Trainer
 
 Welcome to the West Side Soccer League. The WSSL extends you a special message of appreciation for volunteering to enrich the lives of our youngest players. Since the WSSL was founded in 1986, the vision and mission of youth soccer has changed dramatically. After extensive study of successful programs around the world, national youth organizations are beginning to understand the practical applications of Goethe's statement, "Youth prefer to be stimulated, rather than instructed."
 
@@ -19,7 +29,7 @@ Player development is one of the cornerstones of any soccer organization. AYSO a
 
 The interaction between coach and player is a critical aspect of a player's development. AYSO recommends using the question as a component of delivery, by exploring the what, how, and why of their field experiences. A good question is beyond the worth a hundred commands. A question actively engages players in the creative process, of problem-solving, and treating mistakes as experiments from which to learn. I think we can all agree that we want to encourage our players to take ownership on the field and develop independence based on a deepening appreciation of their growth and enjoyment.
 
-Alan Leverenz
+Alan Leverenz\
 Regional Coach Administrator, Advanced Coach Trainer, National Coach
 
 ![](/assets/legacy/Image/Coach/coach-leverenz.jpg)

@@ -3,9 +3,15 @@ title: Waitlists
 path: core/waitlists
 legacyUrl: /programs/core/waitlists/
 updated: 2025-02-28
+sidebar: |-
+  ![](/assets/legacy/Image/Core/wssl-core-45.jpeg)
+
+  ![](/assets/legacy/Image/Core/wssl-core-31.jpeg)
+
+  ![](/assets/legacy/Image/WSSL/Blue-stripes_Nov6-0037.jpg)
 ---
 
-#### **What if my child is on the waitlist?**
+### What if my child is on the waitlist?
 
 Players waitlisted will be cleared up until the second weekend of games. First priority is a player that has a parent as a volunteer coach or referee. Next, the registration date is used. A child is placed on a new team based on available slots and team balancing factors. This is an over constrained problem. As such, no friend requests or other special requests can be honored at this point in the process. Our goal is to get every child playing; but not at the expense of unbalanced, uncompetitive teams. Once the waitlist is cleared and uniforms are handed out, players cannot be moved between teams and drops are subject to a fee before refunding the registration payment.
 

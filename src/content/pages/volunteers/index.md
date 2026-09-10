@@ -7,7 +7,7 @@ updated: 2023-04-21
 
 Thank you for visiting the Volunteers page. Please select from the options below.
 
-[Referee Volunteers](/volunteers/referees/welcome/)
+[Referee Volunteers](/volunteers/referees/)
 
 [Coach Volunteers](/volunteers/coaches/coach-welcome/)
 

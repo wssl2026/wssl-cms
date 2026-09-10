@@ -15,13 +15,13 @@ If you choose to drive to Randall's Island, please note that **parking** is only
 
 If there are any equipment or safety concerns please contact the WSSL [Equipment Director](mailto:equipment@wssl.org) or [Safety Director](mailto:safety@wssl.org) as needed.
 
-For a complete field map of Randalls Island, [click here](https://randallsisland.org/content/uploads/2016/08/Randalls-Island-Park-Alliance-RIPA-Map.pdf).
+### For a complete field map of Randalls Island, [click here](https://randallsisland.org/content/uploads/2016/08/Randalls-Island-Park-Alliance-RIPA-Map.pdf).
 
-Fields 60 and 61
+### Fields 60 and 61
 
 Location:  Fields 60 and 61 are located at the very south end of Randalls Island (also known as Wards Island).
 
-![](/assets/legacy/Image/Fields/kantorlockup.jpg)**Equipment:**  For ages U7-U8, 8 pairs of Pugg goals (and a few spares) and cones are located in the storage container near the entrance
+![](/assets/legacy/Image/Fields/kantorlockup.jpg)**Equipment:**  For ages U7-U8, 8 pairs of Pugg goals (and a few spares) and cones are located in the storage container near the entrance\
 to the fields. For ages U9-U10, there are two sets of 6x18 pop up goals in the storage container. For ages U11 and older, there are sets of movable goals (7x21 and 8x24) with nets at the fields. The container is secured by a combination lock. Coaches must obtain the code from their [Division Head for Core](/programs/core/divisions/), or from the [Director of Travel](mailto:wssl.bobhong@gmail.com) for travel.
 
 **Set Up:**  Pugg goals (U7-U8) and pop up Bownet goals (U9-U10) are activated on a spring-like mechanism. They generally POP out of their bags. Cones are used to mark the corners of each lined field. For ages U7-U8, set up mini 20x30 yard fields. The fields should be marked both for small sided (ages U9-U12) and for full sided (ages U13 and older). Please see the [picture below](#fieldsetup) for how to set up each field for play.
@@ -30,14 +30,14 @@ Break Down:  Teams with the last games need to return the Pugg and Bownet goals 
 
 These videos show how to close the Pugg and Bownet goals:
 
-[Pugg Goal Video](https://www.youtube.com/watch?v=viaK3eXL0KM)
+[Pugg Goal Video](https://www.youtube.com/watch?v=viaK3eXL0KM)\
 [Bownet Goal Video](https://www.youtube.com/watch?v=0QcTExk1oPA)
 
 Pugg and Bownet goals may NOT be left in the container open and strewn about (it sounds obvious... but...). All lost and found -- balls, sweatshirts, etc -- must be stored neatly in the storage container. A large box of black plastic bags is available for storing random items. Cones must be stacked neatly and left on the shelves. The container must be locked -- tug the lock a few times to be sure. Once all is secure, the closing coach must call the Division Head in charge to communicate that all has been taken care of properly. <a id="fieldsetup"></a>
 
 ![](/assets/legacy/Image/Fields/SitePlanKantorFieldsTMcC-2013-04-09.jpg)
 
-Other Small Sided Travel Fields - Fields 6, 8, 50, 51, 72, 73, 80 and 84
+### Other Small Sided Travel Fields - Fields 6, 8, 50, 51, 72, 73, 80 and 84
 
 Location:  Fields 6 and 8 are the "Bronx fields" located at the northern end of Randalls Island. Fields 50 and 51 are in the middle of Randalls Island just south of the parking lots and the Fire Academy.  Fields 72 and 73 are located at the very south end of Randalls Island (also known as Wards Island).
 
@@ -45,7 +45,7 @@ Equipment: 7x21 goals with nets are located at each field, along with the requir
 
 For a complete field map of Randalls Island, [click here](https://randallsisland.org/content/uploads/2016/08/Randalls-Island-Park-Alliance-RIPA-Map.pdf).
 
-Full Size Travel Fields - Fields 44, 45, 50, 51, 52, 54, 71, 74, 80, 81, 82, 84 and 85
+### Full Size Travel Fields - Fields 44, 45, 50, 51, 52, 54, 71, 74, 80, 81, 82, 84 and 85
 
 Location:  Fields 44 and 45 are the "Sunken Meadow" soccer fields located on the northeast corner of Randalls Island north of the Tennis Center. Fields 50-54 are in the middle of Randalls Island just south of the parking lots and the Fire Academy. Fields 71 and 74 are located at the very southeast end of Randalls Island (also known as Wards Island). Fields 80-85 are the "East River Fields" and are also located at the very southwest end of Randalls IsIand near the 103rd street footbridge.
 

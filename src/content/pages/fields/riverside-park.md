@@ -13,7 +13,7 @@ Please don't forget the trash! Every team is responsible for cleaning up after t
 
 If there are any equipment or safety concerns please contact the WSSL [Equipment Director](mailto:equipment@wssl.org) or [Safety Director](mailto:safety@wssl.org) as needed.
 
-Riverside South Fields (71st Street, 74th Street Track and 77th Street Ballfields)
+### Riverside South Fields (71st Street, 74th Street Track and 77th Street Ballfields)
 
 ![](/assets/legacy/Image/Fields/Map-of-Riverside-South-Fields.png)**Location:**  These are grass fields and no cleats. Enter Riverside Park at 72nd or 74th Street to access these fields. Go past the dog park on the left, through the tunnel and down a long flight of stairs. The 71st Street field will be to the left past the baseball field. The 74th Street Track will be immediately to the right, and the field is in the center of the track. Please see the map at right.
 
@@ -31,10 +31,17 @@ Riverside South Fields (71st Street, 74th Street Track and 77th Street Ballfield
 
 **Break down:** The teams who play the last games are responsible for breaking down the fields after the last game, and returning the equipment to the storage shed. Stack cones and discs separately. Store them in tidy stacks on the windowsill right inside the lockup to the right. Twist and fold two PUGG® goals together into one zippered pouch. Neatly stack and line up the pouches inside the door -- to the right under the window -- of the lock up. If by chance the pouches become broken or go missing, the PUGG® goals must be stored neatly nested one inside the other and stacked under the window out of the way of any others who may enter the lockup.
 
-| 101st Street Field **Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. To reach this field, enter at 99th Street and walk north or at 104th Street and use the pedestrian walkway to walk south to the field. Please see the map at right. **Equipment:** Two movable 6x18 goals with nets. **Set Up/Break Down:** Generally, no set up or breakdown is required. Occasionally, the lines on the field fade. If the lines should be repainted, please notify us at [equipment@wssl.org](mailto:equipment@wssl.org). The paint machines and paint are stored in the storage locker by the basketball courts just to the north of the field. A key is needed to access this storage locker. 103rd Street Field **Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. The soccer field runs north/south immediately to the east of the baseball field. To reach this field, enter at 104th Street and walk down two levels to the field. Please see the map at right. **Equipment:** Two movable 7x21 goals with nets. **Set Up:** Place movable goals in the proper location according to field lines. Goals should be placed at the North and South ends of the field. **Break Down:** Coach to remove cones at the end of each game. Last teams to take down nets, fold neatly and insert into gray bags. Store bags together in lock up just south of the field by basketball court. Make sure lock is secure. | ![](/assets/legacy/Image/Fields/map-of-101-and-103-fields.png) |
+|
+### 101st Street Field
+
+**Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. To reach this field, enter at 99th Street and walk north or at 104th Street and use the pedestrian walkway to walk south to the field. Please see the map at right. **Equipment:** Two movable 6x18 goals with nets. **Set Up/Break Down:** Generally, no set up or breakdown is required. Occasionally, the lines on the field fade. If the lines should be repainted, please notify us at [equipment@wssl.org](mailto:equipment@wssl.org). The paint machines and paint are stored in the storage locker by the basketball courts just to the north of the field. A key is needed to access this storage locker.
+
+### 103rd Street Field
+
+**Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. The soccer field runs north/south immediately to the east of the baseball field. To reach this field, enter at 104th Street and walk down two levels to the field. Please see the map at right. **Equipment:** Two movable 7x21 goals with nets. **Set Up:** Place movable goals in the proper location according to field lines. Goals should be placed at the North and South ends of the field. **Break Down:** Coach to remove cones at the end of each game. Last teams to take down nets, fold neatly and insert into gray bags. Store bags together in lock up just south of the field by basketball court. Make sure lock is secure. | ![](/assets/legacy/Image/Fields/map-of-101-and-103-fields.png) |
 | --- | --- |
 
-107th Street Field
+### 107th Street Field
 
 ![](/assets/legacy/Image/Fields/map_of_107_2_fields.png)**Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. To reach this field, enter at 108th Street and walk down two levels to the field. The field is just south of the skate park and north of the Riverside Park rings.
 

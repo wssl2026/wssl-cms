@@ -27,6 +27,6 @@ describe('pageSchema', () => {
     expect(PATH_PATTERN.test('/core/')).toBe(false);
   });
   it('exposes the field list used by the CMS config test', () => {
-    expect(PAGE_FIELD_NAMES).toEqual(['title', 'path', 'description', 'draft', 'updated', 'legacyUrl', 'body']);
+    expect(PAGE_FIELD_NAMES).toEqual(['title', 'path', 'description', 'draft', 'updated', 'legacyUrl', 'sidebar', 'body']);
   });
 });
