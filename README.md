@@ -11,6 +11,13 @@ Source for https://www.wssl.org — Astro static site, content in `src/content/p
 | `npm run migrate` | Re-import every page from the old Mura site (~5 min, network) |
 | `npm run check-links` | Check `dist/` for broken internal links and dead `#fragments` |
 
+### Cloudflare Pages build settings
+
+Pages runs `npm run build` on every push to `main`, including every save from the editor. Two settings keep that fast (the site itself builds in about three seconds; the rest of the build stage is `npm ci`):
+
+- **Build cache** on (Settings → Builds & deployments): Pages then restores npm's download cache between builds, so packages are not downloaded again unless the lockfile changed.
+- **`NODE_ENV=production`** as a build environment variable (Settings → Environment variables, production and preview): npm then skips `devDependencies`, which are the local-preview and test tooling (Wrangler and its Workers runtime alone are ~230 MB) that the Pages build never uses. Everything the build needs — Astro, Tailwind, `tsx` and the two libraries the corpus script reads Markdown with — is in `dependencies` for exactly this reason; keep it that way when adding a build-time tool.
+
 ## Before this goes live
 
 Everything below is a placeholder in the repo and must be filled in by whoever deploys the site:
