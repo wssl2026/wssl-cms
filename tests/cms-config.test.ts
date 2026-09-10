@@ -56,6 +56,21 @@ describe('Sveltia config', () => {
   it('ships no local_backend — Sveltia ignores it and warns', () => {
     expect(config.local_backend).toBeUndefined();
   });
+  it('turns on the live preview pane and per-entry view-on-site links', () => {
+    expect(config.editor.preview).toBe(true);
+    expect(config.show_preview_links).toBe(true);
+  });
+  it('gives every page collection a preview_path that matches its live URL, with no double slash when path is empty', () => {
+    const folders = config.collections.filter((c: any) => c.folder);
+    for (const c of folders) {
+      expect(c.preview_path).toBe(`/${c.name}/{{fields.path}}{{fields.path | ternary('/', '')}}`);
+    }
+  });
+  it('gives the home settings file a preview_path pointing at the site root', () => {
+    const settings = config.collections.find((c: any) => c.name === 'settings');
+    const home = settings.files.find((f: any) => f.file === 'src/data/home.json');
+    expect(home.preview_path).toBe('/');
+  });
 });
 
 describe('Sveltia admin page', () => {

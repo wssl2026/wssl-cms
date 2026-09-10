@@ -26,8 +26,12 @@ display_url: https://www.wssl.org
 logo_url: /images/mobile-logo.png
 media_folder: public/assets
 public_folder: /assets
+# Preview pane while editing, and a "view on site" link on each entry that opens
+# `preview_path` below against `site_url`. The link only ever shows the last
+# saved (committed) version, never in-progress edits.
 editor:
-  preview: false
+  preview: true
+show_preview_links: true
 slug:
   encoding: ascii
   clean_accents: true
@@ -40,6 +44,10 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /programs/{{path}}/'
+    # {{fields.path}} twice: once for the path itself, once (via ternary) for the
+    # trailing slash only when path is non-empty — avoids a double slash when path
+    # is "" (the section home page), which instead resolves to /programs/.
+    preview_path: "/programs/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: &page_fields
       - { label: Title, name: title, widget: string }
       - label: URL path
@@ -58,6 +66,7 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /registration/{{path}}/'
+    preview_path: "/registration/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: *page_fields
   - name: schedules
     label: Schedules
@@ -65,6 +74,7 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /schedules/{{path}}/'
+    preview_path: "/schedules/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: *page_fields
   - name: fields
     label: Fields
@@ -72,6 +82,7 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /fields/{{path}}/'
+    preview_path: "/fields/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: *page_fields
   - name: volunteers
     label: Volunteers (coaches, referees)
@@ -79,6 +90,7 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /volunteers/{{path}}/'
+    preview_path: "/volunteers/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: *page_fields
   - name: about
     label: About
@@ -86,6 +98,7 @@ collections:
     create: true
     slug: '{{slug}}'
     summary: '{{title}} — /about/{{path}}/'
+    preview_path: "/about/{{fields.path}}{{fields.path | ternary('/', '')}}"
     fields: *page_fields
 
   - name: settings
@@ -116,6 +129,7 @@ collections:
       - name: home
         label: Home page
         file: src/data/home.json
+        preview_path: "/"
         fields:
           - { label: Field status, name: fieldStatus, widget: string, required: false }
           - label: Carousel images
