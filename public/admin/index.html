@@ -26,8 +26,12 @@
     // sign-in is what stands behind every commit. Sveltia turns `api_root` into
     // `<api_root>/api/v3` for REST and `<api_root>/api/graphql` for GraphQL, and the
     // proxy accepts both shapes.
+    // `site_url` follows the same rule so the "view on site" links open the copy of the
+    // site this editor belongs to (staging while on pages.dev, production after cutover).
     window.CMS.init({
       config: {
+        site_url: window.location.origin,
+        display_url: window.location.origin,
         backend: {
           base_url: window.location.origin,
           api_root: window.location.origin + '/api/cms/gh',
