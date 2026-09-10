@@ -22,7 +22,6 @@ const suggestions = [
     background: #ffbd41; opacity: 0; z-index: -1;
     animation: ask-pulse 2.6s ease-out infinite;
   }
-  .ask-open.ask-quiet::before { animation: none; }
   @keyframes ask-pulse {
     0% { transform: scale(1); opacity: 0.55; }
     70% { transform: scale(1.45); opacity: 0; }
@@ -222,8 +221,8 @@ const suggestions = [
   try { if (localStorage.getItem(SIZE_KEY) === 'large') setSize(true); } catch { /* storage unavailable */ }
   expandBtn.addEventListener('click', () => setSize(panel.dataset.size !== 'large'));
   // One-time nudge per browser session: a small speech bubble above the button after 6 s,
-  // gone after 10 s or as soon as the panel opens. The pulse ring stops once the visitor
-  // has opened the assistant, so it never nags.
+  // gone after 10 s or as soon as the panel opens. The pulse ring on the button itself
+  // always runs: it is the site's main call to action and should catch the eye on every page.
   const NUDGE_KEY = 'askwssl:nudged';
   let nudgeTimer: number | undefined;
   const hideNudge = () => { nudge.hidden = true; if (nudgeTimer) window.clearTimeout(nudgeTimer); };
@@ -235,7 +234,6 @@ const suggestions = [
         nudgeTimer = window.setTimeout(hideNudge, 10000);
       }, 6000);
     }
-    if (history.length > 0) openBtn.classList.add('ask-quiet');
   } catch { /* storage unavailable */ }
 
   // The panel stays open across page loads within the browser session: following a link the
@@ -244,7 +242,6 @@ const suggestions = [
   const OPEN_KEY = 'askwssl:open';
   function openPanel(focus: boolean) {
     hideNudge();
-    openBtn.classList.add('ask-quiet');
     panel.hidden = false;
     launcher.hidden = true;
     openBtn.setAttribute('aria-expanded', 'true');
