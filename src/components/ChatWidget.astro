@@ -6,7 +6,39 @@ const suggestions = [
   'How do I become a referee?',
 ];
 ---
-<button id="ask-open" class="fixed bottom-5 right-5 z-40 bg-navy text-white font-bold px-5 py-3 rounded-full shadow-lg hover:bg-gold hover:text-navy" aria-controls="ask-panel" aria-expanded="false">Ask WSSL</button>
+<div id="ask-launcher" class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
+  <div id="ask-nudge" class="ask-nudge bg-white text-navy text-sm font-semibold px-4 py-2 rounded-xl shadow-lg border border-gold" role="status" hidden>Have a question about registration, schedules or fields? Ask me!</div>
+  <button id="ask-open" type="button" class="ask-open bg-gold text-navy font-bold text-lg px-6 py-4 rounded-full shadow-xl flex items-center gap-3 hover:bg-navy hover:text-gold focus:outline-none focus-visible:ring-4 focus-visible:ring-navy/40 transition-transform hover:scale-105" aria-controls="ask-panel" aria-expanded="false">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true"><path d="M21 12c0 4.4-4 8-9 8-1.2 0-2.4-.2-3.5-.6L3 21l1.6-4.2C3.6 15.4 3 13.8 3 12c0-4.4 4-8 9-8s9 3.6 9 8z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
+    <span>Ask WSSL</span>
+  </button>
+</div>
+
+<style>
+  /* Soft expanding ring behind the launcher so the button catches the eye without flashing. */
+  .ask-open { position: relative; }
+  .ask-open::before {
+    content: ''; position: absolute; inset: 0; border-radius: 9999px;
+    background: #ffbd41; opacity: 0; z-index: -1;
+    animation: ask-pulse 2.6s ease-out infinite;
+  }
+  .ask-open.ask-quiet::before { animation: none; }
+  @keyframes ask-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    70% { transform: scale(1.45); opacity: 0; }
+    100% { transform: scale(1.45); opacity: 0; }
+  }
+  .ask-nudge { animation: ask-nudge-in 0.4s ease-out; position: relative; }
+  .ask-nudge::after {
+    content: ''; position: absolute; right: 2rem; bottom: -0.45rem; width: 0.9rem; height: 0.9rem;
+    background: #fff; border-right: 1px solid #ffbd41; border-bottom: 1px solid #ffbd41; transform: rotate(45deg);
+  }
+  @keyframes ask-nudge-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ask-open::before, .ask-nudge { animation: none; }
+    .ask-open { transition: none; }
+  }
+</style>
 
 <section id="ask-panel" data-size="compact" class="fixed bottom-5 right-5 z-50 w-[min(24rem,calc(100vw-2.5rem))] h-[min(36rem,calc(100vh-2.5rem))] data-[size=large]:w-[min(56rem,calc(100vw-2.5rem))] data-[size=large]:h-[calc(100vh-2.5rem)] bg-white border border-gray-300 rounded-xl shadow-2xl flex flex-col" hidden aria-label="Ask WSSL assistant">
   <header class="flex items-center justify-between bg-navy text-white px-4 py-3 rounded-t-xl">
@@ -37,7 +69,7 @@ const suggestions = [
   function $(id: string): HTMLElement {
     return document.getElementById(id) as HTMLElement;
   }
-  const panel = $('ask-panel'), openBtn = $('ask-open'), closeBtn = $('ask-close'), expandBtn = $('ask-expand');
+  const panel = $('ask-panel'), openBtn = $('ask-open'), closeBtn = $('ask-close'), expandBtn = $('ask-expand'), launcher = $('ask-launcher'), nudge = $('ask-nudge');
   const list = $('ask-messages'), form = $('ask-form') as HTMLFormElement, input = $('ask-input') as HTMLInputElement, send = $('ask-send') as HTMLButtonElement;
 
   const STORAGE = 'askwssl:history';
@@ -144,8 +176,25 @@ const suggestions = [
   }
   try { if (localStorage.getItem(SIZE_KEY) === 'large') setSize(true); } catch { /* storage unavailable */ }
   expandBtn.addEventListener('click', () => setSize(panel.dataset.size !== 'large'));
-  openBtn.addEventListener('click', () => { panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); openBtn.hidden = true; input.focus(); scroll(); });
-  closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; openBtn.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
+  // One-time nudge per browser session: a small speech bubble above the button after 6 s,
+  // gone after 10 s or as soon as the panel opens. The pulse ring stops once the visitor
+  // has opened the assistant, so it never nags.
+  const NUDGE_KEY = 'askwssl:nudged';
+  let nudgeTimer: number | undefined;
+  const hideNudge = () => { nudge.hidden = true; if (nudgeTimer) window.clearTimeout(nudgeTimer); };
+  try {
+    if (!sessionStorage.getItem(NUDGE_KEY) && history.length === 0) {
+      nudgeTimer = window.setTimeout(() => {
+        nudge.hidden = false;
+        try { sessionStorage.setItem(NUDGE_KEY, '1'); } catch { /* storage unavailable */ }
+        nudgeTimer = window.setTimeout(hideNudge, 10000);
+      }, 6000);
+    }
+    if (history.length > 0) openBtn.classList.add('ask-quiet');
+  } catch { /* storage unavailable */ }
+
+  openBtn.addEventListener('click', () => { hideNudge(); openBtn.classList.add('ask-quiet'); panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); launcher.hidden = true; input.focus(); scroll(); });
+  closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; launcher.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
   form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
   list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
 </script>
