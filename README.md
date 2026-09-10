@@ -110,16 +110,18 @@ function prune() {
 
 How much a question costs depends on the provider and, on Gemini, on the retrieval mode: index mode sends a small map plus a few pages, cache mode sends the whole site. `npm run corpus` builds both files and prints their sizes; `npx tsx scripts/count-corpus-tokens.ts` measures the corpus. Check the current rates before trusting the arithmetic below: **Gemini** at <https://ai.google.dev/gemini-api/docs/pricing>, **Claude** at <https://claude.com/pricing#api>.
 
-**Gemini in `index` mode (`gemini-3.8-flash`, the default).** Each question sends the ~6K-token page map plus the pages the model reads (at most six; the whole corpus is ~80K tokens across 87 pages), in two or three model calls — so roughly 10–25K input tokens, at the flash-class rate of about $0.30 per million:
+**Gemini in `index` mode (`gemini-3.8-flash`, the default).** Each question sends the ~6K-token page map plus the pages the model reads (at most six; the whole corpus is ~80K tokens across 87 pages), in two or three model calls — so roughly 10–25K input tokens, plus a few thousand output tokens (the answer, the tool calls, and the model's thinking, which Gemini bills as output). Paid-tier rates as of September 2026: **$0.75 per million input tokens and $3.75 per million output tokens through 31 December 2026, doubling on 1 January 2027** — Google published the increase on the pricing page, so re-check before budgeting for next year.
 
-- **Every question**: ≈ 20K × $0.30 / 1M ≈ **$0.006**, plus output. Nothing is stored between questions, so there is no cache storage charge and a content edit costs nothing extra.
+- **Every question**: ≈ 20K × $0.75 / 1M ≈ $0.015 input, plus ≈ 2K × $3.75 / 1M ≈ $0.008 output, so about **$0.02–0.03** (about **$0.05** from 2027). Nothing is stored between questions, so there is no cache storage charge and a content edit costs nothing extra.
 
-At `DAILY_CAP = 200` that is well under **$2** a day, and the bill scales with questions asked rather than with hours the site is up. That 10–25K figure assumes typically-sized pages: a page's full text, once read, rides along in `contents` on every later call for that question (the second tool round's request, and always the final answer), so it is billed again each time rather than once. A worst-case question — the model reads all six pages, and each is unusually large — can reach roughly **60–70K** input tokens for that one question.
+At `DAILY_CAP = 200` the ceiling is about **$5 a day** (about $10 from 2027), and the bill scales with questions asked rather than with hours the site is up: a realistic 10–30 questions a day is well under $1. That 10–25K figure assumes typically-sized pages: a page's full text, once read, rides along in `contents` on every later call for that question (the second tool round's request, and always the final answer), so it is billed again each time rather than once. A worst-case question — the model reads all six pages, and each is unusually large — can reach roughly **60–70K** input tokens, about $0.06 for that one question. The question log's `prompt_tokens` and `candidates_tokens` columns are the real numbers: multiply the sheet's totals by the rates above to see what a week actually cost.
 
-**Gemini in `cache` mode (`GEMINI_RETRIEVAL = "cache"`).** Flash-class input is roughly $0.30 per million tokens, cached input about a tenth of that, plus a storage charge (~$1 per million tokens per hour) for as long as the explicit cache lives:
+The free tier prices the same calls at $0, but Google may use the questions to improve its products and the rate limits are lower; the paid tier is the right choice for a public site.
 
-- **Cold question** (first of the hour, or the first after any content change): the corpus is read at full rate and then stored, so ≈ 100K × $0.30 / 1M ≈ **$0.03**, plus ≈ **$0.10** to hold the cache for the hour.
-- **Warm question** (cache hit): ≈ 100K × $0.03 / 1M ≈ **$0.003**, plus output.
+**Gemini in `cache` mode (`GEMINI_RETRIEVAL = "cache"`).** Flash-class input is $0.75 per million tokens through 2026 ($1.50 from 2027), cached input about a tenth of that, plus a storage charge ($0.50 per million tokens per hour through 2026, $1 from 2027) for as long as the explicit cache lives:
+
+- **Cold question** (first of the hour, or the first after any content change): the corpus is read at full rate and then stored, so ≈ 100K × $0.75 / 1M ≈ **$0.08**, plus ≈ **$0.05** to hold the cache for the hour.
+- **Warm question** (cache hit): ≈ 100K × $0.075 / 1M ≈ **$0.008**, plus output.
 
 At `DAILY_CAP = 200` a realistic day is well under **$5** — the hourly cache storage, not the questions, dominates. The worst case, if every question missed the cache, is about $8.
 
