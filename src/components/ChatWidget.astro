@@ -238,8 +238,32 @@ const suggestions = [
     if (history.length > 0) openBtn.classList.add('ask-quiet');
   } catch { /* storage unavailable */ }
 
-  openBtn.addEventListener('click', () => { hideNudge(); openBtn.classList.add('ask-quiet'); panel.hidden = false; openBtn.setAttribute('aria-expanded', 'true'); launcher.hidden = true; input.focus(); scroll(); });
-  closeBtn.addEventListener('click', () => { inFlight?.abort(); panel.hidden = true; launcher.hidden = false; openBtn.setAttribute('aria-expanded', 'false'); openBtn.focus(); });
+  // The panel stays open across page loads within the browser session: following a link the
+  // assistant gave (or any site link) must not close the conversation. The open/closed state
+  // lives in sessionStorage next to the history, so a new tab starts closed.
+  const OPEN_KEY = 'askwssl:open';
+  function openPanel(focus: boolean) {
+    hideNudge();
+    openBtn.classList.add('ask-quiet');
+    panel.hidden = false;
+    launcher.hidden = true;
+    openBtn.setAttribute('aria-expanded', 'true');
+    try { sessionStorage.setItem(OPEN_KEY, '1'); } catch { /* storage unavailable */ }
+    if (focus) input.focus();
+    scroll();
+  }
+  function closePanel() {
+    inFlight?.abort();
+    panel.hidden = true;
+    launcher.hidden = false;
+    openBtn.setAttribute('aria-expanded', 'false');
+    try { sessionStorage.removeItem(OPEN_KEY); } catch { /* storage unavailable */ }
+    openBtn.focus();
+  }
+  openBtn.addEventListener('click', () => openPanel(true));
+  closeBtn.addEventListener('click', closePanel);
+  // Restore on load without stealing focus from the page the visitor just navigated to.
+  try { if (sessionStorage.getItem(OPEN_KEY) === '1') openPanel(false); } catch { /* storage unavailable */ }
   form.addEventListener('submit', (ev) => { ev.preventDefault(); const q = input.value.trim(); if (!q) return; input.value = ''; ask(q); });
   list.addEventListener('click', (ev) => { const b = (ev.target as HTMLElement).closest('.ask-suggest'); if (b) ask(b.textContent!.trim()); });
 </script>
