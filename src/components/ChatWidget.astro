@@ -34,8 +34,20 @@ const suggestions = [
     background: #fff; border-right: 1px solid #ffbd41; border-bottom: 1px solid #ffbd41; transform: rotate(45deg);
   }
   @keyframes ask-nudge-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  /* Typing indicator inside the assistant bubble while the answer is being prepared. The
+     indicator is created by the script below, so it never carries Astro's scoping attribute:
+     these rules must be global to reach it. */
+  :global(.ask-dots) { display: inline-flex; gap: 0.3rem; align-items: center; }
+  :global(.ask-dots i) { width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: #002664; opacity: 0.35; animation: ask-bounce 1.2s ease-in-out infinite; }
+  :global(.ask-dots i:nth-child(2)) { animation-delay: 0.15s; }
+  :global(.ask-dots i:nth-child(3)) { animation-delay: 0.3s; }
+  @keyframes ask-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+    40% { transform: translateY(-0.35rem); opacity: 1; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .ask-open::before, .ask-nudge { animation: none; }
+    .ask-open::before, .ask-nudge, :global(.ask-dots i) { animation: none; }
+    :global(.ask-dots i) { opacity: 0.7; }
     .ask-open { transition: none; }
   }
 </style>
@@ -118,21 +130,53 @@ const suggestions = [
   for (const m of history) { bubble(m.role).innerHTML = m.role === 'user' ? DOMPurify.sanitize(m.content) : render(m.content); }
   if (history.length) $('ask-suggestions')?.remove();
 
+  // "Working" indicator shown in the assistant bubble until the first words stream in:
+  // three bouncing dots plus a status line that advances every couple of seconds, so a
+  // 5–10 s wait (the assistant reads the page map, then the pages it needs) never looks stuck.
+  const WORKING_STEPS = ['Reading the site…', 'Finding the right pages…', 'Writing an answer…'];
+  function showWorking(target: HTMLElement): { stop: () => void } {
+    target.textContent = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'ask-working flex items-center gap-3 text-gray-600';
+    wrap.setAttribute('aria-live', 'polite');
+    const dots = document.createElement('span');
+    dots.className = 'ask-dots';
+    dots.innerHTML = '<i></i><i></i><i></i>';
+    const label = document.createElement('span');
+    label.textContent = WORKING_STEPS[0];
+    wrap.append(dots, label);
+    target.appendChild(wrap);
+    let step = 0;
+    const timer = window.setInterval(() => {
+      step = Math.min(step + 1, WORKING_STEPS.length - 1);
+      label.textContent = WORKING_STEPS[step];
+    }, 2500);
+    let stopped = false;
+    return {
+      stop() {
+        if (stopped) return;
+        stopped = true;
+        window.clearInterval(timer);
+        wrap.remove();
+      },
+    };
+  }
+
   async function ask(question: string) {
     $('ask-suggestions')?.remove();
     history.push({ role: 'user', content: question });
     bubble('user').textContent = question;
     scroll();
     const out = bubble('assistant');
-    out.textContent = '…';
+    const working = showWorking(out);
     scroll();
     send.disabled = true; input.disabled = true;
     let text = '';
     const sources = new Map<string, string>();
     const onEvent = (e: ClientEvent) => {
-      if (e.type === 'text') { text += e.text; out.innerHTML = render(text); }
+      if (e.type === 'text') { working.stop(); text += e.text; out.innerHTML = render(text); }
       else if (e.type === 'citation' && e.url) sources.set(e.url, e.title || e.url);
-      else if (e.type === 'error') { text = text || e.message; out.innerHTML = render(text); }
+      else if (e.type === 'error') { working.stop(); text = text || e.message; out.innerHTML = render(text); }
       scroll();
     };
     inFlight?.abort();
@@ -140,6 +184,7 @@ const suggestions = [
     inFlight = controller;
     try { await streamChat(history, onEvent, controller.signal, sessionId); }
     finally {
+      working.stop();
       if (inFlight === controller) inFlight = null;
       if (sources.size) {
         const s = sourcesEl();
