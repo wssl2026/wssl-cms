@@ -14,6 +14,14 @@
        ship new code into the page that commits to the site. -->
   <script src="/admin/sveltia-cms.js"></script>
   <script>
+    // Styles the preview pane roughly like the live site (PT Sans, navy/gold, prose
+    // spacing) and hides the field labels ("Title", "Body") left over from the default
+    // preview — see public/admin/preview.css for the full explanation. Metadata fields
+    // (path, description, draft, updated, legacyUrl) are hidden from the preview pane
+    // entirely via `preview: false` in config.yml, so only title + body reach this CSS.
+    window.CMS.registerPreviewStyle('/admin/preview.css');
+  </script>
+  <script>
     // Everything that does not depend on where this page is served from lives in
     // config.yml; Sveltia merges what follows over it. `base_url` (where the sign-in
     // popup opens) and `api_root` (where the GitHub API calls go) are both this origin,

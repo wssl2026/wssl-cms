@@ -37,6 +37,10 @@ slug:
   clean_accents: true
   sanitize_replacement: '-'
 
+# `preview: false` on the metadata fields below (path, description, draft, updated, legacyUrl)
+# keeps them out of the preview pane, so it only shows title + body — the actual page content.
+# `public/admin/preview.css`, registered from index.html via CMS.registerPreviewStyle(), styles
+# what's left (title as a heading, body prose) roughly like the site.
 collections:
   - name: programs
     label: Programs
@@ -55,10 +59,11 @@ collections:
         widget: string
         hint: 'Under this section, lowercase with dashes, e.g. core/waitlists → /programs/core/waitlists/. Leave empty only for the section home page.'
         pattern: ['^$|^[a-z0-9-]+(/[a-z0-9-]+)*$', 'Lowercase letters, numbers, dashes and slashes only']
-      - { label: Description (for search engines), name: description, widget: string, required: false }
-      - { label: Draft (hide from the site), name: draft, widget: boolean, default: false, required: false }
-      - { label: Last updated, name: updated, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false }
-      - { label: Old site URL (reference only), name: legacyUrl, widget: string, required: false }
+        preview: false
+      - { label: Description (for search engines), name: description, widget: string, required: false, preview: false }
+      - { label: Draft (hide from the site), name: draft, widget: boolean, default: false, required: false, preview: false }
+      - { label: Last updated, name: updated, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false, preview: false }
+      - { label: Old site URL (reference only), name: legacyUrl, widget: string, required: false, preview: false }
       - { label: Body, name: body, widget: markdown }
   - name: registration
     label: Registration

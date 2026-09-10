@@ -1,0 +1,169 @@
+/* Preview pane styling for the Sveltia CMS admin, loaded via
+   CMS.registerPreviewStyle('/admin/preview.css') in public/admin/index.html.
+
+   Registering any preview style switches Sveltia from rendering the preview inline to
+   rendering it inside a sandboxed iframe with its own blank document (see
+   entry-preview-iframe.svelte in @sveltia/cms) — none of Sveltia's own built-in preview
+   CSS reaches that document, so this file has to define everything, not just override it.
+
+   Tokens below are copied from src/styles/global.css (--color-navy, --color-gold, PT Sans)
+   and src/layouts/PageLayout.astro / BaseLayout.astro (the h1 and .prose treatment, the
+   Google Fonts import) so the preview reads roughly like the published page. It does not
+   pull in Tailwind — the exact spacing/type scale on the live site (see the "view on site"
+   link after saving) will differ in the details.
+
+   Each field renders in the preview as
+     <section data-key-path="fieldName" data-field-type="...">
+       <h4>Label</h4>
+       ...value...
+     </section>
+   With path/description/draft/updated/legacyUrl set to `preview: false` in config.yml, only
+   the title and body sections remain — the `<h4>` labels for those two are hidden below so
+   only actual page content shows. */
+
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap');
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1.5rem;
+  max-width: 896px;
+  margin-inline: auto;
+  font-family: 'PT Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #111827;
+  background: #fff;
+}
+
+/* Field labels ("Title", "Body") are editor chrome, not page content. */
+section[data-key-path] > h4 {
+  display: none;
+}
+
+/* string-preview.svelte already tags the title field's <p> with a `.title` class because its
+   field name is literally "title"; style it like PageLayout.astro's
+   <h1 class="text-3xl font-bold text-navy mb-6">. The attribute selector is kept as a
+   belt-and-suspenders fallback in case that internal class ever goes away. */
+section[data-key-path='title'] p,
+p.title {
+  font-family: 'PT Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #002664;
+  line-height: 1.2;
+  margin: 0 0 1.5rem;
+}
+
+/* Body markdown, approximating .prose.prose-lg.prose-a:text-navy.prose-headings:text-navy */
+section[data-key-path='body'] {
+  margin-top: 0.5rem;
+}
+
+section[data-key-path='body'] h1,
+section[data-key-path='body'] h2,
+section[data-key-path='body'] h3,
+section[data-key-path='body'] h4,
+section[data-key-path='body'] h5,
+section[data-key-path='body'] h6 {
+  color: #002664;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.5em 0 0.5em;
+}
+
+section[data-key-path='body'] h1 { font-size: 1.75rem; }
+section[data-key-path='body'] h2 { font-size: 1.5rem; }
+section[data-key-path='body'] h3 { font-size: 1.25rem; }
+section[data-key-path='body'] h4,
+section[data-key-path='body'] h5,
+section[data-key-path='body'] h6 { font-size: 1.1rem; }
+
+section[data-key-path='body'] p,
+section[data-key-path='body'] ul,
+section[data-key-path='body'] ol {
+  margin: 1em 0;
+}
+
+section[data-key-path='body'] ul,
+section[data-key-path='body'] ol {
+  padding-left: 1.5em;
+}
+
+section[data-key-path='body'] li {
+  margin: 0.25em 0;
+}
+
+section[data-key-path='body'] a {
+  color: #002664;
+  text-decoration: underline;
+}
+
+section[data-key-path='body'] a:hover {
+  color: #ffbd41;
+}
+
+section[data-key-path='body'] strong {
+  font-weight: 700;
+}
+
+section[data-key-path='body'] img,
+section[data-key-path='body'] video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+section[data-key-path='body'] table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+
+section[data-key-path='body'] th,
+section[data-key-path='body'] td {
+  border: 1px solid #d1d5db;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+section[data-key-path='body'] th {
+  background: #f3f4f6;
+  font-weight: 700;
+}
+
+section[data-key-path='body'] blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 3px solid #ffbd41;
+  color: #4b5563;
+}
+
+section[data-key-path='body'] hr {
+  border: none;
+  border-top: 1px solid #d1d5db;
+  margin: 2em 0;
+}
+
+section[data-key-path='body'] code {
+  background: #f3f4f6;
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+section[data-key-path='body'] pre {
+  background: #f3f4f6;
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+section[data-key-path='body'] pre code {
+  background: none;
+  padding: 0;
+}

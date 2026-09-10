@@ -44,6 +44,22 @@ describe('Sveltia config', () => {
       expect(c.fields.map((f: any) => f.name)).toEqual([...PAGE_FIELD_NAMES]);
     }
   });
+  it('keeps only title and body in the preview pane; the rest is metadata hidden with preview: false', () => {
+    const hidden = ['path', 'description', 'draft', 'updated', 'legacyUrl'];
+    for (const c of config.collections.filter((c: any) => c.folder)) {
+      const byName = Object.fromEntries(c.fields.map((f: any) => [f.name, f]));
+      for (const name of hidden) expect(byName[name].preview, name).toBe(false);
+      expect(byName.title.preview).toBeUndefined();
+      expect(byName.body.preview).toBeUndefined();
+    }
+  });
+  it('hides nothing in the Site Settings preview panes', () => {
+    const settings = config.collections.find((c: any) => c.name === 'settings');
+    expect(settings.files.length).toBeGreaterThan(0);
+    for (const file of settings.files) {
+      for (const f of file.fields) expect(f.preview, `${file.name}.${f.name}`).not.toBe(false);
+    }
+  });
   it('site settings edit the JSON data files', () => {
     const settings = config.collections.find((c: any) => c.name === 'settings');
     expect(settings.files.map((f: any) => f.file).sort()).toEqual(['src/data/alerts.json', 'src/data/home.json', 'src/data/nav.json', 'src/data/site.json']);
@@ -109,6 +125,11 @@ describe('Sveltia admin page', () => {
   it('does not load the stylesheet or module attribute Sveltia warns about', () => {
     expect(html).not.toContain('sveltia-cms.css');
     expect(html).not.toMatch(/<script[^>]*type="module"[^>]*sveltia/);
+  });
+  it('registers the preview pane stylesheet before CMS.init()', () => {
+    expect(html).toContain("window.CMS.registerPreviewStyle('/admin/preview.css')");
+    expect(html.indexOf('registerPreviewStyle')).toBeLessThan(html.indexOf('window.CMS.init('));
+    expect(existsSync('public/admin/preview.css')).toBe(true);
   });
 });
 

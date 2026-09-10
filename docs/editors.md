@@ -23,7 +23,7 @@ Ignore **Work with Local Repository**: that button only appears to developers ru
 - **Tables**: the editor understands Markdown tables and shows them as real tables, but this version has no toolbar button for inserting one. To add a table, or to add a row or a column to one, switch the content box to its **Markdown** view with the toggle above it and edit the pipe (`| … | … |`) rows directly; switch back to rich text to check the result. Editing the *text inside* an existing table's cells works in either view.
 
 ## Preview while editing
-Every page and Site Settings screen has a preview pane next to the editing form that updates as you type. Once a page has been saved at least once, a **View on site** link also appears above the form; it opens the live page in a new tab. That link always shows the last *saved* version of the page — it will not show edits you have made since the last **Save**, and after the rebuild finishes (about 1–2 minutes) it reflects what is now live.
+Every page and Site Settings screen has a preview pane next to the editing form that updates as you type. Once a page has been saved at least once, a **View on site** link also appears above the form; it opens the live page in a new tab. That link always shows the last *saved* version of the page — it will not show edits you have made since the last **Save**, and after the rebuild finishes (about 1–2 minutes) it reflects what is now live. The preview pane shows just the page content — title and body — styled roughly like the site; for the exact look, use the **View on site** link after saving.
 
 ## Rainout / closure banner
 Site Settings → Alert banner → tick "Show banner", write the message, Save. Untick to remove.
