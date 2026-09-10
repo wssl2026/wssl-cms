@@ -24,8 +24,8 @@ publish_mode: simple
 site_url: https://www.wssl.org
 display_url: https://www.wssl.org
 logo_url: /images/mobile-logo.png
-media_folder: public/uploads
-public_folder: /uploads
+media_folder: public/assets
+public_folder: /assets
 editor:
   preview: false
 slug:

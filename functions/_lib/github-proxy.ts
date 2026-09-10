@@ -58,7 +58,7 @@ export const GITHUB_API_ORIGIN = 'https://api.github.com';
  * risk worth restricting. What a SHA read can never do is *choose* a path, which is why
  * `object(expression:)` (ref + path) and `file(path:)` are scoped to these roots instead.
  */
-export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/uploads', 'public/images'];
+export const ALLOWED_ROOTS = ['src/content/pages', 'src/data', 'public/assets', 'public/uploads', 'public/images'];
 
 /**
  * True when `path` is a plain, forward-slash-separated path that stays inside one of

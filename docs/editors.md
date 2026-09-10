@@ -19,7 +19,7 @@ Ignore **Work with Local Repository**: that button only appears to developers ru
 - Saving commits to GitHub and the site rebuilds automatically in about 1–2 minutes.
 - **Draft**: tick "Draft" and save to hide a page without deleting it.
 - **New page**: click **New** in a section. "URL path" becomes the address under that section (e.g. `core/waitlists` → /programs/core/waitlists/). Add it to the menu under Site Settings → Navigation menu if it should appear in the nav.
-- **PDFs and images**: drag the file straight onto the image or file field, or click the field and pick **Upload** in the asset library that opens. The library also lets you re-use a file you uploaded earlier instead of uploading it twice. Files are stored in `/uploads/`.
+- **PDFs and images**: drag the file straight onto the image or file field, or click the field and pick **Upload** in the asset library that opens. The library also lets you re-use a file you uploaded earlier instead of uploading it twice. Files are stored under `/assets/`; the pictures and PDFs carried over from the old site are already in the library under `legacy`, so you can reuse them instead of uploading again.
 - **Tables**: the editor understands Markdown tables and shows them as real tables, but this version has no toolbar button for inserting one. To add a table, or to add a row or a column to one, switch the content box to its **Markdown** view with the toggle above it and edit the pipe (`| … | … |`) rows directly; switch back to rich text to check the result. Editing the *text inside* an existing table's cells works in either view.
 
 ## Rainout / closure banner

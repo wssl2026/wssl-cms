@@ -276,6 +276,7 @@ describe('classifyRequest — commit paths are scoped to the content roots (C1)'
     'src/content/pages/index.md',
     'src/data/site.json',
     'public/uploads/photo.jpg',
+    'public/assets/legacy/Image/WSSL/WSSL-g11-19.png',
     'public/images/logo.svg',
   ])('allows an addition under an allowed root: %s', (path) => {
     expect(withAddition(path).kind).toBe('forward');
