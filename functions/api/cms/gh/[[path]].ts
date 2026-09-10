@@ -16,6 +16,7 @@
  */
 import { MIN_SESSION_SECRET_LENGTH, verifySession } from '../../../_lib/cms-session';
 import {
+  LOCAL_EDITOR_EMAIL,
   defaultVerifyJwt,
   errorMessage,
   jsonError,
@@ -132,12 +133,16 @@ export function createGitHubProxyHandler(overrides: Partial<GitHubProxyDeps> = {
     }
 
     // --- forward it ----------------------------------------------------------
-    if (!env.GITHUB_BOT_TOKEN) {
+    // Local development only: with no bot token and the localhost bypass editor, forward
+    // unauthenticated so read-only work against the public repository still functions
+    // (GitHub rejects writes without a token). Production always requires the token.
+    const anonymousDev = !env.GITHUB_BOT_TOKEN && editor.email === LOCAL_EDITOR_EMAIL;
+    if (!env.GITHUB_BOT_TOKEN && !anonymousDev) {
       return done(jsonError('The site editor is not configured: GITHUB_BOT_TOKEN is not set.', 502));
     }
 
     const headers = new Headers({
-      Authorization: `Bearer ${env.GITHUB_BOT_TOKEN}`,
+      ...(anonymousDev ? {} : { Authorization: `Bearer ${env.GITHUB_BOT_TOKEN}` }),
       'User-Agent': 'wssl-cms-proxy',
     });
     for (const name of FORWARDED_REQUEST_HEADERS) {

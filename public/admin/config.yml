@@ -121,7 +121,7 @@ collections:
           - label: Carousel images
             name: carousel
             widget: list
-            field: { label: Image, name: image, widget: image, media_folder: public/images, public_folder: /images }
+            field: { label: Image, name: image, widget: image, media_folder: /public/images, public_folder: /images }
           - label: Program buttons
             name: programButtons
             widget: list
@@ -133,7 +133,7 @@ collections:
             widget: list
             fields:
               - { label: Title, name: title, widget: string }
-              - { label: Icon, name: icon, widget: image, media_folder: public/images, public_folder: /images }
+              - { label: Icon, name: icon, widget: image, media_folder: /public/images, public_folder: /images }
               - { label: Body, name: body, widget: markdown }
       - name: nav
         label: Navigation menu
