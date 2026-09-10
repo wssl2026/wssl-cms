@@ -1,19 +1,43 @@
 {
   "fieldStatus": "",
-  "carousel": ["/images/carousel-1.png", "/images/carousel-2.png", "/images/carousel-3.png", "/images/carousel-4.png", "/images/carousel-5.png"],
+  "carousel": [
+    "/images/carousel-1.png",
+    "/images/carousel-2.png",
+    "/images/carousel-3.png",
+    "/images/carousel-4.png",
+    "/images/carousel-5.png"
+  ],
   "programButtons": [
-    { "label": "Core League U6-U19", "href": "/programs/core/" },
-    { "label": "Development Academy U6-U14", "href": "/programs/da/" },
-    { "label": "Travel Teams U8-U19", "href": "/programs/travel-teams/" },
-    { "label": "Tournament Teams U9-U14", "href": "/programs/tournament-teams/" },
-    { "label": "VIP Program (Special Needs)", "href": "/programs/epic/" },
-    { "label": "Playground (3 and 4 year olds)", "href": "/programs/playground/" }
+    {
+      "label": "Core League U6-U19",
+      "href": "/programs/core/"
+    },
+    {
+      "label": "Development Academy U6-U14",
+      "href": "/programs/da/"
+    },
+    {
+      "label": "Travel Teams U8-U19",
+      "href": "/programs/travel-teams/"
+    },
+    {
+      "label": "Tournament Teams U9-U14",
+      "href": "/programs/tournament-teams/"
+    },
+    {
+      "label": "VIP Program (Special Needs)",
+      "href": "/programs/epic/"
+    },
+    {
+      "label": "Playground (3 and 4 year olds)",
+      "href": "/programs/playground/"
+    }
   ],
   "cards": [
     {
       "title": "Registration and Tryouts",
       "icon": "/images/soccerball-icon.png",
-      "body": "Fall 2026 Core season registration is still open.\n\nPlease go to the \"Registration\" tab to complete the necessary steps.\n\nFall 2026 Core season dates are 9/19 through 11/22.\n\nNo playground or Core games on 10/10 - 10/11, in observance of Columbus/Indigenous Peoples' Day weekend.\n\nFall 2026 Silent Soccer weekends: September 26/27, October 24/25, and November 14/15.\n\n---\n\n**Travel Team Tryouts 2026-2027**\n\nStill looking for a Travel Team?\nComplete our inquiry form to hear about current opportunities!\n\n[West Side Travel Team Inquiry Form](https://docs.google.com/forms/d/e/1FAIpQLSfSguwCt_bvmRm3EIMJqlwBwRzcszwsCy8Qh-0kA25Qw6Y1QA/viewform)"
+      "body": "Fall 2026 Core season registration is still open.\n\nPlease go to the \"Registration\" tab to complete the necessary steps.\n\n- Fall 2026 Core season dates are 9/19 through 11/22.\n- No playground or Core games on 10/10 - 10/11, in observance of Columbus/Indigenous Peoples' Day weekend.\n- Fall 2026 Silent Soccer weekends: September 26/27, October 24/25, and November 14/15.\n\n***\n\n**Travel Team Tryouts 2026-2027**\n\nStill looking for a Travel Team?\nComplete our inquiry form to hear about current opportunities!\n\n[West Side Travel Team Inquiry Form](https://docs.google.com/forms/d/e/1FAIpQLSfSguwCt_bvmRm3EIMJqlwBwRzcszwsCy8Qh-0kA25Qw6Y1QA/viewform)"
     },
     {
       "title": "Volunteer Training",
