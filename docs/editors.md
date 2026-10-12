@@ -3,7 +3,7 @@
 ## Signing in
 You do not need a GitHub account, and you do not need a password — just your email.
 
-1. Go to https://www.wssl.org/admin/.
+1. Go to https://www.wssl.org/admin/ (until launch: https://wssl-cms.pages.dev/admin/, the staging copy).
 2. Type your email address and click **Send me a code**.
 3. Open the email, copy the one-time code, paste it in.
 4. The editor's own welcome screen appears. Click **Sign In with GitHub**.

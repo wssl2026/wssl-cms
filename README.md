@@ -39,6 +39,7 @@ Everything below is a placeholder in the repo and must be filled in by whoever d
 - **Ask WSSL's model** — `LLM_PROVIDER` in `wrangler.toml` is `gemini` (the alternative is `anthropic`; any other value makes the widget answer "temporarily unavailable" and logs `chat_provider_misconfigured`). `GEMINI_MODEL` is `gemini-3.8-flash` and `GEMINI_RETRIEVAL` is `index` (the alternative is `cache`; see "How Ask WSSL answers" and Cost). Confirm the key can actually call that model **once, before launch**: `GEMINI_API_KEY=... npm run check-gemini-model` lists every model the key may use and exits non-zero if `GEMINI_MODEL` is not among them.
 - **`DAILY_CAP`** (plain var, default `200`) — the number of Ask WSSL questions answered per UTC day before the widget answers "reached its daily limit". Raise or lower it after watching the first week; see Cost below.
 - **Question log** (optional) — set `QUESTION_LOG_URL` in `wrangler.toml` and the `QUESTION_LOG_SECRET` Pages secret to log every Ask WSSL question to a Google Sheet. See "Question log (Google Sheet)" below. Off by default — leave both unset to skip this.
+- **Practice page** — `src/content/pages/about/editor-practice.md` is a sandbox for editor training on staging (see `docs/editor-training.md`). Delete it before launch; it is not in the menu but it is on the site and in the assistant's page index.
 - **`docs/runbook.md`** — operations runbook, written in Task 12 at deploy time. It does not exist yet.
 
 ## How `/admin` signs editors in
