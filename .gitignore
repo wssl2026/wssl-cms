@@ -8,6 +8,8 @@ public/admin/sveltia-cms.js
 functions/_lib/corpus.json
 functions/_lib/index.json
 scripts/migration-report.json
+# Written by `npm run check-updates -- --diffs`.
+.update-check/
 .superpowers/
 .idea/
 .DS_Store

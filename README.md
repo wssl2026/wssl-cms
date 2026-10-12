@@ -10,6 +10,7 @@ Source for https://www.wssl.org — Astro static site, content in `src/content/p
 | `npm test` | Vitest suite |
 | `npm run migrate` | Re-import every page from the old Mura site (~5 min, network) |
 | `npm run check-links` | Check `dist/` for broken internal links and dead `#fragments` |
+| `npm run check-updates` | List what changed on the old wssl.org since the pages here were migrated: new, edited and removed pages, side columns, menu order (~1 min, network, read-only). Add `-- --diffs` to write before/after text and diffs under `.update-check/` |
 
 ### Cloudflare Pages build settings
 

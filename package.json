@@ -9,6 +9,7 @@
     "migrate": "tsx scripts/migrate.ts",
     "corpus": "tsx scripts/build-corpus.ts",
     "check-links": "tsx scripts/check-links.ts",
+    "check-updates": "tsx scripts/check-updates.ts",
     "check-gemini-model": "tsx scripts/check-gemini-model.ts"
   },
   "keywords": [],
