@@ -19,6 +19,10 @@ describe('asset helpers', () => {
     expect(normalizeInternal('https://www.wssl.org/fields/overview/')).toBe('/fields/overview/');
     expect(normalizeInternal('/about/contact/#form')).toBe('/about/contact/#form');
   });
+  it('maps a link to a page\'s index.html onto the page address', () => {
+    expect(normalizeInternal('/fields/riverside-park/index.html')).toBe('/fields/riverside-park/');
+    expect(normalizeInternal('https://www.wssl.org/fields/riverside-park/index.html#map')).toBe('/fields/riverside-park/#map');
+  });
   it('leaves a path whose last segment is a file alone', () => {
     expect(normalizeInternal('http://www.wssl.org/inleague/schedule/schedule.cfm?team=1')).toBe('/inleague/schedule/schedule.cfm?team=1');
     expect(normalizeInternal('/documents/handbook.pdf')).toBe('/documents/handbook.pdf');

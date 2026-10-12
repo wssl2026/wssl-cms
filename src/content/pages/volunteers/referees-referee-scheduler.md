@@ -2,7 +2,7 @@
 title: Using The Referee Scheduler
 path: referees/referee-scheduler
 legacyUrl: /volunteers/referees/referee-scheduler/
-updated: 2022-05-10
+updated: 2026-09-27
 sidebar: >-
   [Download The Referee Scheduling
   Guide](/assets/legacy/File/Referee-Scheduling-Guide-September-2015-v02.pdf)
@@ -22,7 +22,7 @@ sidebar: >-
 
 ### How to Self Schedule
 
-It is crucial to the success of our Referee program that Referees use this system to self-schedule games. Without this system the Referee Schedulers" job becomes very difficult. Help them avoid making last minute phone calls to schedule referees for the fast approaching weekend games. It's also important that we know how many matches you have officiated in which divisions.
+It is crucial to the success of our Referee program that Referees use this system to self-schedule games. Without this system the Referee Schedulers' job becomes very difficult. Help them avoid making last minute phone calls to schedule referees for the fast approaching weekend games. It's also important that we know how many matches you have officiated in which divisions.
 
 ##### ![](/assets/legacy/Image/referees/AdobeStock_281134660.jpg)
 
@@ -32,21 +32,27 @@ Log in to WSSL.org using your own user name and password. This applies to youth 
 
 ##### **Step 2:**
 
-Select "Referees" in the top navigation menu.
+Select "Referees" in the left hand menu.
 
 ##### **Step 3:**
 
-Select "Referee Schedule Signup". If you cannot see the schedule, the most likely causes are:
+Select "Referee Scheduler".
+
+If you cannot see the schedule, the most likely causes are:
 
 a) You have not registered as a WSSL volunteer for the current season (12 months from August to July) - go to Players / [Player & Volunteer Registration](https://inleague.wssl.org/Registration/Index); or,
 
 b) You have not attended and received credit for a referee class at the required level; or,
 
-c) You have not completed the AYSO Safe Have online course - go to [eTrainU](https://inleague.wssl.org/eTrainU); or,
+c) You have not completed the AYSO Safe Haven online course - go to [eTrainU](https://inleague.wssl.org/eTrainU); or,
 
 d) You have not completed the CDC Concussion Awareness online course - go to [eTrainU](https://inleague.wssl.org/eTrainU).
 
-If you have checked these things and are still stuck, please reach out to the [Regional Referee Administrator](mailto:STAN.INCE@GMAIL.COM).
+e) You need a new Background Check - check your inLeague dashboard
+
+f) Your SafeSport needs to be refreshed - check your inLeague dashboard
+
+If you have checked these things and are still stuck, please reach out to the [Regional Referee Administrator](mailto:RRA@wssl.org).
 
 ##### **Step 4:**
 

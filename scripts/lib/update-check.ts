@@ -12,9 +12,13 @@ import { htmlToMarkdown } from './convert';
  * expected and only Mura's own `lastupdate` counts as a change signal.
  */
 
-/** Pages restructured by hand after migration (nested-table layouts the converter can't read). */
+/**
+ * Pages whose body is not the plain converter's output: the Divisions season pages are
+ * rewritten by scripts/restructure-divisions.ts, the other three were restructured by hand
+ * (nested-table layouts the converter can't read).
+ */
 export const HAND_EDITED = new Set([
-  'programs/core-divisions-fall-2025.md',
+  'programs/core-divisions-fall-2026.md',
   'programs/core-divisions-spring-2026.md',
   'schedules/game-schedules-bus-schedule.md',
   'programs/holiday-summer-camps.md',

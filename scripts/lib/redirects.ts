@@ -3,6 +3,9 @@ export const STATIC_REDIRECTS = [
   '/blog                 /                      301',
   '/blog/*               /                      301',
   '/fields/overview      /fields/overview/      301',
+  // The Fall 2025 divisions page was retired on the old site when Fall 2026 went up (Oct 2026).
+  '/programs/core/divisions/fall-2025   /programs/core/divisions/fall-2026/  301',
+  '/programs/core/divisions/fall-2025/  /programs/core/divisions/fall-2026/  301',
   // Legacy same-host links into the old ColdFusion app, kept alive on inLeague.
   '/inleague/*           https://inleague.wssl.org/:splat  301',
   '/login                https://inleague.wssl.org/  301',

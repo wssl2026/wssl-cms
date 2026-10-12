@@ -283,12 +283,12 @@
       "children": [
         {
           "label": "Welcome",
-          "href": "/volunteers/coaches/coach-welcome/",
+          "href": "/volunteers/referees/welcome/",
           "children": []
         },
         {
           "label": "Welcome",
-          "href": "/volunteers/referees/welcome/",
+          "href": "/volunteers/coaches/coach-welcome/",
           "children": []
         },
         {
@@ -297,13 +297,13 @@
           "children": []
         },
         {
-          "label": "Become a Coach",
-          "href": "/volunteers/coaches/become-coach/",
+          "label": "Become an Adult Referee",
+          "href": "/volunteers/referees/new-referee/",
           "children": []
         },
         {
-          "label": "Become an Adult Referee",
-          "href": "/volunteers/referees/new-referee/",
+          "label": "Become a Coach",
+          "href": "/volunteers/coaches/become-coach/",
           "children": []
         },
         {
@@ -312,13 +312,13 @@
           "children": []
         },
         {
-          "label": "Certification",
-          "href": "/volunteers/coaches/certification/",
+          "label": "Become a Teen Referee",
+          "href": "/volunteers/referees/teen-referee/",
           "children": []
         },
         {
-          "label": "Become a Teen Referee",
-          "href": "/volunteers/referees/teen-referee/",
+          "label": "Certification",
+          "href": "/volunteers/coaches/certification/",
           "children": []
         },
         {
@@ -327,13 +327,13 @@
           "children": []
         },
         {
-          "label": "Class Registration",
-          "href": "/volunteers/coaches/register-class/",
+          "label": "Certification",
+          "href": "/volunteers/referees/certification/",
           "children": []
         },
         {
-          "label": "Certification",
-          "href": "/volunteers/referees/certification/",
+          "label": "Class Registration",
+          "href": "/volunteers/coaches/register-class/",
           "children": []
         },
         {
@@ -342,13 +342,13 @@
           "children": []
         },
         {
-          "label": "Coach Code of Conduct",
-          "href": "/volunteers/coaches/coach-conduct-code/",
+          "label": "Referee Classes",
+          "href": "/volunteers/referees/register-class-ref/",
           "children": []
         },
         {
-          "label": "Referee Classes",
-          "href": "/volunteers/referees/register-class-ref/",
+          "label": "Coach Code of Conduct",
+          "href": "/volunteers/coaches/coach-conduct-code/",
           "children": []
         },
         {
@@ -357,13 +357,13 @@
           "children": []
         },
         {
-          "label": "Coach Resources",
-          "href": "/volunteers/coaches/coach-resources/",
+          "label": "Referee Scheduler",
+          "href": "/volunteers/referees/referee-scheduler/",
           "children": []
         },
         {
-          "label": "Referee Scheduler",
-          "href": "/volunteers/referees/referee-scheduler/",
+          "label": "Coach Resources",
+          "href": "/volunteers/coaches/coach-resources/",
           "children": []
         },
         {
@@ -382,13 +382,13 @@
           "children": []
         },
         {
-          "label": "Coaches & Referees Working Together",
-          "href": "/volunteers/coaches/coaches-referees/",
+          "label": "Videos",
+          "href": "/volunteers/referees/videos/",
           "children": []
         },
         {
-          "label": "Videos",
-          "href": "/volunteers/referees/videos/",
+          "label": "Coaches & Referees Working Together",
+          "href": "/volunteers/coaches/coaches-referees/",
           "children": []
         },
         {

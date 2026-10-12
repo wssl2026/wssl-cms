@@ -2,7 +2,7 @@
 title: Become an Adult Referee!
 path: referees/new-referee
 legacyUrl: /volunteers/referees/new-referee/
-updated: 2024-09-06
+updated: 2026-09-11
 sidebar: |-
   ![](/assets/legacy/Image/referees/wssl-ref-6.jpeg)
 
@@ -86,4 +86,4 @@ Once you are eligible:
 
 Once you attend the class and pass the exam, you are now a certified soccer referee! We will give you a uniform and kit for free: send an email to **Uniforms.WSSL@gmail.com** including your name and shirt size (Youth, Adult Small, Medium, Large, XL or 2XL). The pick-up location is the Field House at the northeast corner of the 101st Street & Riverside Park soccer field (in the park next to the Henry Hudson Parkway).
 
-Please email your [Division Chief Referee](/programs/core/divisions/) or the Regional Referee Administrator, [Stan Ince](mailto:stan.ince@gmail.com), with any questions.
+Please email your [Division Chief Referee](/programs/core/divisions/) or the Regional Referee Administrator, [Michelle Gurk](mailto:RRA@wssl.org), with any questions.

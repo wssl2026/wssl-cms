@@ -2,7 +2,7 @@
 title: Divisions - Where / When We Play
 path: core/divisions
 legacyUrl: /programs/core/divisions/
-updated: 2025-12-20
+updated: 2026-10-01
 sidebar: |-
   ![](/assets/legacy/Image/Core/wssl-core-47.jpeg)
 
@@ -21,6 +21,8 @@ Please understand and honor what USSF and AYSO small-sided rules and years of wi
 
 **\*\*Please note that B19 and G19 are "high school" divisions and WSSL does not permit players enrolled in college to play.**
 
+**For division-specific questions, please reach out to the division leadership as listed [HERE](https://docs.google.com/spreadsheets/d/1UpcsbTIoKA_RsfoCXCJjZwZqs0ZWNGcMBohFSQoTk5M/edit?usp=sharing).**
+
 [Spring 2026 field assignments](/programs/core/divisions/spring-2026/)
 
-[Fall 2025 field assignments](/programs/core/divisions/fall-2025/)
+[Fall 2026 field assignments](/programs/core/divisions/fall-2026/)

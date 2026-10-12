@@ -2,7 +2,7 @@
 title: Welcome
 path: referees/welcome
 legacyUrl: /volunteers/referees/welcome/
-updated: 2023-04-27
+updated: 2026-09-24
 sidebar: |-
   ![](/assets/legacy/Image/referees/IMG_2379.jpg)
 
@@ -17,7 +17,7 @@ sidebar: |-
 
 We hope that you enjoy your time on the pitch this season and we thank you for your dedication. Whether you are refereeing in U6 or U19, as center referee or running the lines, you are performing a vital role for the league and for the children, allowing them to develop and play soccer in a manner that is **Safe**, **Fair** and **Fun**. Remember that **you** are also allowed to have fun as a referee. We try to create a friendly and supportive environment to allow you to learn and thrive in this capacity.
 
-Not a referee? Click [here](/volunteers/referees/new-referee/) to find out why you should and how to make it happen. The first step is to register as a volunteer by updating your adult profile on your wssl in-league account and checking off the volunteer box for Referee!
+Not a referee? Click [here](/volunteers/referees/new-referee/) to find out how to make it happen. The first step is to register as a volunteer by updating your adult profile on your WSSL inLeague account and checking off the volunteer box for Referee!
 
 We have several resources that are meant to support you as you participate as a referee in our League's games. If you have any questions or concerns, please contact your division's [Chief Referee](/programs/core/divisions/).
 
@@ -27,8 +27,8 @@ There are three members of the AYSO "Team" - Coaches, Referees and Parents. We h
 
 See you on the pitch!
 
-Best regards,\
-Stan Ince\
+\
+Michelle Gurk\
 WSSL Regional Referee Administrator
 
 ### Training
@@ -62,11 +62,11 @@ We have a manual for the division Chief Referees. To view it, please click here:
 
 ### Referee Leadership Team
 
-Stan Ince is the Regional Referee Administrator and makes sure that we have a chief referee for each division and that the chief referees have the resources they need.
+Michelle Gurk is the Regional Referee Administrator and makes sure that we have a chief referee for each division and that the chief referees have the resources they need.
 
 Michael Titowsky is the Regional Director of Referee Instruction and is responsible for scheduling and organizing referee training for all divisions.
 
-Paul Samarel is the Regional Director of Referee Assessment and is responsible for referee mentoring, plus observations and assessments for certification upgrades for referees in all divisions. Paul is aided and abetted by Scot Gleason, our Head of Mentoring.
+Paul Samarel is the Regional Director of Referee Assessment and is responsible for referee mentoring, plus observations and assessments for certification upgrades for referees in all divisions.
 
 John Drayton is our Regional Director of Youth Referees. Please contact John for any questions or concerns about the Youth Referee program.
 

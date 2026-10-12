@@ -2,7 +2,7 @@
 title: Spring 2026
 path: core/divisions/spring-2026
 legacyUrl: /programs/core/divisions/spring-2026/
-updated: 2026-04-22
+updated: 2026-09-26
 ---
 
 **PLEASE NOTE THAT THE BELOW INFORMATION IS ONLY APPLICABLE TO SPRING 2026 SEASON.**
@@ -11,8 +11,10 @@ updated: 2026-04-22
 
 | [B6](#B6) | [G7](#G7) | [B9](#B9) | [G10](#G10) | [B12](#B12) | [G13/G14](#G13) | [Playground U5](#U5) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [G6](#G6) | [B8](#B8) | [G9](#G9) | [B11](#B11) | [G12](#G12) | [B19](#B19) |   |
-| [B7](#B7) | [G8](#G8) | [B10](#B10) | [G11](#G11) | [B13/B14](#B13) | [G19](#G19) | <a id="U5"></a> |
+| [G6](#G6) | [B8](#B8) | [G9](#G9) | [B11](#B11) | [G12](#G12) | [B19](#B19) |  |
+| [B7](#B7) | [G8](#G8) | [B10](#B10) | [G11](#G11) | [B13/B14](#B13) | [G19](#G19) |  |
+
+<a id="U5"></a>
 
 ## Playground Soccer: Boys and Girls, 3 and 4 year olds (2021 birth year and January - August 2022)
 
@@ -40,7 +42,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 3 v 3 (no keeper), side-by-side games |
 | Time Slot | 60 minutes for integrated practice and game |
-| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half. |
+| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="G6"></a>
@@ -58,7 +60,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 3 v 3 (no keeper), side-by-side games |
 | Time Slot | 60 minutes for integrated practice and game |
-| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half. |
+| Game Length | 35 minute practice followed by 25 minute game with two 10-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="B7"></a>
@@ -76,7 +78,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 4 v 4 (no keeper) |
 | Practice | 30 minutes pre-game |
-| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="G7"></a>
@@ -94,7 +96,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 4 v 4 (no keeper) |
 | Practice | 30 minutes pre-game |
-| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="B8"></a>
@@ -105,7 +107,6 @@ updated: 2026-04-22
 | --- | --- |
 | Division Head (click to Contact) | [Morgan Resta Flarer and Brook Crowley](mailto:b2018@wssl.org) |
 | Chief Ref (click to Contact) | [Michelle Gurk](mailto:b2018chiefref@wssl.org) |
-| Ref Scheduler | [Beth Eldridge](mailto:bethstjames@gmail.com) |
 | Field | [74th Street Oval in Riverside Park](/fields/riverside-park/) |
 | Field Size | 20x30 yards, Pugg goals |
 | Day of Play | Saturday |
@@ -113,7 +114,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 4 v 4 (no keeper) |
 | Practice | 30 minutes pre-game |
-| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="G8"></a>
@@ -131,7 +132,7 @@ updated: 2026-04-22
 | Team Size | 6-7 players |
 | On-Field Format | 4 v 4 (no keeper) |
 | Practice | 30 minutes pre-game |
-| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half. |
+| Game Length | 45 minute game with two 20-minute halves. Two substitution breaks in each half |
 | Footwear | Sneakers or turf shoes (NO CLEATS) |
 
 <a id="B9"></a>
@@ -149,7 +150,7 @@ updated: 2026-04-22
 | Team Size | 9-10 players |
 | On-Field Format | 7 v 7 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted at 101st field only |
 
 <a id="G9"></a>
@@ -167,7 +168,7 @@ updated: 2026-04-22
 | Team Size | 9-10 players |
 | On-Field Format | 7 v 7 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="B10"></a>
@@ -185,7 +186,7 @@ updated: 2026-04-22
 | Team Size | 9-10 players |
 | On-Field Format | 7 v 7 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="G10"></a>
@@ -203,7 +204,7 @@ updated: 2026-04-22
 | Team Size | 9-10 players |
 | On-Field Format | 7 v 7 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half. |
+| Game Length | 55 minute game with two 25-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="B11"></a>
@@ -221,7 +222,7 @@ updated: 2026-04-22
 | Team Size | 11-12 players |
 | On-Field Format | 9 v 9 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="G11"></a>
@@ -239,7 +240,7 @@ updated: 2026-04-22
 | Team Size | 11-12 players |
 | On-Field Format | 9 v 9 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="B12"></a>
@@ -257,7 +258,7 @@ updated: 2026-04-22
 | Team Size | 11-12 players |
 | On-Field Format | 9 v 9 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="G12"></a>
@@ -275,7 +276,7 @@ updated: 2026-04-22
 | Team Size | 11-12 players |
 | On-Field Format | 9 v 9 including keeper |
 | Practice | 45 minutes pre-game |
-| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half. |
+| Game Length | 65 minute game with two 30-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="B13"></a>
@@ -285,7 +286,7 @@ updated: 2026-04-22
 | Field | Detail |
 | --- | --- |
 | Division Head (click to Contact) | [Eric Halperin](mailto:b2013@wssl.org) |
-| Chief Ref (click to Contact) | [Carlo-Edoardo Carlon and Peter Stone](mailto:cecarlon@yahoo.com,%20peteandrenee@hotmail.com?subject=B14%20referee) |
+| Chief Ref (click to Contact) | [Carlo-Edoardo Carlon and Peter Stone](<mailto:cecarlon@yahoo.com, peteandrenee@hotmail.com?subject=B14%20referee>) |
 | Field | Jefferson Field (114th Street & First Avenue) |
 | Field Size | Full field |
 | Day of Play | Sunday |
@@ -293,7 +294,7 @@ updated: 2026-04-22
 | Team Size | 14-18 players |
 | On-Field Format | 11 v 11 including keeper |
 | Practice | 60 minutes pre-game |
-| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half. |
+| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="G13"></a>
@@ -311,7 +312,7 @@ updated: 2026-04-22
 | Team Size | 14-18 players |
 | On-Field Format | 11 v 11 including keeper |
 | Practice | 60 minutes pre-game |
-| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half. |
+| Game Length | 75 minute game with two 35-minute halves. Two substitution breaks in each half |
 | Footwear | Cleats permitted |
 
 <a id="B19"></a>
@@ -329,7 +330,7 @@ updated: 2026-04-22
 | Team Size | 14-18 Players |
 | On-Field Format | 11 v 11, including the keeper |
 | Practice | 60 minutes pre-game |
-| Game Length | 90 minute game with two 40-minute halves. Monitored substitutions. |
+| Game Length | 90 minute game with two 40-minute halves. Monitored substitutions |
 | Footwear | Cleats permitted |
 
 <a id="G19"></a>
@@ -347,5 +348,5 @@ updated: 2026-04-22
 | Team Size | 14-18 Players |
 | On-Field Format | 11 v 11, including the keeper |
 | Practice | 60 minutes pre-game |
-| Game Length | 85 minute game with two 40-minute halves. Monitored substitutions. |
+| Game Length | 85 minute game with two 40-minute halves. Monitored substitutions |
 | Footwear | Cleats permitted |

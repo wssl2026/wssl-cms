@@ -54,6 +54,9 @@ export function normalizeInternal(href: string): string {
   const m = p.match(/^([^?#]*)([^#]*)(?:#(.*))?$/)!;
   let path = m[1];
   const suffix = m[2] + (m[3] === undefined ? '' : `#${sanitizeFragment(m[3])}`);
+  // A link to a directory's index.html is a link to the directory (Astro writes every
+  // page as <dir>/index.html, so the file exists, but the canonical address is the slash).
+  path = path.replace(/\/index\.html?$/i, '/');
   // Directory-style paths get a trailing slash; a path ending in a filename
   // (…/schedule.cfm, …/handbook.pdf) must be left exactly as it is.
   const isFile = /\.[A-Za-z0-9]{1,8}$/.test(path);

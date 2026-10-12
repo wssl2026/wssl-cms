@@ -2,7 +2,7 @@
 title: Referee FAQ
 path: referees/referee-faq
 legacyUrl: /volunteers/referees/referee-faq/
-updated: 2024-09-24
+updated: 2026-09-27
 sidebar: |-
   ### Other Resources
 
@@ -56,19 +56,19 @@ When will I know what team my child is on?](#divisionhead)\
 
 A: We understand! We've all been there!
 
-Guess what? the younger players don't know anything about soccer either! So you can begin by refereeing in the youngest divisions, and you and the players can grow together. In addition, we offer mentoring, support, a friendly face at the game, whatever you need. Our divisional chief referees and other experienced Referees, are ready to get you the support you need in order to feel comfortable. Please ask us!<a id="courses"></a>
+Guess what? the younger players don't know anything about soccer either! So you can begin by refereeing in the youngest divisions, and you and the players can grow together. In addition, we offer mentoring, support, a friendly face at the game, whatever you need. Our divisional Chief Referees and other experienced Referees, are ready to get you the support you need in order to feel comfortable. Please ask us!<a id="courses"></a>
 
 ### Q: Which courses do I need to take?
 
 A: Becoming a referee in WSSL and AYSO happens in stages.
 
-1\. Take AYSO Safe Haven course once in your career. This 1 hour course is the first requirement for all volunteers, both coaches and referees. You can take it either as part of referee school or coaching school. If you have never taken this course before, you should take it when it is net offered.It gives you information which protects you under the Volunteer Act of 1997, and it also teaches you important things about AYSO and WSSL's shared culture of child development.\
-2\. Take the U-8 Official course once in your career. This 2 1/2 hour course teaches you about game management and certain simplified rules which make the game Safe, Fair and Fun for the players. You should take this course AFTER you have taken Safe Haven. After taking thesequence of Safe Haven and U8 Official, you will be qualified to referee in U-6, U-7, and U-8 games.\
-3\. Take Upgrade to Basic Referee Course once in your career. This 4 hour course gets into the nuts and bolts of refereeing older children. It provides you with in-depth information about fouls, restarts, and (deep breath) - offside. It teaches you the WSSL culture of protecting the goalkeeper. And it introduces you the 3-person referee team - the signals, the communication skills, and the underlying camaraderie. After taking the sequence of Safe Haven, U-8 Official, and Upgrade to Basic, you will be qualified to referee in our U-9 through U-19 divisions (although we hope that you will come back to take our Intermediate and Advanced Courses as your children get older, and of course we are always glad to see you come back to any of these courses for a refresher!).<a id="upgrading"></a>
+1\. Take AYSO Safe Haven course once in your career. This 1 hour course is the first requirement for all volunteers, both coaches and referees. You can take it either as part of referee school or coaching school. If you have never taken this course before, you should take it when it is net offered.It gives you information which protects you under the Volunteer Act of 1997, and it also teaches you important things about AYSO and WSSL's shared culture of child development.
 
-### Q: Can I referee in the older divisions without taking Upgrade to Basic?
+\
+2\. Take the U-8 Official course once in your career. This 2 1/2 hour course teaches you about game management and certain simplified rules which make the game Safe, Fair and Fun for the players. You should take this course AFTER you have taken Safe Haven. After taking the sequence of Safe Haven and U8 Official (plus a 40-minute WSSL 8U Zoom Seminar), you will be qualified to referee in U-6, U-7, and U-8 games.
 
-A: The content of Upgrade to Basic is very different from the content of the U-8 Official class. So, in order to make yourself comfortable and do the best job for the players in the older divisions, yes, you must take the Upgrade to Basic course, in addition to Safe Haven and U-8 Official, when you and your child move into the U-9 and older divisions.<a id="safehaven"></a>
+\
+3\. Take the Regional Referee course once in your career. This 4 hour course gets into the nuts and bolts of refereeing older children. It provides you with in-depth information about fouls, restarts, and (deep breath) - offside. It teaches you the WSSL culture of protecting the goalkeeper. And it introduces you to the 3-person referee team - the signals, the communication skills, and the underlying camaraderie. After taking the sequence of Safe Haven, U-8 Official, and Upgrade to Basic, you will be qualified to referee in our U-9 through U-19 divisions (although we hope that you will come back to take our Intermediate and Advanced Courses as your children get older, and of course we are always glad to see you come back to any of these courses for a refresher!).<a id="upgrading"></a>
 
 ### Q: Can I skip the Safe Haven course?
 
@@ -86,11 +86,13 @@ As your children advance, you will find that they become aware that there is "an
 
 ### Q: Where do I get the referee uniform and equipment?
 
-A: Once you complete your training, you will be provided with a free uniform (including shirt, shorts, and socks), badge, whistle, flags, stopwatch and a copy of the most current edition of the Laws of the Game. You provide the shoes.<a id="minimum"></a>
+A: Once you complete your training, you will be provided with a free uniform (including shirt, shorts, and socks), badge, whistle, and flags. You provide the shoes, watch and coin.<a id="minimum"></a>
 
 ### Q: Do I have to commit to referee a minimum number of games?
 
-A: We are happy to have you referee the number of games that works for you, but we suspect that once you get the bug, you will want to referee more rather than less.
+A: We ask that each referee officiate at least three games per season to maintain "active volunteer status".
+
+We are happy to have you referee the number of games that works for you, but we suspect that once you get the bug, you will want to referee more rather than less.
 
 We also know that the more referees we have, the fewer games each one has to do in order to have a fully-covered weekend. If every team has two parents or older sibs who are active refs, two games every four weeks completely covers our schedule for our U-6, U- and U-8 divisions. For our U-9 and older divisions, three games every four weeks would cover our schedule.<a id="stress"></a>
 
@@ -104,13 +106,15 @@ A: In class we have Spanish-language versions of the tests, and will be happy to
 
 ### Q: Can my child referee?
 
-A: Yes, of course! We welcome youth referees - minimum age of 10 for U-8 and 12 for Upgrade to Basic. We have a Youth Referee coordinator, who provides mentoring and support to the young referees - meeting them at the field, introducing them to the coaches and players, and making sure that the experience is a positive one.
+A: Yes, of course! We welcome youth referees - minimum age of 10 for 8U Official and 12 for upgrade to Regional Referee. We have a Youth Referee coordinator, who provides mentoring and support to the young referees - meeting them at the field, introducing them to the coaches and players, and making sure that the experience is a positive one.
 
 Ideally, a youth referee develops a relationship with a particular division (B-8, G-7, etc.), and becomes a respected member of that division's referee corps.<a id="online"></a>
 
 ### Q: Can I take the referee classes online?
 
-A: AYSO offers an online referee course, but after investigation, we have found that this course still requires hours of classroom time. WSSL has chosen to stay with the full classroom sequence rather than try to mix and match online and classroom training.<a id="othertraining"></a>
+A: The 8U Official course (required to referee in the 8U, 7U and 6U divisions) can be completed almost entirely online, save a 40-minute 8U Zoom Seminar which covers WSSL specific topics.
+
+The Regional Referee course (required to referee in the 9U and older divisions) can also be completed almost entirely online, but requires a three-hour "Regional Online In-Person Companion Course" which can be attended via Zoom or in-person. The Regional Referee course is also offered live, in-person in some regions- check eTrainu via inLeague for available courses. <a id="othertraining"></a>
 
 ### Q: What other training do you offer?
 
@@ -160,7 +164,7 @@ A: They are okay for both players and referees on artificial turf fields, but no
 
 ### Q: Are shin-guards mandatory?
 
-A: Yes. They are available at most sporting goods stores, and if you go to Upper 90, mention that you are a WSSL family, and you may be eligible for a discount. Also your division head may have some extra pairs available.<a id="volunteer"></a>
+A: Yes. They are available at most sporting goods stores, and if you go to Soccer Post, mention that you are a WSSL family, and you may be eligible for a discount. Also your division head may have some extra pairs available.<a id="volunteer"></a>
 
 ### Q: I don't want to referee or coach, but I want to volunteer. What can I do?
 
