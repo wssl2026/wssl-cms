@@ -1,4 +1,4 @@
-import { htmlToMarkdown, localAssetPath, isLegacyAsset, normalizeInternal, stripHost } from '../scripts/lib/convert';
+import { htmlToMarkdown, localAssetPath, isLegacyAsset, normalizeInternal, rewriteInleagueSchedule, stripHost } from '../scripts/lib/convert';
 
 describe('asset helpers', () => {
   it('detects legacy assets on any wssl host', () => {
@@ -24,11 +24,32 @@ describe('asset helpers', () => {
     expect(normalizeInternal('https://www.wssl.org/fields/riverside-park/index.html#map')).toBe('/fields/riverside-park/#map');
   });
   it('leaves a path whose last segment is a file alone', () => {
-    expect(normalizeInternal('http://www.wssl.org/inleague/schedule/schedule.cfm?team=1')).toBe('/inleague/schedule/schedule.cfm?team=1');
+    expect(normalizeInternal('http://www.wssl.org/inleague/schedule/field-status.cfm?region=1')).toBe('/inleague/schedule/field-status.cfm?region=1');
     expect(normalizeInternal('/documents/handbook.pdf')).toBe('/documents/handbook.pdf');
   });
   it('tolerates malformed percent-encoding instead of throwing', () => {
     expect(localAssetPath('/sites/wssl/assets/File/50% off.pdf')).toBe('/assets/legacy/File/50-off.pdf');
+  });
+});
+
+describe('rewriteInleagueSchedule', () => {
+  it('rebuilds a legacy schedule.cfm link on the new inLeague app URL for that division', () => {
+    expect(rewriteInleagueSchedule('/inleague/schedule/schedule.cfm?competition_id=1&startdate=9/19/2026&endDate=11/22/2026&division=B19'))
+      .toBe('https://inleague.wssl.org/app/schedule/1/461A113D-20D9-46FC-8961-113ADC1FDB77?tab=allGames&gamesOnOrAfter=2026-09-19&includeUnpublished=0');
+    expect(rewriteInleagueSchedule('http://www.wssl.org/inleague/schedule/schedule.cfm?competition_id=1&startdate=9/19/2026&division=g14'))
+      .toBe('https://inleague.wssl.org/app/schedule/1/C4361E7A-46EA-4B0A-B49B-A6601D0DBC56?tab=allGames&gamesOnOrAfter=2026-09-19&includeUnpublished=0');
+  });
+  it('sends EPIC to its own competition, and an unknown division to the chooser for its competition', () => {
+    expect(rewriteInleagueSchedule('/inleague/schedule/schedule.cfm?competition_id=1&startdate=9/19/2026&division=VIP'))
+      .toBe('https://inleague.wssl.org/app/schedule/7?tab=allGames&gamesOnOrAfter=2026-09-19&includeUnpublished=0');
+    expect(rewriteInleagueSchedule('/inleague/schedule/schedule.cfm?competition_id=4&division=XYZ'))
+      .toBe('https://inleague.wssl.org/app/schedule/4?tab=allGames&includeUnpublished=0');
+  });
+  it('leaves every other link alone, and is applied by the converter to page links', () => {
+    expect(rewriteInleagueSchedule('/inleague/schedule/field-status.cfm')).toBeNull();
+    expect(rewriteInleagueSchedule('/registration/')).toBeNull();
+    const { markdown } = htmlToMarkdown('<p><a href="/inleague/schedule/schedule.cfm?competition_id=1&amp;startdate=9/19/2026&amp;division=B6">B6</a></p>');
+    expect(markdown).toBe('[B6](https://inleague.wssl.org/app/schedule/1/267F7F22-1CBD-404D-8803-7D85F4968395?tab=allGames&gamesOnOrAfter=2026-09-19&includeUnpublished=0)');
   });
 });
 

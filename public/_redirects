@@ -87,5 +87,6 @@
 /fields/overview      /fields/overview/      301
 /programs/core/divisions/fall-2025   /programs/core/divisions/fall-2026/  301
 /programs/core/divisions/fall-2025/  /programs/core/divisions/fall-2026/  301
+/inleague/schedule/*  https://inleague.wssl.org/app/schedule/1  301
 /inleague/*           https://inleague.wssl.org/:splat  301
 /login                https://inleague.wssl.org/  301

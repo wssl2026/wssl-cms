@@ -6,7 +6,12 @@ export const STATIC_REDIRECTS = [
   // The Fall 2025 divisions page was retired on the old site when Fall 2026 went up (Oct 2026).
   '/programs/core/divisions/fall-2025   /programs/core/divisions/fall-2026/  301',
   '/programs/core/divisions/fall-2025/  /programs/core/divisions/fall-2026/  301',
-  // Legacy same-host links into the old ColdFusion app, kept alive on inLeague.
+  // Legacy same-host links into the old ColdFusion app, kept alive on inLeague. The old
+  // schedule.cfm pages are gone (Oct 2026: inLeague's new schedule app addresses divisions by
+  // id, not code), so those land on the schedule chooser; query strings do not survive a
+  // Pages redirect, so the division cannot be carried over here — the converter rewrites the
+  // links in page content instead (scripts/lib/convert.ts, src/data/inleague-divisions.json).
+  '/inleague/schedule/*  https://inleague.wssl.org/app/schedule/1  301',
   '/inleague/*           https://inleague.wssl.org/:splat  301',
   '/login                https://inleague.wssl.org/  301',
 ];

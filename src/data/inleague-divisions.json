@@ -1,0 +1,26 @@
+{
+  "_comment": "inLeague division identifiers for schedule links (https://inleague.wssl.org/app/schedule/<competition>/<divID>?tab=allGames&gamesOnOrAfter=YYYY-MM-DD&includeUnpublished=0). Read from inLeague's public API (GET /api/v1/divisions and /api/v1/competitions) on 2026-10-14; the migration converter uses it to rewrite the old site's schedule.cfm links. Keys are the division codes the old links used.",
+  "competitions": { "core": 1, "epic": 7 },
+  "divisions": {
+    "B5": { "divID": "4D85C1AE-08B1-4C42-AE59-43CB0120E5AE", "displayName": "U5 Playground", "competition": 1 },
+    "B6": { "divID": "267F7F22-1CBD-404D-8803-7D85F4968395", "displayName": "B6", "competition": 1 },
+    "G6": { "divID": "61E36E1A-7413-46EA-97F4-67EA1C2A2C53", "displayName": "G6", "competition": 1 },
+    "B7": { "divID": "AD520C64-0365-4035-A1A6-A08A85180648", "displayName": "B7", "competition": 1 },
+    "G7": { "divID": "9A47EDCE-CD8D-4276-A536-5C164F03D566", "displayName": "G7", "competition": 1 },
+    "B8": { "divID": "72790F42-993D-4F43-BCDA-BD54D338FD88", "displayName": "B8", "competition": 1 },
+    "G8": { "divID": "BEC2A1E3-261C-48CB-A236-556609F17CA0", "displayName": "G8", "competition": 1 },
+    "B9": { "divID": "49613F96-A0D0-4AE3-9BAD-ED1FB9C3AD1C", "displayName": "B9", "competition": 1 },
+    "G9": { "divID": "A99846F3-46A0-492E-AE4A-29E16D799851", "displayName": "G9", "competition": 1 },
+    "B10": { "divID": "EB9F8EB2-E748-47F6-80CF-BEB77BAFE9F1", "displayName": "B10", "competition": 1 },
+    "G10": { "divID": "CF031E38-2740-4E56-8914-F4A14B7CF24B", "displayName": "G10", "competition": 1 },
+    "B11": { "divID": "BA334B8F-67D7-4B6D-A6B8-DEEC7925D561", "displayName": "B11", "competition": 1 },
+    "G11": { "divID": "910AD71F-9732-4C61-8926-F74535EA9655", "displayName": "G11", "competition": 1 },
+    "B12": { "divID": "5BDD0271-7EF1-4FF6-9683-982A0AB616BF", "displayName": "B12", "competition": 1 },
+    "G12": { "divID": "4A5B5EF8-B892-454F-ADDF-4350CEA1A1B1", "displayName": "G12", "competition": 1 },
+    "B14": { "divID": "19D63C2D-C9DB-44D6-98C8-4348251CC480", "displayName": "B13/B14", "competition": 1 },
+    "G14": { "divID": "C4361E7A-46EA-4B0A-B49B-A6601D0DBC56", "displayName": "G13/G14", "competition": 1 },
+    "B19": { "divID": "461A113D-20D9-46FC-8961-113ADC1FDB77", "displayName": "B19", "competition": 1 },
+    "G19": { "divID": "B4E95A6E-8F40-46A7-BF9A-5BFE9ED73466", "displayName": "G19", "competition": 1 },
+    "VIP": { "divID": null, "displayName": "EPIC", "competition": 7, "_note": "EPIC is its own competition in inLeague with no division in the schedule menu, so its link goes to that competition's schedule page." }
+  }
+}

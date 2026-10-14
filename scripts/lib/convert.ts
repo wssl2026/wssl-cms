@@ -1,6 +1,7 @@
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
 import domino from '@mixmark-io/domino';
+import inleagueDivisions from '../../src/data/inleague-divisions.json';
 
 export interface ConvertResult {
   markdown: string;
@@ -49,8 +50,37 @@ export function sanitizeFragment(fragment: string): string {
   return safeDecode(fragment).replace(/[^A-Za-z0-9_-]/g, '');
 }
 
+const INLEAGUE_SCHEDULE_APP = 'https://inleague.wssl.org/app/schedule';
+
+function toIsoDate(s: string | null): string | null {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((s ?? '').trim());
+  return m ? `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}` : null;
+}
+
+/**
+ * The old site's schedule links pointed at inLeague's ColdFusion pages by division code
+ * (`/inleague/schedule/schedule.cfm?competition_id=1&startdate=9/19/2026&division=B19`).
+ * inLeague retired those in October 2026: its new schedule app addresses a division by id,
+ * so the links are rebuilt from src/data/inleague-divisions.json. A code the map does not
+ * know lands on the competition's schedule chooser rather than on a dead page. Returns null
+ * for any other link.
+ */
+export function rewriteInleagueSchedule(href: string): string | null {
+  const m = /^\/inleague\/schedule\/schedule\.cfm(?:\?([^#]*))?/i.exec(stripHost(href));
+  if (!m) return null;
+  const params = new URLSearchParams(m[1] ?? '');
+  const code = (params.get('division') ?? '').trim().toUpperCase();
+  const known = (inleagueDivisions.divisions as Record<string, { divID: string | null; competition: number }>)[code];
+  const competition = known?.competition ?? (Number(params.get('competition_id')) || inleagueDivisions.competitions.core);
+  const date = toIsoDate(params.get('startdate'));
+  const query = new URLSearchParams({ tab: 'allGames', ...(date ? { gamesOnOrAfter: date } : {}), includeUnpublished: '0' });
+  return `${INLEAGUE_SCHEDULE_APP}/${competition}${known?.divID ? `/${known.divID}` : ''}?${query}`;
+}
+
 export function normalizeInternal(href: string): string {
   const p = stripHost(href);
+  const inleague = rewriteInleagueSchedule(p);
+  if (inleague) return inleague;
   const m = p.match(/^([^?#]*)([^#]*)(?:#(.*))?$/)!;
   let path = m[1];
   const suffix = m[2] + (m[3] === undefined ? '' : `#${sanitizeFragment(m[3])}`);
