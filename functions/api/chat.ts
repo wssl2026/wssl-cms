@@ -7,24 +7,29 @@ import { eventsToStream } from '../_lib/sse';
 import { checkDailyCap } from '../_lib/usage';
 import type { Provider } from '../_lib/providers/types';
 import { createAnthropicProvider } from '../_lib/providers/anthropic';
+import { createAnthropicIndexProvider } from '../_lib/providers/anthropic-index';
 import { createGeminiProvider } from '../_lib/providers/gemini';
 import { buildQuestionRecord, questionLogConfigured, sendQuestionRecord } from '../_lib/question-log';
 import type { QuestionLogEnv } from '../_lib/question-log';
 
 interface Env extends QuestionLogEnv {
   ANTHROPIC_API_KEY: string;
+  /** Overrides the Claude model in index mode; default claude-haiku-5-5. */
+  ANTHROPIC_MODEL?: string;
+  /** `index` (default) or `cache` — the Claude provider's retrieval mode. See README "How Ask WSSL answers". */
+  ANTHROPIC_RETRIEVAL?: string;
   GEMINI_API_KEY: string;
   GEMINI_MODEL?: string;
   /** `index` (default) or `cache`. See README "How Ask WSSL answers". */
   GEMINI_RETRIEVAL?: string;
-  /** `gemini` (default) or `anthropic`. See README "Ask WSSL". */
+  /** `anthropic` or `gemini`; set in wrangler.toml. See README "Ask WSSL". */
   LLM_PROVIDER?: string;
   USAGE: KVNamespace;
   DAILY_CAP?: string;
 }
 
 const corpus = corpusJson as CorpusDoc[];
-// The page map for the Gemini provider's index mode; both files are rebuilt by `npm run build`.
+// The page map for index mode (both providers); both files are rebuilt by `npm run build`.
 const pageIndex = indexJson as IndexEntry[];
 
 const json = (body: unknown, status = 200) =>
@@ -48,7 +53,8 @@ function selectProvider(env: Env): ProviderSelection {
   }
   if (name === 'anthropic') {
     if (!env.ANTHROPIC_API_KEY?.trim()) return { ok: false, providerName: name, reason: 'missing_key' };
-    return { ok: true, provider: createAnthropicProvider(env) };
+    const mode = (env.ANTHROPIC_RETRIEVAL ?? 'index').trim().toLowerCase();
+    return { ok: true, provider: mode === 'cache' ? createAnthropicProvider(env) : createAnthropicIndexProvider(env, pageIndex) };
   }
   return { ok: false, providerName: name, reason: 'unknown_provider' };
 }

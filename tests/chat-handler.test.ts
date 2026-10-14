@@ -3,6 +3,8 @@ import { describe, it, expect, vi } from 'vitest';
 // Only the "question log scheduling" describe block below reaches a real provider; it needs
 // the Anthropic SDK mocked so the stream actually completes (and `onComplete` fires) without
 // touching the network. Declared once, at the top, since vi.mock is hoisted above every import.
+// These handler tests run the Claude provider in cache mode (ANTHROPIC_RETRIEVAL=cache), the one
+// path this fake implements; the index mode has its own tests in anthropic-index-provider.test.ts.
 vi.mock('@anthropic-ai/sdk', () => ({
   default: class {
     beta = {
@@ -147,7 +149,7 @@ describe('POST /api/chat handler', () => {
       const waitUntilCalls: Promise<unknown>[] = [];
       const env = {
         ANTHROPIC_API_KEY: 'x',
-        LLM_PROVIDER: 'anthropic',
+        LLM_PROVIDER: 'anthropic', ANTHROPIC_RETRIEVAL: 'cache',
         USAGE: fakeKV(),
         DAILY_CAP: '5',
         QUESTION_LOG_URL: 'https://script.google.com/macros/s/xyz/exec',
@@ -190,7 +192,7 @@ describe('POST /api/chat handler', () => {
       const waitUntilCalls: Promise<unknown>[] = [];
       const env = {
         ANTHROPIC_API_KEY: 'x',
-        LLM_PROVIDER: 'anthropic',
+        LLM_PROVIDER: 'anthropic', ANTHROPIC_RETRIEVAL: 'cache',
         USAGE: fakeKV(),
         DAILY_CAP: '5',
         QUESTION_LOG_URL: 'https://script.google.com/macros/s/xyz/exec',
@@ -215,7 +217,7 @@ describe('POST /api/chat handler', () => {
     it('schedules nothing when QUESTION_LOG_URL/QUESTION_LOG_SECRET are not set', async () => {
       const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('ok', { status: 200 }));
       const waitUntilCalls: Promise<unknown>[] = [];
-      const env = { ANTHROPIC_API_KEY: 'x', LLM_PROVIDER: 'anthropic', USAGE: fakeKV(), DAILY_CAP: '5' };
+      const env = { ANTHROPIC_API_KEY: 'x', LLM_PROVIDER: 'anthropic', ANTHROPIC_RETRIEVAL: 'cache', USAGE: fakeKV(), DAILY_CAP: '5' };
       const request = makeRequest(
         'https://example.com/api/chat',
         { messages: [{ role: 'user', content: 'How do I register?' }] },
@@ -234,7 +236,7 @@ describe('POST /api/chat handler', () => {
       const waitUntilCalls: Promise<unknown>[] = [];
       const env = {
         ANTHROPIC_API_KEY: 'x',
-        LLM_PROVIDER: 'anthropic',
+        LLM_PROVIDER: 'anthropic', ANTHROPIC_RETRIEVAL: 'cache',
         USAGE: fakeKV(),
         DAILY_CAP: '5',
         QUESTION_LOG_URL: 'https://script.google.com/macros/s/xyz/exec',

@@ -7,10 +7,19 @@ pages_build_output_dir = "dist"
 # Questions answered per day before Ask WSSL turns itself off. See README "Cost".
 DAILY_CAP = "200"
 
-# Which model answers Ask WSSL: "gemini" or "anthropic". The matching secret
-# (GEMINI_API_KEY or ANTHROPIC_API_KEY) must be set for whichever is selected.
-# Run `npm run check-gemini-model` once to confirm GEMINI_MODEL exists for the key.
-LLM_PROVIDER = "gemini"
+# Which model answers Ask WSSL: "anthropic" (Claude) or "gemini". The matching secret
+# (ANTHROPIC_API_KEY or GEMINI_API_KEY) must be set for whichever is selected.
+LLM_PROVIDER = "anthropic"
+
+# The Claude provider: the model, and how it gets the site's content in front of the model —
+# "index" (the default) sends a one-line-per-page map and lets the model fetch the pages it
+# needs with a read_pages tool; "cache" sends the whole corpus as cached documents (claude-sonnet-5,
+# see MODEL in functions/_lib/chat.ts). Any other value is treated as "index".
+ANTHROPIC_MODEL = "claude-haiku-5-5"
+ANTHROPIC_RETRIEVAL = "index"
+
+# The Gemini provider, kept configured so switching back is one line. Run
+# `npm run check-gemini-model` once to confirm GEMINI_MODEL exists for the key.
 GEMINI_MODEL = "gemini-3.8-flash"
 
 # How the Gemini provider gets the site's content in front of the model. "index" (the default)

@@ -4,6 +4,17 @@ import { corpusByPath, extractCitations, findDoc } from '../gemini-corpus';
 import type { IndexEntry } from '../index-types';
 import { renderIndex } from '../index-types';
 import type { ProviderEvent } from '../sse';
+import {
+  INDEX_PREAMBLE,
+  MAX_PAGES_PER_CALL,
+  MAX_PAGES_PER_QUESTION,
+  MAX_TOOL_ROUNDS,
+  READ_PAGES_DESCRIPTION,
+  READ_PAGES_TOOL_NAME,
+  resolveReadPages,
+  urlsFromInput,
+} from '../read-pages';
+import type { ReadPage, ReadResult } from '../read-pages';
 import type { LogLine, ProviderDeps } from './types';
 import {
   GEMINI_SYSTEM_PROMPT,
@@ -32,17 +43,19 @@ import type {
  * the visitor always sees something.
  */
 
-export const READ_PAGES_TOOL_NAME = 'read_pages';
-export const MAX_TOOL_ROUNDS = 2;
-export const MAX_PAGES_PER_CALL = 4;
-export const MAX_PAGES_PER_QUESTION = 6;
-export const NO_SUCH_PAGE = '(no such page)';
-export const PAGE_BUDGET_REACHED = '(page budget reached)';
+// The constants, the preamble and the page resolver are shared with the Claude provider;
+// re-exported here so this module's public surface (and its tests) stay as they were.
+export {
+  INDEX_PREAMBLE,
+  MAX_PAGES_PER_CALL,
+  MAX_PAGES_PER_QUESTION,
+  MAX_TOOL_ROUNDS,
+  NO_SUCH_PAGE,
+  PAGE_BUDGET_REACHED,
+  READ_PAGES_TOOL_NAME,
+} from '../read-pages';
 /** The tool turns' text is discarded — only the function call matters — so they get a small budget. */
 export const TOOL_TURN_MAX_OUTPUT_TOKENS = 1024;
-
-export const INDEX_PREAMBLE =
-  'Below is the map of every page on wssl.org. Call `read_pages` with the URLs you need before answering; read at most 4 pages; if the map clearly cannot answer, say so.';
 
 /**
  * The declaration sent as `config.tools = [{ functionDeclarations: [READ_PAGES_TOOL] }]`.
@@ -51,8 +64,7 @@ export const INDEX_PREAMBLE =
  */
 export const READ_PAGES_TOOL = {
   name: READ_PAGES_TOOL_NAME,
-  description:
-    'Fetch the full text of wssl.org pages listed in the map. Pass the URLs exactly as they appear there. Returns one entry per URL.',
+  description: READ_PAGES_DESCRIPTION,
   parameters: {
     type: 'OBJECT',
     properties: {
@@ -66,10 +78,6 @@ export const READ_PAGES_TOOL = {
   },
 } as const;
 
-interface ReadPage { url: string; title: string; text: string }
-/** What one tool call produced: what goes back to the model, and which of it was a newly-read page. */
-interface ToolResult { pages: ReadPage[]; resolved: ReadPage[] }
-
 /** The SDK exposes `functionCalls` as a getter; a hand-built response may only carry candidates. */
 function functionCallsOf(response: GeminiFunctionCallSource | undefined): GeminiFunctionCall[] {
   if (!response) return [];
@@ -79,10 +87,7 @@ function functionCallsOf(response: GeminiFunctionCallSource | undefined): Gemini
 }
 
 function urlsOf(call: GeminiFunctionCall): string[] {
-  const raw = (call.args as { urls?: unknown })?.urls;
-  if (typeof raw === 'string') return [raw];
-  if (!Array.isArray(raw)) return [];
-  return raw.filter((u): u is string => typeof u === 'string');
+  return urlsFromInput((call.args as { urls?: unknown })?.urls);
 }
 
 /**
@@ -95,45 +100,8 @@ function readPagesTools() {
   return [{ functionDeclarations: [structuredClone(READ_PAGES_TOOL)] }];
 }
 
-/**
- * Resolve one tool call against the corpus. Unknown URLs come back as `(no such page)` rather
- * than being dropped, so the model can see that its guess was wrong instead of assuming the
- * page was empty. A URL already read this question is returned again from `alreadyRead` without
- * touching the budget — so a model that asks for the same page twice doesn't burn its allowance
- * — and once the per-question budget is spent, remaining URLs come back as
- * `(page budget reached)` instead of silently vanishing from the response.
- */
-function readPages(
-  call: GeminiFunctionCall,
-  byPath: Map<string, CorpusDoc>,
-  budget: number,
-  alreadyRead: Map<string, ReadPage>,
-): ToolResult {
-  const pages: ReadPage[] = [];
-  const resolved: ReadPage[] = [];
-  let left = budget;
-  for (const url of urlsOf(call).slice(0, MAX_PAGES_PER_CALL)) {
-    const doc = findDoc(url, byPath);
-    if (!doc) {
-      pages.push({ url, title: '', text: NO_SUCH_PAGE });
-      continue;
-    }
-    const cached = alreadyRead.get(doc.url);
-    if (cached) {
-      pages.push(cached);
-      continue;
-    }
-    if (left <= 0) {
-      pages.push({ url, title: '', text: PAGE_BUDGET_REACHED });
-      continue;
-    }
-    left -= 1;
-    const page = { url: doc.url, title: doc.title, text: doc.text };
-    pages.push(page);
-    resolved.push(page);
-    alreadyRead.set(doc.url, page);
-  }
-  return { pages, resolved };
+function readPages(call: GeminiFunctionCall, byPath: Map<string, CorpusDoc>, budget: number, alreadyRead: Map<string, ReadPage>): ReadResult {
+  return resolveReadPages(urlsOf(call), byPath, budget, alreadyRead);
 }
 
 export async function* geminiIndexEvents(

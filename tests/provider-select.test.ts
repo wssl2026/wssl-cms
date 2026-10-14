@@ -23,11 +23,27 @@ vi.mock('@google/genai/web', () => ({
 
 vi.mock('@anthropic-ai/sdk', () => ({
   default: class {
+    // Index mode (the default): a tool turn that asks for nothing, then the streamed answer.
+    messages = {
+      create: async (params: any) => ({
+        id: 'msg_1', type: 'message', role: 'assistant', model: params.model,
+        content: [{ type: 'text', text: 'no pages needed' }], stop_reason: 'end_turn', stop_sequence: null,
+        usage: { input_tokens: 1, output_tokens: 1, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 },
+      }),
+      stream: (params: any) => ({
+        async *[Symbol.asyncIterator]() {
+          yield { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'claude says hello' } };
+        },
+        finalMessage: async () => ({ stop_reason: 'end_turn', model: params.model, content: [], usage: { input_tokens: 1, output_tokens: 1 } }),
+        abort: () => {},
+      }),
+    };
+    // Cache mode (ANTHROPIC_RETRIEVAL=cache): the whole corpus as documents, on the beta client.
     beta = {
       messages: {
         stream: () => ({
           async *[Symbol.asyncIterator]() {
-            yield { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'claude says hello' } };
+            yield { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'claude (cache mode) says hello' } };
           },
           finalMessage: async () => ({ stop_reason: 'end_turn', model: 'claude-sonnet-5', usage: { input_tokens: 1 } }),
           abort: () => {},
@@ -79,18 +95,31 @@ describe('provider selection', () => {
     expect(out.at(-1)).toEqual({ type: 'done', served_by: 'gemini-3.8-flash-lite' });
   });
 
-  it('selects the Anthropic provider when LLM_PROVIDER=anthropic', async () => {
+  it('selects the Claude index provider on Haiku 5.5 when LLM_PROVIDER=anthropic', async () => {
     const res = await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), LLM_PROVIDER: 'anthropic' }));
     expect(res.status).toBe(200);
     const out = await events(res);
     expect(out[0]).toEqual({ type: 'text', text: 'claude says hello' });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'claude-haiku-5-5' });
+  });
+
+  it('honours ANTHROPIC_MODEL', async () => {
+    const res = await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), LLM_PROVIDER: 'anthropic', ANTHROPIC_MODEL: 'claude-sonnet-5-5' }));
+    const out = await events(res);
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'claude-sonnet-5-5' });
+  });
+
+  it('ANTHROPIC_RETRIEVAL=cache selects the whole-corpus Claude provider', async () => {
+    const res = await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), LLM_PROVIDER: 'anthropic', ANTHROPIC_RETRIEVAL: 'cache' }));
+    const out = await events(res);
+    expect(out[0]).toEqual({ type: 'text', text: 'claude (cache mode) says hello' });
     expect(out.at(-1)).toEqual({ type: 'done', served_by: 'claude-sonnet-5' });
   });
 
   it('ignores case and surrounding whitespace in LLM_PROVIDER', async () => {
     const res = await onRequestPost(makeContext({ ...base, USAGE: fakeKV(), LLM_PROVIDER: ' Anthropic ' }));
     const out = await events(res);
-    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'claude-sonnet-5' });
+    expect(out.at(-1)).toEqual({ type: 'done', served_by: 'claude-haiku-5-5' });
   });
 
   it('refuses an unknown LLM_PROVIDER with a 503 config error', async () => {
