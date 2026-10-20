@@ -2,7 +2,7 @@
 title: Core Games
 path: game-schedules/core-games
 legacyUrl: /schedules/game-schedules/core-games/
-updated: 2026-08-18
+updated: 2026-10-14
 ---
 
 Click on the links at the left to see the weekly game schedule for each individual division.

@@ -2,7 +2,7 @@
 title: Core Weekday Open Training (Free with Core Registration)
 path: training-schedules/core-weekday-open-training
 legacyUrl: /schedules/training-schedules/core-weekday-open-training/
-updated: 2026-10-09
+updated: 2026-10-17
 ---
 
 ## **Fall 2026 (October through November)**
@@ -25,18 +25,20 @@ All age groups (U6 through U19) may attend each session.
 
 </div>
 
-Tuesday, October 13th at 71st Street/Riverside Park, 3:45-4:45pm
+Monday, October 19th at 74th Street/Riverside Park, 5:00-6:00pm
 
-Tuesday, October 13th at 71st Street/Riverside Park, 5:00-6:00pm
+Tuesday, October 20th at 71st Street/Riverside Park, 3:45-4:45pm
 
-Wednesday, October 14th at 71st Street/Riverside Park, 3:45-4:45pm
+Tuesday, October 20th at 71st Street/Riverside Park, 5:00-6:00pm
 
-Wednesday, October 14th at 71st Street/Riverside Park, 5:00-6:00pm
+Wednesday, October 21st at 71st Street/Riverside Park, 3:45-4:45pm
 
-Thursday, October 15th at 71st Street/Riverside Park, 3:45-4:45pm
+Wednesday, October 21st at 71st Street/Riverside Park, 5:00-6:00pm
 
-Thursday, October 15th at 71st Street/Riverside Park, 5:00-6:00pm
+Thursday, October 22nd at 71st Street/Riverside Park, 3:45-4:45pm
 
-Friday, October 16th at 71st Street/Riverside Park, 3:45-4:45pm
+Thursday, October 22nd at 71st Street/Riverside Park, 5:00-6:00pm
 
-Friday, October 16th at 71st Street/Riverside Park, 5:00-6:00pm
+Friday, October 23rd at Frederick Douglass Playground Field, 3:45-4:45pm
+
+Friday, October 23rd at Frederick Douglass Playground Field, 5:00-6:00pm

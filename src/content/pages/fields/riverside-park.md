@@ -2,7 +2,7 @@
 title: Riverside Park Fields
 path: riverside-park
 legacyUrl: /fields/riverside-park/
-updated: 2023-09-11
+updated: 2026-10-18
 ---
 
 <iframe allowfullscreen="" frameborder="0" height="600" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1977.1824664105525!2d-73.97263163299733!3d40.80272875514239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f6300af9b315%3A0xf4487799111dadcc!2s107th%20Street%20Field%2C%20Riverside%20Park!5e1!3m2!1sen!2sus!4v1570249950978!5m2!1sen!2sus" style="border:0;" width="800"></iframe>
@@ -38,7 +38,7 @@ If there are any equipment or safety concerns please contact the WSSL [Equipment
 
 ### 103rd Street Field
 
-**Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. The soccer field runs north/south immediately to the east of the baseball field. To reach this field, enter at 104th Street and walk down two levels to the field. Please see the map at right. **Equipment:** Two movable 7x21 goals with nets. **Set Up:** Place movable goals in the proper location according to field lines. Goals should be placed at the North and South ends of the field. **Break Down:** Coach to remove cones at the end of each game. Last teams to take down nets, fold neatly and insert into gray bags. Store bags together in lock up just south of the field by basketball court. Make sure lock is secure. | ![](/assets/legacy/Image/Fields/map-of-101-and-103-fields.png) |
+**Location:** In Riverside Park, one level down from the pedestrian walkways. This is a turf field and cleats are permitted. The soccer field runs north/south immediately to the east of the baseball field. To reach this field, enter at 104th Street and walk down two levels to the field. Please see the map at right. **Equipment:** Two movable 7x21 goals with nets. **Set Up:** Place movable goals in the proper location according to field lines. Goals should be placed at the North and South ends of the field. **All spectators MUST watch the game from the terrace above.** **Break Down:** Coach to remove cones at the end of each game. Last teams to take down nets, fold neatly and insert into gray bags. Store bags together in lock up just south of the field by basketball court. Make sure lock is secure. | ![](/assets/legacy/Image/Fields/map-of-101-and-103-fields.png) |
 | --- | --- |
 
 ### 107th Street Field

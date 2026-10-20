@@ -2,7 +2,7 @@
 title: Referee Resources
 path: referees/referee-resources
 legacyUrl: /volunteers/referees/referee-resources/
-updated: 2025-03-10
+updated: 2026-10-19
 sidebar: |-
   ### OTHER RESOURCES
 
@@ -46,6 +46,8 @@ For any incident or accident on the field during a West Side Soccer League game 
 3. Incidents -- fighting -- any type
 4. Property damage
 5. Law enforcement summoned
+
+Incident reports should be sent to safety@wssl.org.
 
 ### The Laws of the Game
 
