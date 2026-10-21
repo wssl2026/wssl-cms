@@ -21,7 +21,8 @@ function trailTo(nodes: NavNode[], href: string): NavNode[] | null {
 
 /**
  * The trail the legacy site showed above every inner page: Home, then each navigation
- * ancestor, then the page itself, all labelled as the navigation labels them. A page that
+ * ancestor (a menu group such as "Coaches" included, as a label without a link), then the
+ * page itself, all labelled as the navigation labels them. A page that
  * is not in the navigation (a page reached only by link) still gets Home / its section /
  * its own title, so the visitor always sees where they are.
  */

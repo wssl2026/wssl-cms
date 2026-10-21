@@ -117,7 +117,7 @@ describe('buildNav', () => {
     expect(buildNav(items)).toEqual([{ label: 'About', href: '/about/', children: [] }]);
   });
 
-  it('hoists the children of a nav parent that has no page of its own', () => {
+  it('keeps a Folder parent as a headed group over its children', () => {
     const items = [
       item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
       item({ contentid: 'B', filename: 'volunteers/coaches', menutitle: 'Coaches', type: 'Folder', parentid: 'A', orderno: 1 }),
@@ -126,13 +126,15 @@ describe('buildNav', () => {
     ];
     expect(buildNav(items)).toEqual([
       { label: 'Volunteers', href: '/volunteers/', children: [
-        { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
-        { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+        { label: 'Coaches', href: '', children: [
+          { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
+          { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+        ] },
       ] },
     ]);
   });
 
-  it('re-attaches orphans whose parent item the API never returned to the nearest ancestor page', () => {
+  it('turns an orphan subtree whose parent item the API never returned into a headed group under the nearest ancestor page', () => {
     const items = [
       item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
       // parent 'MISSING' (volunteers/coaches) is absent from the API response
@@ -141,8 +143,30 @@ describe('buildNav', () => {
     ];
     expect(buildNav(items)).toEqual([
       { label: 'Volunteers', href: '/volunteers/', children: [
-        { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
-        { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+        { label: 'Coaches', href: '', children: [
+          { label: 'Certification', href: '/volunteers/coaches/certification/', children: [] },
+          { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] },
+        ] },
+      ] },
+    ]);
+  });
+
+  it('names and orders orphan groups like the old menu, listed groups first and unlisted ones after the real pages', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'P', filename: 'volunteers/overview', menutitle: 'Overview', parentid: 'A', orderno: 5 }),
+      item({ contentid: 'R1', filename: 'volunteers/referees/welcome', menutitle: 'Welcome', parentid: 'REF-FOLDER', orderno: 1 }),
+      item({ contentid: 'O1', filename: 'volunteers/volunteers/safesport', menutitle: 'SafeSport', parentid: 'OTHER-FOLDER', orderno: 1 }),
+      item({ contentid: 'C1', filename: 'volunteers/coaches/become-coach', menutitle: 'Become a Coach', parentid: 'COACH-FOLDER', orderno: 2 }),
+      item({ contentid: 'X1', filename: 'volunteers/field-crew/setup', menutitle: 'Setup', parentid: 'UNLISTED-FOLDER', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'Volunteers', href: '/volunteers/', children: [
+        { label: 'Coaches', href: '', children: [{ label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] }] },
+        { label: 'Referees', href: '', children: [{ label: 'Welcome', href: '/volunteers/referees/welcome/', children: [] }] },
+        { label: 'Other Volunteers', href: '', children: [{ label: 'SafeSport', href: '/volunteers/volunteers/safesport/', children: [] }] },
+        { label: 'Overview', href: '/volunteers/overview/', children: [] },
+        { label: 'Field Crew', href: '', children: [{ label: 'Setup', href: '/volunteers/field-crew/setup/', children: [] }] },
       ] },
     ]);
   });

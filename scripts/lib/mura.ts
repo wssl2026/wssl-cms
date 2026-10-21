@@ -17,7 +17,29 @@ export interface MuraItem {
   orderno?: number | string; // Mura's real sort column; displayorder is unreliable in the live API
 }
 
+/** A menu entry. `href` is '' for a group heading (a folder with no page of its own) that only organises its children. */
 export interface NavItem { label: string; href: string; children: NavItem[] }
+
+/**
+ * Labels for the page-less folders that group the dropdown menus, in the order the old
+ * site's menu shows them. The Mura API never returns folder items, so their names cannot be
+ * read from it; anything not listed here is titled from its last path segment.
+ */
+export const FOLDER_LABELS: Record<string, string> = {
+  'schedules/game-schedules': 'Game Schedules',
+  'schedules/training-schedules': 'Training Schedules',
+  'volunteers/coaches': 'Coaches',
+  'volunteers/referees': 'Referees',
+  'volunteers/volunteers': 'Other Volunteers',
+};
+
+function folderLabel(path: string): string {
+  const known = FOLDER_LABELS[path];
+  if (known) return known;
+  const last = path.split('/').pop() ?? path;
+  return last.split('-').map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ');
+}
+
 
 export const MURA_API = 'https://www.wssl.org/index.cfm/_api/json/v1/wssl/content/';
 const FIELDS = 'contentid,filename,title,menutitle,type,body,summary,parentid,displayorder,isnav,lastupdate,url,orderno';
@@ -131,21 +153,42 @@ export function buildNav(items: MuraItem[]): NavItem[] {
     byParent.set(it.parentid, list);
   }
 
-  // Mura's content API does not return the folder items that some pages hang
-  // off (e.g. volunteers/coaches, schedules/game-schedules), so those pages are
-  // orphans whose parentid matches no item. Re-attach each orphan group to the
-  // nearest ancestor page found by filename; otherwise the whole subtree — most
-  // of Volunteers and all of Game Schedules — silently disappears from the nav.
+  // Mura's content API does not return the folder items that some pages hang off
+  // (volunteers/coaches, schedules/game-schedules, …), so those pages are orphans whose
+  // parentid matches no item. Each orphan group becomes a synthetic Folder under the nearest
+  // ancestor page found by filename — rendered as a headed group in the dropdown, the way the
+  // old site's menu shows it — otherwise the whole subtree silently disappears from the nav.
   const knownIds = new Set(items.map((i) => i.contentid));
   const byFilename = new Map(items.map((i) => [trimSlashes(i.filename), i]));
+  const folderOrder = Object.keys(FOLDER_LABELS);
   for (const [parentid, children] of [...byParent]) {
     if (parentid === HOME_ID || knownIds.has(parentid)) continue;
     byParent.delete(parentid);
     const segments = trimSlashes(children[0].filename).split('/');
     let anchor: MuraItem | undefined;
-    for (let n = segments.length - 1; n > 0 && !anchor; n--) anchor = byFilename.get(segments.slice(0, n).join('/'));
+    let folderPath = '';
+    for (let n = segments.length - 1; n > 0 && !anchor; n--) {
+      folderPath = segments.slice(0, n + 1).join('/');
+      anchor = byFilename.get(segments.slice(0, n).join('/'));
+    }
     if (!anchor) continue;
-    byParent.set(anchor.contentid, [...(byParent.get(anchor.contentid) ?? []), ...children]);
+    const index = folderOrder.indexOf(folderPath);
+    const folder: MuraItem = {
+      contentid: `folder:${folderPath}`,
+      filename: folderPath,
+      title: folderLabel(folderPath),
+      menutitle: folderLabel(folderPath),
+      type: 'Folder',
+      parentid: anchor.contentid,
+      displayorder: 0,
+      isnav: 1,
+      lastupdate: '',
+      // Groups the old menu lists come first, in its order (Game Schedules before the Training
+      // Schedules page, Coaches before Referees); an unlisted folder goes after the real pages.
+      orderno: index >= 0 ? index - folderOrder.length : 1000 + sortKey(children[0]),
+    };
+    byParent.set(folder.contentid, children);
+    byParent.set(anchor.contentid, [...(byParent.get(anchor.contentid) ?? []), folder]);
   }
   const seen = new Set<string>();
   const build = (parentid: string, depth: number): NavItem[] => {
@@ -155,9 +198,14 @@ export function buildNav(items: MuraItem[]): NavItem[] {
       .sort((a, b) => sortKey(a) - sortKey(b))
       .flatMap((it) => {
         const href = hrefFor(it);
-        // A parent with no page of its own (a Folder, or a section-less filename)
-        // must not take its whole subtree with it: hoist the children into its place.
-        if (!href) return build(it.contentid, depth);
+        if (!href) {
+          // A Folder has no page of its own but names a group: keep it as a heading over its
+          // children (the dropdown renders it as a column). Anything else page-less — a
+          // section-less filename, a Mura-only link — must not take its subtree with it: hoist.
+          if (it.type !== 'Folder') return build(it.contentid, depth);
+          const children = build(it.contentid, depth + 1);
+          return children.length ? [{ label: it.menutitle || it.title, href: '', children }] : [];
+        }
         return [{ label: it.menutitle || it.title, href, children: depth < 3 ? build(it.contentid, depth + 1) : [] }];
       });
   };

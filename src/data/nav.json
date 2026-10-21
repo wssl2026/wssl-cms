@@ -159,29 +159,35 @@
       "href": "/schedules/",
       "children": [
         {
-          "label": "Travel Games",
-          "href": "/schedules/game-schedules/travel-games/",
-          "children": []
-        },
-        {
-          "label": "Core Games",
-          "href": "/schedules/game-schedules/core-games/",
-          "children": []
-        },
-        {
-          "label": "U8-U14 Tryouts",
-          "href": "/schedules/game-schedules/tryout-schedule/",
-          "children": []
-        },
-        {
-          "label": "High School Tryouts",
-          "href": "/schedules/game-schedules/high-school-tryouts/",
-          "children": []
-        },
-        {
-          "label": "Randalls Shuttle Bus",
-          "href": "/schedules/game-schedules/bus-schedule/",
-          "children": []
+          "label": "Game Schedules",
+          "href": "",
+          "children": [
+            {
+              "label": "Travel Games",
+              "href": "/schedules/game-schedules/travel-games/",
+              "children": []
+            },
+            {
+              "label": "Core Games",
+              "href": "/schedules/game-schedules/core-games/",
+              "children": []
+            },
+            {
+              "label": "U8-U14 Tryouts",
+              "href": "/schedules/game-schedules/tryout-schedule/",
+              "children": []
+            },
+            {
+              "label": "High School Tryouts",
+              "href": "/schedules/game-schedules/high-school-tryouts/",
+              "children": []
+            },
+            {
+              "label": "Randalls Shuttle Bus",
+              "href": "/schedules/game-schedules/bus-schedule/",
+              "children": []
+            }
+          ]
         },
         {
           "label": "Training Schedules",
@@ -282,124 +288,142 @@
       "href": "/volunteers/",
       "children": [
         {
-          "label": "Welcome",
-          "href": "/volunteers/referees/welcome/",
-          "children": []
+          "label": "Coaches",
+          "href": "",
+          "children": [
+            {
+              "label": "Welcome",
+              "href": "/volunteers/coaches/coach-welcome/",
+              "children": []
+            },
+            {
+              "label": "Become a Coach",
+              "href": "/volunteers/coaches/become-coach/",
+              "children": []
+            },
+            {
+              "label": "Certification",
+              "href": "/volunteers/coaches/certification/",
+              "children": []
+            },
+            {
+              "label": "Class Registration",
+              "href": "/volunteers/coaches/register-class/",
+              "children": []
+            },
+            {
+              "label": "Coach Code of Conduct",
+              "href": "/volunteers/coaches/coach-conduct-code/",
+              "children": []
+            },
+            {
+              "label": "Coach Resources",
+              "href": "/volunteers/coaches/coach-resources/",
+              "children": []
+            },
+            {
+              "label": "Coaches & Referees Working Together",
+              "href": "/volunteers/coaches/coaches-referees/",
+              "children": []
+            },
+            {
+              "label": "Coach Feedback",
+              "href": "/volunteers/coaches/coach-comment-form/",
+              "children": []
+            }
+          ]
         },
         {
-          "label": "Welcome",
-          "href": "/volunteers/coaches/coach-welcome/",
-          "children": []
+          "label": "Referees",
+          "href": "",
+          "children": [
+            {
+              "label": "Welcome",
+              "href": "/volunteers/referees/welcome/",
+              "children": []
+            },
+            {
+              "label": "Become an Adult Referee",
+              "href": "/volunteers/referees/new-referee/",
+              "children": []
+            },
+            {
+              "label": "Become a Teen Referee",
+              "href": "/volunteers/referees/teen-referee/",
+              "children": []
+            },
+            {
+              "label": "Certification",
+              "href": "/volunteers/referees/certification/",
+              "children": []
+            },
+            {
+              "label": "Referee Classes",
+              "href": "/volunteers/referees/register-class-ref/",
+              "children": []
+            },
+            {
+              "label": "Referee Scheduler",
+              "href": "/volunteers/referees/referee-scheduler/",
+              "children": []
+            },
+            {
+              "label": "Referee FAQ",
+              "href": "/volunteers/referees/referee-faq/",
+              "children": []
+            },
+            {
+              "label": "Referee Resources",
+              "href": "/volunteers/referees/referee-resources/",
+              "children": []
+            },
+            {
+              "label": "Videos",
+              "href": "/volunteers/referees/videos/",
+              "children": []
+            },
+            {
+              "label": "Referee Feedback",
+              "href": "/volunteers/referees/referee-feedback/",
+              "children": []
+            }
+          ]
         },
         {
-          "label": "West Side Soccer AYSO SuperCamp",
-          "href": "/volunteers/volunteers/west-side-soccer-ayso-supercamp/",
-          "children": []
-        },
-        {
-          "label": "Become an Adult Referee",
-          "href": "/volunteers/referees/new-referee/",
-          "children": []
-        },
-        {
-          "label": "Become a Coach",
-          "href": "/volunteers/coaches/become-coach/",
-          "children": []
-        },
-        {
-          "label": "SafeSport",
-          "href": "/volunteers/volunteers/safesport/",
-          "children": []
-        },
-        {
-          "label": "Become a Teen Referee",
-          "href": "/volunteers/referees/teen-referee/",
-          "children": []
-        },
-        {
-          "label": "Certification",
-          "href": "/volunteers/coaches/certification/",
-          "children": []
-        },
-        {
-          "label": "Become a Volunteer",
-          "href": "/volunteers/volunteers/become-a-volunteer/",
-          "children": []
-        },
-        {
-          "label": "Certification",
-          "href": "/volunteers/referees/certification/",
-          "children": []
-        },
-        {
-          "label": "Class Registration",
-          "href": "/volunteers/coaches/register-class/",
-          "children": []
-        },
-        {
-          "label": "Field Marshalls",
-          "href": "/volunteers/volunteers/field-marshalls/",
-          "children": []
-        },
-        {
-          "label": "Referee Classes",
-          "href": "/volunteers/referees/register-class-ref/",
-          "children": []
-        },
-        {
-          "label": "Coach Code of Conduct",
-          "href": "/volunteers/coaches/coach-conduct-code/",
-          "children": []
-        },
-        {
-          "label": "League Leadership Opportunities",
-          "href": "/volunteers/volunteers/league-leadership-opportunities/",
-          "children": []
-        },
-        {
-          "label": "Referee Scheduler",
-          "href": "/volunteers/referees/referee-scheduler/",
-          "children": []
-        },
-        {
-          "label": "Coach Resources",
-          "href": "/volunteers/coaches/coach-resources/",
-          "children": []
-        },
-        {
-          "label": "Volunteer Requirements",
-          "href": "/volunteers/volunteers/volunteers/",
-          "children": []
-        },
-        {
-          "label": "Referee FAQ",
-          "href": "/volunteers/referees/referee-faq/",
-          "children": []
-        },
-        {
-          "label": "Referee Resources",
-          "href": "/volunteers/referees/referee-resources/",
-          "children": []
-        },
-        {
-          "label": "Videos",
-          "href": "/volunteers/referees/videos/",
-          "children": []
-        },
-        {
-          "label": "Coaches & Referees Working Together",
-          "href": "/volunteers/coaches/coaches-referees/",
-          "children": []
-        },
-        {
-          "label": "Coach Feedback",
-          "href": "/volunteers/coaches/coach-comment-form/",
-          "children": []
-        },
-        {
-          "label": "Referee Feedback",
-          "href": "/volunteers/referees/referee-feedback/",
-          "children": []
+          "label": "Other Volunteers",
+          "href": "",
+          "children": [
+            {
+              "label": "West Side Soccer AYSO SuperCamp",
+              "href": "/volunteers/volunteers/west-side-soccer-ayso-supercamp/",
+              "children": []
+            },
+            {
+              "label": "SafeSport",
+              "href": "/volunteers/volunteers/safesport/",
+              "children": []
+            },
+            {
+              "label": "Become a Volunteer",
+              "href": "/volunteers/volunteers/become-a-volunteer/",
+              "children": []
+            },
+            {
+              "label": "Field Marshalls",
+              "href": "/volunteers/volunteers/field-marshalls/",
+              "children": []
+            },
+            {
+              "label": "League Leadership Opportunities",
+              "href": "/volunteers/volunteers/league-leadership-opportunities/",
+              "children": []
+            },
+            {
+              "label": "Volunteer Requirements",
+              "href": "/volunteers/volunteers/volunteers/",
+              "children": []
+            }
+          ]
         }
       ]
     },

@@ -175,7 +175,7 @@ collections:
                 required: false
                 fields:
                   - { label: Label, name: label, widget: string }
-                  - { label: Link, name: href, widget: string }
+                  - { label: Link, name: href, widget: string, required: false, hint: 'Leave empty to make this a group heading (e.g. Coaches) whose sub-sub-items show as a column.' }
                   - label: Sub-sub-items
                     name: children
                     widget: list

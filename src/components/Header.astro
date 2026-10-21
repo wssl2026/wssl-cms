@@ -1,6 +1,14 @@
 ---
 import nav from '../data/nav.json';
 import site from '../data/site.json';
+
+interface NavEntry { label: string; href: string; children?: NavEntry[] }
+const items = nav.items as NavEntry[];
+// A sub-item with no link is a group heading (Coaches, Referees, Game Schedules…): the
+// dropdown then lays its sub-items out as headed columns, as the old site's menu did.
+const hasGroups = (entries: NavEntry[]) => entries.some((e) => !e.href);
+const link = 'block px-4 py-2 uppercase text-sm text-gray-800 hover:bg-navy hover:text-white';
+const sublink = 'block px-4 py-1 text-sm uppercase text-gray-800 hover:bg-navy hover:text-white';
 ---
 <div id="banner-div" class="hidden md:block bg-[#f3f3f5] text-center">
   <a href="/" class="inline-block">
@@ -16,27 +24,52 @@ import site from '../data/site.json';
     <nav id="site-nav" class="hidden lg:block py-2">
       <ul class="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-6">
         <li><a href="/" class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">Home</a></li>
-        {nav.items.map((item) => (
-          <li class="relative group">
-            <a href={item.href} class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">{item.label}</a>
-            {(item.children ?? []).length > 0 && (
-              <ul class="pl-4 lg:pl-0 lg:absolute lg:left-0 lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-white lg:min-w-64 lg:shadow-lg lg:z-20">
-                {(item.children ?? []).map((child) => (
-                  <li>
-                    <a href={child.href} class="block px-4 py-2 uppercase text-sm text-gray-800 hover:bg-navy hover:text-white">{child.label}</a>
-                    {(child.children ?? []).length > 0 && (
-                      <ul class="pl-4">
-                        {(child.children ?? []).map((g) => (
-                          <li><a href={g.href} class="block px-4 py-1 text-sm uppercase text-gray-800 hover:bg-navy hover:text-white">{g.label}</a></li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
+        {items.map((item) => {
+          const children = item.children ?? [];
+          const grouped = hasGroups(children);
+          return (
+            <li class="relative group">
+              <a href={item.href} class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">{item.label}</a>
+              {children.length > 0 && (
+                <div class={`lg:absolute lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-white lg:shadow-lg lg:z-20 ${grouped ? 'lg:left-1/2 lg:-translate-x-1/2' : 'lg:left-0'}`}>
+                  <ul class={`pl-4 lg:pl-0 ${grouped ? 'lg:flex lg:items-stretch' : 'lg:min-w-64'}`}>
+                    {children.map((child) => {
+                      const sub = child.children ?? [];
+                      // In a grouped dropdown every entry with sub-items is a column — a group heading, or a
+                      // page that has sub-pages (Training Schedules) — so the columns line up as on the old site.
+                      if (grouped && (!child.href || sub.length > 0)) {
+                        return (
+                          <li class="lg:min-w-56 lg:border-r lg:border-gray-200 lg:last:border-r-0 lg:pb-2">
+                            {child.href
+                              ? <a href={child.href} class={`block px-4 pt-3 pb-1 font-bold text-navy whitespace-nowrap hover:underline`}>{child.label}</a>
+                              : <span class="block px-4 pt-3 pb-1 font-bold text-navy whitespace-nowrap">{child.label}</span>}
+                            <ul>
+                              {sub.map((g) => (
+                                <li><a href={g.href} class={link}>{g.label}</a></li>
+                              ))}
+                            </ul>
+                          </li>
+                        );
+                      }
+                      return (
+                        <li>
+                          <a href={child.href} class={link}>{child.label}</a>
+                          {sub.length > 0 && (
+                            <ul class="pl-4">
+                              {sub.map((g) => (
+                                <li><a href={g.href} class={sublink}>{g.label}</a></li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </li>
+          );
+        })}
         <li><a href={site.loginUrl} target="_blank" rel="noopener" class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">Login</a></li>
       </ul>
     </nav>

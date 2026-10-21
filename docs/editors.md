@@ -42,6 +42,9 @@ Ignore **Work with Local Repository**: that button only appears to developers ru
 ## Preview while editing
 Every page and Site Settings screen has a preview pane next to the editing form that updates as you type. Once a page has been saved at least once, a **View on site** link also appears above the form; it opens the live page in a new tab. That link always shows the last *saved* version of the page — it will not show edits you have made since the last **Save**, and after the rebuild finishes (about 1–2 minutes) it reflects what is now live. The preview pane shows just the page content — title and body — styled roughly like the site; for the exact look, use the **View on site** link after saving.
 
+## The menu
+Site Settings → Navigation menu. Each top-level item is a section; its sub-items are the dropdown. A sub-item with an **empty Link** is a group heading — Coaches, Referees and Other Volunteers under Volunteers, Game Schedules and Training Schedules under Schedules — and its own sub-sub-items appear as a column under that heading, as on the old site. Give a new page a sub-item with its Link filled in to put it in the menu.
+
 ## Rainout / closure banner
 Site Settings → Alert banner → tick "Show banner", write the message, Save. Untick to remove.
 

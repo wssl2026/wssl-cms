@@ -21,6 +21,17 @@ describe('breadcrumbFor', () => {
       { label: 'Travel FAQ', href: '/programs/travel-teams/travel-faq/' },
     ]);
   });
+  it('includes a menu group as an unlinked crumb', () => {
+    const grouped = [{ label: 'Volunteers', href: '/volunteers/', children: [
+      { label: 'Coaches', href: '', children: [{ label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] }] },
+    ] }];
+    expect(breadcrumbFor(grouped, '/volunteers/coaches/become-coach/', 'Become a Coach')).toEqual([
+      { label: 'Home', href: '/' },
+      { label: 'Volunteers', href: '/volunteers/' },
+      { label: 'Coaches', href: '' },
+      { label: 'Become a Coach', href: '/volunteers/coaches/become-coach/' },
+    ]);
+  });
   it('gives a section home page just Home and itself', () => {
     expect(breadcrumbFor(nav, '/about/', 'About')).toEqual([{ label: 'Home', href: '/' }, { label: 'About', href: '/about/' }]);
   });
