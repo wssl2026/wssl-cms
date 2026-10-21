@@ -30,8 +30,10 @@ const sublink = 'block px-4 py-1 text-sm uppercase text-gray-800 hover:bg-navy h
           return (
             <li class="relative group">
               <a href={item.href} class="block px-2 py-3 font-bold uppercase tracking-wide hover:text-gold">{item.label}</a>
+              {/* The dropdown panel is white on every screen size: on a phone the menu is a stacked list inside
+                  the navy header, so the panel's dark text needs its own light background there too. */}
               {children.length > 0 && (
-                <div class={`lg:absolute lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:bg-white lg:shadow-lg lg:z-20 ${grouped ? 'lg:left-1/2 lg:-translate-x-1/2' : 'lg:left-0'}`}>
+                <div class={`bg-white mx-2 mb-2 rounded lg:mx-0 lg:mb-0 lg:rounded-none lg:absolute lg:top-full lg:hidden lg:group-hover:block lg:group-focus-within:block lg:shadow-lg lg:z-20 ${grouped ? 'lg:left-1/2 lg:-translate-x-1/2' : 'lg:left-0'}`}>
                   <ul class={`pl-4 lg:pl-0 ${grouped ? 'lg:flex lg:items-stretch' : 'lg:min-w-64'}`}>
                     {children.map((child) => {
                       const sub = child.children ?? [];
