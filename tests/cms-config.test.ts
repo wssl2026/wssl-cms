@@ -67,7 +67,7 @@ describe('Sveltia config', () => {
   it('the home settings file edits the home page fields', () => {
     const settings = config.collections.find((c: any) => c.name === 'settings');
     const home = settings.files.find((f: any) => f.file === 'src/data/home.json');
-    expect(home.fields.map((f: any) => f.name)).toEqual(['fieldStatus', 'carousel', 'programButtons', 'cards']);
+    expect(home.fields.map((f: any) => f.name)).toEqual(['fieldStatus', 'carousel', 'programButtons', 'quickLinks', 'cards']);
   });
   it('ships no local_backend — Sveltia ignores it and warns', () => {
     expect(config.local_backend).toBeUndefined();

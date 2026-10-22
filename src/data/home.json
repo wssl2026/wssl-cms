@@ -33,6 +33,38 @@
       "href": "/programs/playground/"
     }
   ],
+  "quickLinks": [
+    {
+      "label": "Register",
+      "href": "https://inleague.wssl.org/Registration/regStatus",
+      "icon": "/images/register-icon.png"
+    },
+    {
+      "label": "Divisions",
+      "href": "/programs/core/divisions/",
+      "icon": "/images/trophy-icon.png"
+    },
+    {
+      "label": "Schedules",
+      "href": "/schedules/",
+      "icon": "/images/calendar-icon.png"
+    },
+    {
+      "label": "Fields",
+      "href": "/fields/overview/",
+      "icon": "/images/fields-icon.png"
+    },
+    {
+      "label": "Donate",
+      "href": "/about/donate/",
+      "icon": "/images/donate-icon.png"
+    },
+    {
+      "label": "Shop",
+      "href": "https://uniforms.u90soccer.com/spiritwear.html?cat=256",
+      "icon": "/images/shop-icon.png"
+    }
+  ],
   "cards": [
     {
       "title": "Registration and Tryouts",

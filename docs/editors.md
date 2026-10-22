@@ -45,6 +45,9 @@ Every page and Site Settings screen has a preview pane next to the editing form 
 ## The menu
 Site Settings → Navigation menu. Each top-level item is a section; its sub-items are the dropdown. A sub-item with an **empty Link** is a group heading — Coaches, Referees and Other Volunteers under Volunteers, Game Schedules and Training Schedules under Schedules — and its own sub-sub-items appear as a column under that heading, as on the old site. Give a new page a sub-item with its Link filled in to put it in the menu.
 
+## Home page
+Site Settings → Home page edits everything on the front page: the field status line, the carousel photos, the program buttons, the quick links (the icon row at the bottom: Register, Divisions, Schedules, Fields, Donate, Shop) and the announcement cards.
+
 ## Rainout / closure banner
 Site Settings → Alert banner → tick "Show banner", write the message, Save. Untick to remove.
 

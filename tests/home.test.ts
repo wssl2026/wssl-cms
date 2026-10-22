@@ -14,7 +14,7 @@ function internalLinksIn(markdown: string): string[] {
 
 describe('home.json', () => {
   it('has exactly the expected top-level keys', () => {
-    expect(Object.keys(home).sort()).toEqual(['cards', 'carousel', 'fieldStatus', 'programButtons'].sort());
+    expect(Object.keys(home).sort()).toEqual(['cards', 'carousel', 'fieldStatus', 'programButtons', 'quickLinks'].sort());
   });
 
   it('every programButtons[].href resolves to a published content page', () => {

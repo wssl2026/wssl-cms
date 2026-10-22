@@ -27,5 +27,19 @@ import home from '../data/home.json';
         ))}
       </div>
     </div>
+    {home.quickLinks?.length > 0 && (
+      <nav aria-label="Quick links" class="mt-12 border-t border-gray-200 pt-8">
+        <ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
+          {home.quickLinks.map((q) => (
+            <li>
+              <a href={q.href} class="inline-flex items-center gap-3 text-xl font-bold text-[#2a7ae2] hover:text-navy hover:underline">
+                <img src={q.icon} alt="" class="h-12 w-auto" loading="lazy" />
+                <span>{q.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
   </div>
 </BaseLayout>

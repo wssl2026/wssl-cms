@@ -152,6 +152,13 @@ collections:
             fields:
               - { label: Label, name: label, widget: string }
               - { label: Link, name: href, widget: string }
+          - label: Quick links (the icon row at the bottom of the home page)
+            name: quickLinks
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+              - { label: Icon, name: icon, widget: image, media_folder: /public/images, public_folder: /images }
           - label: Cards
             name: cards
             widget: list
