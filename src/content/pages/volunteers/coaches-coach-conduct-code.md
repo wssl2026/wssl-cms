@@ -54,9 +54,6 @@ sidebar: |-
 
   ![](/assets/legacy/Image/Core/wssl-core-5.jpeg)
 
-  ![](/assets/legacy/Image/referees/wssl-core-21.jpeg)
-
-  ![](/assets/legacy/Image/referees/wssl-core-5.jpeg)
 ---
 
 ### Coach Oath & Code of Conduct

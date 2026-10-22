@@ -1,4 +1,4 @@
-import { htmlToMarkdown, localAssetPath, isLegacyAsset, normalizeInternal, rewriteInleagueSchedule, stripHost } from '../scripts/lib/convert';
+import { htmlToMarkdown, localAssetPath, isLegacyAsset, normalizeInternal, rewriteInleagueSchedule, stripHost, stripMissingAssets } from '../scripts/lib/convert';
 
 describe('asset helpers', () => {
   it('detects legacy assets on any wssl host', () => {
@@ -19,6 +19,11 @@ describe('asset helpers', () => {
     expect(normalizeInternal('https://www.wssl.org/fields/overview/')).toBe('/fields/overview/');
     expect(normalizeInternal('/about/contact/#form')).toBe('/about/contact/#form');
   });
+  it('sends links to pages the old site renamed to the new address', () => {
+    expect(normalizeInternal('/programs/travel-tournament/travel-overview/')).toBe('/programs/travel-teams/');
+    expect(normalizeInternal('https://www.wssl.org/programs/travel-tournament/tournament-teams')).toBe('/programs/tournament-teams/');
+    expect(normalizeInternal('/programs/travel-tournament/travel-overview/#fees')).toBe('/programs/travel-teams/#fees');
+  });
   it('maps a link to a page\'s index.html onto the page address', () => {
     expect(normalizeInternal('/fields/riverside-park/index.html')).toBe('/fields/riverside-park/');
     expect(normalizeInternal('https://www.wssl.org/fields/riverside-park/index.html#map')).toBe('/fields/riverside-park/#map');
@@ -29,6 +34,17 @@ describe('asset helpers', () => {
   });
   it('tolerates malformed percent-encoding instead of throwing', () => {
     expect(localAssetPath('/sites/wssl/assets/File/50% off.pdf')).toBe('/assets/legacy/File/50-off.pdf');
+  });
+});
+
+describe('stripMissingAssets', () => {
+  it('removes images of missing assets wherever they sit, unlinks missing files, and collapses emptied lines', () => {
+    const md = 'sidebar: |-\n  ![](/assets/legacy/a.jpg)![](/assets/legacy/gone.jpg)\n\n  ![](/assets/legacy/gone2.jpg)\n\n  ![](/assets/legacy/b.jpg)\n---\n\nRead the **[Guidance](/assets/legacy/File/gone.pdf)** now.\n';
+    expect(stripMissingAssets(md, ['/assets/legacy/gone.jpg', '/assets/legacy/gone2.jpg', '/assets/legacy/File/gone.pdf']))
+      .toBe('sidebar: |-\n  ![](/assets/legacy/a.jpg)\n\n  ![](/assets/legacy/b.jpg)\n---\n\nRead the **Guidance** now.\n');
+  });
+  it('returns the input untouched when nothing matches', () => {
+    expect(stripMissingAssets('![](/assets/legacy/a.jpg)', ['/assets/legacy/gone.jpg'])).toBe('![](/assets/legacy/a.jpg)');
   });
 });
 

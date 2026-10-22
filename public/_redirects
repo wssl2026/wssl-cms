@@ -1,3 +1,6 @@
+/sites/wssl/assets/File/Referee%20Scheduling%20Guide%20September%202015%20v02.pdf  /assets/legacy/File/Referee-Scheduling-Guide-September-2015-v02.pdf  301
+/sites/wssl/assets/Image/referees/wssl%20ref%20-%203.jpeg  /assets/legacy/Image/referees/wssl-ref-3.jpeg  301
+/sites/wssl/assets/Image/referees/WSSL_Chief%20Referee%20Manual_2022_v2.pdf  /assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2011.jpeg  /assets/legacy/Image/Core/wssl-core-11.jpeg  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2022.jpeg  /assets/legacy/Image/Core/wssl-core-22.jpeg  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2027.jpeg  /assets/legacy/Image/Core/wssl-core-27.jpeg  301
@@ -8,11 +11,9 @@
 /sites/wssl/assets/Image/referees/Blue-Tornadoes-9-17-17---19.jpg  /assets/legacy/Image/referees/Blue-Tornadoes-9-17-17-19.jpg  301
 /sites/wssl/assets/Image/referees/Blue-Tornadoes-9-17-17---65.jpg  /assets/legacy/Image/referees/Blue-Tornadoes-9-17-17-65.jpg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%205.jpeg  /assets/legacy/Image/referees/wssl-ref-5.jpeg  301
-/sites/wssl/assets/File/Referee%20Scheduling%20Guide%20September%202015%20v02.pdf  /assets/legacy/File/Referee-Scheduling-Guide-September-2015-v02.pdf  301
 /sites/wssl/assets/Image/referees/Blue-Tornadoes-9-17-17---21.jpg  /assets/legacy/Image/referees/Blue-Tornadoes-9-17-17-21.jpg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%2012.jpeg  /assets/legacy/Image/referees/wssl-ref-12.jpeg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%204.jpeg  /assets/legacy/Image/referees/wssl-ref-4.jpeg  301
-/sites/wssl/assets/Image/referees/WSSL_Chief%20Referee%20Manual_2022_v2.pdf  /assets/legacy/Image/referees/WSSL_Chief-Referee-Manual_2022_v2.pdf  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%201.jpeg  /assets/legacy/Image/referees/wssl-ref-1.jpeg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%202.jpeg  /assets/legacy/Image/referees/wssl-ref-2.jpeg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%206.jpeg  /assets/legacy/Image/referees/wssl-ref-6.jpeg  301
@@ -45,7 +46,6 @@
 /sites/wssl/assets/Image/Tournament/wssl%20tournament%20-%201%20(1).jpeg  /assets/legacy/Image/Tournament/wssl-tournament-1-1-.jpeg  301
 /sites/wssl/assets/Image/Tournament/wssl%20tournament%20-%201.jpeg  /assets/legacy/Image/Tournament/wssl-tournament-1.jpeg  301
 /sites/wssl/assets/Image/Tournament/wssl%20tournament%20-%201%20(2).jpeg  /assets/legacy/Image/Tournament/wssl-tournament-1-2-.jpeg  301
-/sites/wssl/assets/Image/referees/wssl%20ref%20-%203.jpeg  /assets/legacy/Image/referees/wssl-ref-3.jpeg  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2045.jpeg  /assets/legacy/Image/Core/wssl-core-45.jpeg  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2031.jpeg  /assets/legacy/Image/Core/wssl-core-31.jpeg  301
 /sites/wssl/assets/Image/Core/wssl%20core%20-%2026.jpeg  /assets/legacy/Image/Core/wssl-core-26.jpeg  301
@@ -80,11 +80,15 @@
 /sites/wssl/assets/Image/referees/wssl%20core%20-%2040.jpeg  /assets/legacy/Image/referees/wssl-core-40.jpeg  301
 /sites/wssl/assets/Image/referees/wssl%20ref%20-%2013.jpeg  /assets/legacy/Image/referees/wssl-ref-13.jpeg  301
 /sites/wssl/assets/Image/Fields/new%20field%20at%20101.jpg  /assets/legacy/Image/Fields/new-field-at-101.jpg  301
+/sites/wssl/assets/File/WSSL%20U6%20U7%20U8%20Q&A%20v01.pdf  /assets/legacy/File/WSSL-U6-U7-U8-Q-A-v01.pdf  301
+/sites/wssl/assets/File/WSSL%20U8%20for%205_10_22%20final.pdf  /assets/legacy/File/WSSL-U8-for-5_10_22-final.pdf  301
 /sites/wssl/assets/*  /assets/legacy/:splat  301
 /index.cfm/*          /                      301
 /blog                 /                      301
 /blog/*               /                      301
 /fields/overview      /fields/overview/      301
+/programs/travel-tournament/travel-overview/*   /programs/travel-teams/      301
+/programs/travel-tournament/tournament-teams/*  /programs/tournament-teams/  301
 /programs/core/divisions/fall-2025   /programs/core/divisions/fall-2026/  301
 /programs/core/divisions/fall-2025/  /programs/core/divisions/fall-2026/  301
 /inleague/schedule/*  https://inleague.wssl.org/app/schedule/1  301

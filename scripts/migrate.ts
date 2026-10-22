@@ -1,7 +1,7 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { fetchAllContent, targetFor, frontmatter, buildNav, type MuraItem } from './lib/mura';
-import { htmlToMarkdown, localAssetPath } from './lib/convert';
+import { fetchAllContent, targetFor, frontmatter, buildNav, isEmptyLeaf, type MuraItem } from './lib/mura';
+import { htmlToMarkdown, localAssetPath, stripMissingAssets } from './lib/convert';
 import { planAssetDownloads } from './lib/assets';
 import { buildRedirectsFile } from './lib/redirects';
 import { extractSidebarHtml } from './lib/sidebar';
@@ -54,6 +54,7 @@ async function main() {
     collisions: [] as string[],
     pageCollisions: [] as string[],
     sidebars: [] as string[],
+    imagesDropped: [] as string[],
   };
   const allAssets = new Set<string>();
   const writtenTargets = new Map<string, string>();
@@ -62,6 +63,12 @@ async function main() {
     const target = targetFor(item.filename);
     if (!target || item.type !== 'Page') {
       report.skipped.push(`${item.type}:${item.filename}`);
+      continue;
+    }
+    // A section's own landing page may be blank (the section template fills it); any other
+    // blank page with nothing under it is a leftover and gets no file.
+    if (target.path !== '' && isEmptyLeaf(item, items)) {
+      report.skipped.push(`empty:${item.filename}`);
       continue;
     }
     // targetFor flattens nested paths, so two Mura items can land on one file.
@@ -93,6 +100,20 @@ async function main() {
   for (const { source } of downloads) {
     (await downloadLegacyAsset(source)) === 'ok' ? report.assetsOk.push(source) : report.assetsMissing.push(source);
   }
+
+  // An image or file the old site itself no longer has (404 there too) would be a broken
+  // image or link here: take it out of every page and side column that referenced it.
+  const missingLocal = report.assetsMissing.map((a) => localAssetPath(a));
+  if (missingLocal.length) {
+    for (const file of report.written) {
+      const before = await readFile(file, 'utf8');
+      const after = stripMissingAssets(before, missingLocal);
+      if (after !== before) {
+        await writeFile(file, after);
+        report.imagesDropped.push(file);
+      }
+    }
+  }
   for (const [url, dest] of Object.entries(THEME_IMAGES)) {
     (await download(url, dest)) ? report.assetsOk.push(url) : report.assetsMissing.push(url);
   }
@@ -100,7 +121,7 @@ async function main() {
   await mkdir('src/data', { recursive: true });
   await writeFile('src/data/nav.json', JSON.stringify({ items: buildNav(items) }, null, 2) + '\n');
   await writeFile('scripts/migration-report.json', JSON.stringify(report, null, 2) + '\n');
-  console.log(`written=${report.written.length} sidebars=${report.sidebars.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} collisions=${report.collisions.length} pageCollisions=${report.pageCollisions.length}`);
+  console.log(`written=${report.written.length} sidebars=${report.sidebars.length} skipped=${report.skipped.length} assetsOk=${report.assetsOk.length} assetsMissing=${report.assetsMissing.length} imagesDropped=${report.imagesDropped.length} collisions=${report.collisions.length} pageCollisions=${report.pageCollisions.length}`);
   console.log('skipped:', report.skipped.join(', '));
   console.log('missing assets:', report.assetsMissing.join(', '));
   console.log('collisions:', report.collisions.join(', '));

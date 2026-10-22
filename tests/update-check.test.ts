@@ -81,6 +81,18 @@ describe('compareContent', () => {
     expect(report.unchanged).toBe(1);
   });
 
+  it('ignores references to assets the last import found missing, and skips blank leaf pages like the import does', () => {
+    const items = [
+      item('fields/park', '<p>Field.</p><p><img src="/sites/wssl/assets/Image/gone.jpg"></p>'),
+      item('schedules/tryout-schedule1', '<p>&nbsp;</p>'),
+    ];
+    const existing = new Map([['/fields/park/', page('fields/park.md', 'Field.')]]);
+    const report = compareContent(items, existing, new Map(), { missingAssets: ['/sites/wssl/assets/Image/gone.jpg'] });
+    expect(report.unchanged).toBe(1);
+    expect(report.changed).toEqual([]);
+    expect(report.newPages).toEqual([]);
+  });
+
   it('ignores non-Page items such as Links', () => {
     const items = [item('programs/inquiry', '', '2026-10-01 00:00:00', { type: 'Link', url: 'https://forms.example' })];
     const report = compareContent(items, new Map(), new Map());

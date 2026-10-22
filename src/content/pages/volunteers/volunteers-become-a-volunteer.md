@@ -5,7 +5,6 @@ description: xyz
 legacyUrl: /volunteers/volunteers/become-a-volunteer/
 updated: 2022-07-10
 sidebar: |-
-  ![](/assets/legacy/Image/referees/wssl-core-35.jpeg)
 
   ![](/assets/legacy/Image/Core/wssl-core-37.jpeg)
 

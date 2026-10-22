@@ -68,9 +68,18 @@ describe('fetchAllContent', () => {
       return { ok: true, json: async () => ({ data: { totalpages: 2, items: [item({ contentid: `P${page}` })] } }) };
     }) as unknown as typeof fetch;
     const items = await fetchAllContent(fake);
+    // Two listings (the default and the unfiltered one), merged by contentid.
     expect(items.map((i) => i.contentid)).toEqual(['P1', 'P2']);
-    expect(calls).toHaveLength(2);
+    expect(calls).toHaveLength(4);
     expect(calls[0]).toContain('maxitems=100');
+    expect(calls[2]).toContain('showNavOnly=false&showexcludesearch=true');
+  });
+  it('keeps a page that only the unfiltered listing returns', async () => {
+    const fake = (async (url: string) => {
+      const wide = url.includes('showNavOnly=false');
+      return { ok: true, json: async () => ({ data: { totalpages: 1, items: wide ? [item({ contentid: 'A' }), item({ contentid: 'HIDDEN', isnav: 0 })] : [item({ contentid: 'A' })] } }) };
+    }) as unknown as typeof fetch;
+    expect((await fetchAllContent(fake)).map((i) => i.contentid)).toEqual(['A', 'HIDDEN']);
   });
   it('throws on HTTP errors', async () => {
     const fake = (async () => ({ ok: false, status: 500 })) as unknown as typeof fetch;
@@ -167,6 +176,48 @@ describe('buildNav', () => {
         { label: 'Other Volunteers', href: '', children: [{ label: 'SafeSport', href: '/volunteers/volunteers/safesport/', children: [] }] },
         { label: 'Overview', href: '/volunteers/overview/', children: [] },
         { label: 'Field Crew', href: '', children: [{ label: 'Setup', href: '/volunteers/field-crew/setup/', children: [] }] },
+      ] },
+    ]);
+  });
+
+  it('groups the children of a parent page that is kept out of the menu, under that page\'s name', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'volunteers', menutitle: 'Volunteers', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'volunteers/coaches', title: 'Coaches', menutitle: 'Coaches', parentid: 'A', orderno: 1, isnav: 0, body: '' }),
+      item({ contentid: 'C', filename: 'volunteers/coaches/become-coach', menutitle: 'Become a Coach', parentid: 'B', orderno: 1 }),
+      item({ contentid: 'R', filename: 'volunteers/referees', title: 'Referees', menutitle: 'Referees', parentid: 'A', orderno: 2, searchexclude: 1 }),
+      item({ contentid: 'R1', filename: 'volunteers/referees/welcome', menutitle: 'Welcome', parentid: 'R', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'Volunteers', href: '/volunteers/', children: [
+        { label: 'Coaches', href: '', children: [{ label: 'Become a Coach', href: '/volunteers/coaches/become-coach/', children: [] }] },
+        { label: 'Referees', href: '/volunteers/referees/', children: [{ label: 'Welcome', href: '/volunteers/referees/welcome/', children: [] }] },
+      ] },
+    ]);
+  });
+
+  it('keeps an embed-only page (the Google Calendar iframe) in the menu', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'about', menutitle: 'About', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'about/wssl-calendar', menutitle: 'WSSL Calendar', parentid: 'A', orderno: 1, body: '<iframe src="https://calendar.google.com/calendar/embed?x=1"></iframe>' }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'About', href: '/about/', children: [{ label: 'WSSL Calendar', href: '/about/wssl-calendar/', children: [] }] },
+    ]);
+  });
+
+  it('leaves a blank page with nothing under it out of the menu', () => {
+    const items = [
+      item({ contentid: 'A', filename: 'schedules', menutitle: 'Schedules', parentid: HOME, orderno: 1 }),
+      item({ contentid: 'B', filename: 'schedules/tryout-schedule1', menutitle: 'Tryout Schedule', parentid: 'A', orderno: 1, body: '<p>&nbsp;</p>' }),
+      item({ contentid: 'C', filename: 'schedules/training-schedules', menutitle: 'Training Schedules', parentid: 'A', orderno: 2, body: '' }),
+      item({ contentid: 'D', filename: 'schedules/training-schedules/travel-training', menutitle: 'Travel Training', parentid: 'C', orderno: 1 }),
+    ];
+    expect(buildNav(items)).toEqual([
+      { label: 'Schedules', href: '/schedules/', children: [
+        { label: 'Training Schedules', href: '/schedules/training-schedules/', children: [
+          { label: 'Travel Training', href: '/schedules/training-schedules/travel-training/', children: [] },
+        ] },
       ] },
     ]);
   });

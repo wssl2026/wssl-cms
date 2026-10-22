@@ -15,6 +15,7 @@ export interface MuraItem {
   summary?: string;
   url?: string; // Link items
   orderno?: number | string; // Mura's real sort column; displayorder is unreliable in the live API
+  searchexclude?: number | string;
 }
 
 /** A menu entry. `href` is '' for a group heading (a folder with no page of its own) that only organises its children. */
@@ -42,23 +43,44 @@ function folderLabel(path: string): string {
 
 
 export const MURA_API = 'https://www.wssl.org/index.cfm/_api/json/v1/wssl/content/';
-const FIELDS = 'contentid,filename,title,menutitle,type,body,summary,parentid,displayorder,isnav,lastupdate,url,orderno';
+const FIELDS = 'contentid,filename,title,menutitle,type,body,summary,parentid,displayorder,isnav,lastupdate,url,orderno,searchexclude';
 export const HOME_ID = '00000000000000000000000000000000001';
 export const SECTIONS = ['programs', 'registration', 'schedules', 'fields', 'volunteers', 'about'] as const;
 
+/**
+ * Mura's content listing hides two kinds of page unless asked: pages kept out of the menu
+ * (`isnav = 0`, e.g. the referee and coach resource pages that are only linked from side
+ * columns) and pages excluded from search (`searchexclude = 1`, which is how the "Referees"
+ * and "Game Schedules" landing pages are flagged). `showNavOnly=false&showexcludesearch=true`
+ * lifts both filters. Its pagination has proved unreliable (a wide listing can drop an item
+ * the default one returns), so both listings are fetched and merged by contentid.
+ */
+const LISTINGS = ['', '&showNavOnly=false&showexcludesearch=true'];
+
 export async function fetchAllContent(fetchImpl: typeof fetch = fetch): Promise<MuraItem[]> {
-  const items: MuraItem[] = [];
-  let page = 1;
-  let totalPages = 1;
-  do {
-    const res = await fetchImpl(`${MURA_API}?fields=${FIELDS}&maxitems=100&pageIndex=${page}`);
-    if (!res.ok) throw new Error(`Mura API ${res.status}`);
-    const json = (await res.json()) as { data: { totalpages: number; items: MuraItem[] } };
-    totalPages = json.data.totalpages;
-    items.push(...json.data.items);
-    page++;
-  } while (page <= totalPages);
-  return items;
+  const byId = new Map<string, MuraItem>();
+  for (const extra of LISTINGS) {
+    let page = 1;
+    let totalPages = 1;
+    do {
+      const res = await fetchImpl(`${MURA_API}?fields=${FIELDS}&maxitems=100&pageIndex=${page}${extra}`);
+      if (!res.ok) throw new Error(`Mura API ${res.status}`);
+      const json = (await res.json()) as { data: { totalpages: number; items: MuraItem[] } };
+      totalPages = json.data.totalpages;
+      for (const it of json.data.items) if (!byId.has(it.contentid)) byId.set(it.contentid, it);
+      page++;
+    } while (page <= totalPages);
+  }
+  return [...byId.values()];
+}
+
+/** A page with no body text and no child pages: a blank URL the menu should not offer and the import should not write. */
+export function isEmptyLeaf(item: MuraItem, items: MuraItem[]): boolean {
+  if (item.type !== 'Page') return false;
+  const body = item.body ?? '';
+  const text = decodeEntities(body.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+  if (text || /<(iframe|img|embed|object|video)\b/i.test(body)) return false; // an embed-only page (the Google Calendar) is content
+  return !items.some((other) => other.parentid === item.contentid);
 }
 
 export function targetFor(filename: string): { file: string; section: string; path: string } | null {
@@ -158,34 +180,42 @@ export function buildNav(items: MuraItem[]): NavItem[] {
   // parentid matches no item. Each orphan group becomes a synthetic Folder under the nearest
   // ancestor page found by filename — rendered as a headed group in the dropdown, the way the
   // old site's menu shows it — otherwise the whole subtree silently disappears from the nav.
-  const knownIds = new Set(items.map((i) => i.contentid));
-  const byFilename = new Map(items.map((i) => [trimSlashes(i.filename), i]));
+  // The same goes for a parent the listing does return but that is kept out of the menu
+  // (`isnav = 0`, e.g. the blank volunteers/coaches page): its children are grouped under
+  // its name rather than lost.
+  const byId = new Map(items.map((i) => [i.contentid, i]));
+  const byFilename = new Map(items.filter((i) => Number(i.isnav)).map((i) => [trimSlashes(i.filename), i]));
   const folderOrder = Object.keys(FOLDER_LABELS);
   for (const [parentid, children] of [...byParent]) {
-    if (parentid === HOME_ID || knownIds.has(parentid)) continue;
+    if (parentid === HOME_ID) continue;
+    const parent = byId.get(parentid);
+    if (parent && Number(parent.isnav)) continue;
     byParent.delete(parentid);
     const segments = trimSlashes(children[0].filename).split('/');
     let anchor: MuraItem | undefined;
-    let folderPath = '';
+    let folderPath = parent ? trimSlashes(parent.filename) : '';
     for (let n = segments.length - 1; n > 0 && !anchor; n--) {
-      folderPath = segments.slice(0, n + 1).join('/');
+      if (!parent) folderPath = segments.slice(0, n + 1).join('/');
       anchor = byFilename.get(segments.slice(0, n).join('/'));
     }
     if (!anchor) continue;
     const index = folderOrder.indexOf(folderPath);
+    // The old menu's heading wins ("Other Volunteers" for the page titled "Volunteers"); otherwise the page's own name.
+    const label = FOLDER_LABELS[folderPath] ?? (parent?.menutitle || parent?.title || folderLabel(folderPath));
     const folder: MuraItem = {
       contentid: `folder:${folderPath}`,
       filename: folderPath,
-      title: folderLabel(folderPath),
-      menutitle: folderLabel(folderPath),
+      title: label,
+      menutitle: label,
       type: 'Folder',
       parentid: anchor.contentid,
       displayorder: 0,
       isnav: 1,
       lastupdate: '',
-      // Groups the old menu lists come first, in its order (Game Schedules before the Training
-      // Schedules page, Coaches before Referees); an unlisted folder goes after the real pages.
-      orderno: index >= 0 ? index - folderOrder.length : 1000 + sortKey(children[0]),
+      // A parent page keeps its own place among its siblings (Coaches 1, Referees 2, Other
+      // Volunteers 3 on the old site). With no parent item at all, groups the old menu lists
+      // come first in its order and an unlisted folder goes after the real pages.
+      orderno: parent ? sortKey(parent) : index >= 0 ? index - folderOrder.length : 1000 + sortKey(children[0]),
     };
     byParent.set(folder.contentid, children);
     byParent.set(anchor.contentid, [...(byParent.get(anchor.contentid) ?? []), folder]);
@@ -206,7 +236,9 @@ export function buildNav(items: MuraItem[]): NavItem[] {
           const children = build(it.contentid, depth + 1);
           return children.length ? [{ label: it.menutitle || it.title, href: '', children }] : [];
         }
-        return [{ label: it.menutitle || it.title, href, children: depth < 3 ? build(it.contentid, depth + 1) : [] }];
+        const children = depth < 3 ? build(it.contentid, depth + 1) : [];
+        if (children.length === 0 && isEmptyLeaf(it, items)) return []; // a blank page is not worth a menu entry
+        return [{ label: it.menutitle || it.title, href, children }];
       });
   };
   return build(HOME_ID, 1);

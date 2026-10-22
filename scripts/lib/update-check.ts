@@ -1,5 +1,5 @@
-import { isoDate, targetFor, type MuraItem } from './mura';
-import { htmlToMarkdown } from './convert';
+import { isEmptyLeaf, isoDate, targetFor, type MuraItem } from './mura';
+import { htmlToMarkdown, localAssetPath, stripMissingAssets } from './convert';
 
 /**
  * Pure comparison between the live Mura content and the migrated pages, for
@@ -76,11 +76,19 @@ const norm = (s: string): string => s.replace(/\s+/g, ' ').trim();
  * @param sidebarHtml    the legacy sidebar region's HTML per legacy path ('' when the page has none),
  *                       as returned by `extractSidebarHtml` on the rendered page
  */
+export interface CompareOptions {
+  /** Legacy asset paths the last import found missing on the old site (its own 404s); references to them are ignored, as the import drops them. */
+  missingAssets?: string[];
+}
+
 export function compareContent(
   items: MuraItem[],
   existing: Map<string, MigratedPage>,
   sidebarHtml: Map<string, string>,
+  options: CompareOptions = {},
 ): UpdateReport {
+  const missingLocal = (options.missingAssets ?? []).map((a) => localAssetPath(a));
+  const clean = (markdown: string) => (missingLocal.length ? stripMissingAssets(markdown, missingLocal) : markdown);
   const report: UpdateReport = { newPages: [], changed: [], removed: [], unchanged: 0, skipped: [] };
   const seen = new Set<string>();
 
@@ -92,12 +100,15 @@ export function compareContent(
       report.skipped.push(legacyPath);
       continue;
     }
+    if (target.path !== '' && isEmptyLeaf(item, items)) continue; // the import writes no file for these
     seen.add(legacyPath);
 
-    const body = htmlToMarkdown(item.body ?? '');
+    const raw = htmlToMarkdown(item.body ?? '');
+    const body = { ...raw, markdown: clean(raw.markdown) };
     const sideHtml = sidebarHtml.get(legacyPath) ?? '';
-    const side = sideHtml ? htmlToMarkdown(sideHtml) : { markdown: '', assets: [] as string[] };
-    const assets = [...body.assets, ...side.assets];
+    const rawSide = sideHtml ? htmlToMarkdown(sideHtml) : { markdown: '', assets: [] as string[] };
+    const side = { ...rawSide, markdown: clean(rawSide.markdown) };
+    const assets = [...body.assets, ...side.assets].filter((a) => !(options.missingAssets ?? []).includes(a));
     const current = existing.get(legacyPath);
 
     if (!current) {

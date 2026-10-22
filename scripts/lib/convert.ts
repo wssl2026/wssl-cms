@@ -77,8 +77,34 @@ export function rewriteInleagueSchedule(href: string): string | null {
   return `${INLEAGUE_SCHEDULE_APP}/${competition}${known?.divID ? `/${known.divID}` : ''}?${query}`;
 }
 
+/**
+ * Remove references to assets the old site itself no longer has (its own 404s): an image
+ * goes entirely, even one sharing a line with another image; a link to a file keeps its
+ * text. Lines emptied by that collapse, so no stray blank lines are left behind.
+ */
+export function stripMissingAssets(markdown: string, localPaths: string[]): string {
+  let out = markdown;
+  for (const local of localPaths) {
+    const path = local.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(new RegExp(`!\\[[^\\]]*\\]\\(${path}\\)`, 'g'), '');
+    out = out.replace(new RegExp(`\\[([^\\]]*)\\]\\(${path}\\)`, 'g'), '$1');
+  }
+  if (out === markdown) return markdown;
+  return out.replace(/^[ \t]+$/gm, '').replace(/\n{3,}/g, '\n\n');
+}
+
+/** Addresses the old site redirects to a page it renamed; its content still links to the old ones. */
+export const LEGACY_MOVED: Record<string, string> = {
+  '/programs/travel-tournament/travel-overview/': '/programs/travel-teams/',
+  '/programs/travel-tournament/tournament-teams/': '/programs/tournament-teams/',
+};
+
 export function normalizeInternal(href: string): string {
   const p = stripHost(href);
+  const cut = p.search(/[?#]/);
+  const bare = (cut === -1 ? p : p.slice(0, cut)).replace(/\/?$/, '/');
+  const moved = LEGACY_MOVED[bare];
+  if (moved) return moved + (cut === -1 ? '' : p.slice(cut));
   const inleague = rewriteInleagueSchedule(p);
   if (inleague) return inleague;
   const m = p.match(/^([^?#]*)([^#]*)(?:#(.*))?$/)!;

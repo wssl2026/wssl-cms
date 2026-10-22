@@ -9,6 +9,15 @@ import { localAssetPath } from './lib/convert';
 import { extractSidebarHtml } from './lib/sidebar';
 import { compareContent, flattenNav, legacyPathOf, type MigratedPage } from './lib/update-check';
 
+/** The last import's report (git-ignored): the assets it found gone from the old site are not changes. */
+async function lastImportMissingAssets(): Promise<string[]> {
+  try {
+    return JSON.parse(await readFile('scripts/migration-report.json', 'utf8')).assetsMissing ?? [];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * What changed on the old wssl.org since the pages here were migrated? Read-only: fetches
  * the Mura API and the rendered legacy pages (for their side columns), compares them with
@@ -85,7 +94,7 @@ async function main() {
     sidebars.set(legacyPath, extractSidebarHtml(await fetchText(`https://www.wssl.org${legacyPath}`)));
   });
 
-  const report = compareContent(items, existing, sidebars);
+  const report = compareContent(items, existing, sidebars, { missingAssets: await lastImportMissingAssets() });
   const missingAssets = (assets: string[]) => assets.filter((a) => !existsSync(join('public', localAssetPath(a))));
 
   console.log(`wssl.org: ${pageItems.length} pages | new site: ${existing.size} pages | unchanged: ${report.unchanged}`);

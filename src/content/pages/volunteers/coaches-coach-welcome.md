@@ -6,13 +6,10 @@ updated: 2021-08-22
 sidebar: |-
   ![](/assets/legacy/Image/Core/wssl-core-12.jpeg)
 
-  ![](/assets/legacy/Image/Core/wssl-core-14.jpeg)![](/assets/legacy/Image/referees/wssl-core-14.jpeg)
+  ![](/assets/legacy/Image/Core/wssl-core-14.jpeg)
 
   ![](/assets/legacy/Image/Core/wssl-core-5.jpeg)
 
-  ![](/assets/legacy/Image/referees/wssl-core-29.jpeg)
-
-  ![](/assets/legacy/Image/referees/wssl-core-40.jpeg)
 ---
 
 ### Welcome to the West Side Soccer League Coaching Program - Wisdom from WSSL's Coach Administrator & Trainer

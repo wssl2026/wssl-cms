@@ -47,9 +47,9 @@ The Travel Program is geared for stronger players who are interested in improvin
 
 [WSSL Core Program](/programs/core/)
 
-[WSSL Travel Program](/programs/travel-tournament/travel-overview/)
+[WSSL Travel Program](/programs/travel-teams/)
 
-[WSSL Tournament Program](/programs/travel-tournament/tournament-teams/)<a id="seasondates"></a>
+[WSSL Tournament Program](/programs/tournament-teams/)<a id="seasondates"></a>
 
 ### What are the season dates?
 

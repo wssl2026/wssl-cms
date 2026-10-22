@@ -77,7 +77,7 @@ No set up required. Fields are marked as full fields and the goals are permanent
 
 ### <a id="Goals"></a>How to Return the Goals to the Fence and Nest them:
 
-![](/assets/legacy/Image/Fields/goalsnested.jpg)      ![](/assets/legacy/Images/Fields/ballfield5.jpg)
+![](/assets/legacy/Image/Fields/goalsnested.jpg)      
 
 <div class="alert alert-danger">
 
